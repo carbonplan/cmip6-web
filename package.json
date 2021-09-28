@@ -31,7 +31,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "rehype-slug": "^4.0.1",
-    "theme-ui": "^0.10.0"
+    "theme-ui": "^0.11.3"
   },
   "devDependencies": {
     "prettier": "2.3.2"
