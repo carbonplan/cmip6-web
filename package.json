@@ -1,7 +1,7 @@
 {
-  "name": "article-template",
+  "name": "cmip6-web",
   "version": "1.0.0",
-  "description": "template for developing a standalone carbonplan research article",
+  "description": "maps of downscaled cmip6 models",
   "main": "index.js",
   "scripts": {
     "dev": "next -p 5001",
@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/carbonplan/article-template.git"
+    "url": "git+https://github.com/carbonplan/cmip6-web.git"
   },
   "author": "carbonplan",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/carbonplan/article-template/issues"
+    "url": "https://github.com/carbonplan/cmip6-web/issues"
   },
-  "homepage": "https://github.com/carbonplan/article-template#readme",
+  "homepage": "https://github.com/carbonplan/cmip6-web#readme",
   "dependencies": {
     "@carbonplan/components": "^10.3.0",
     "@carbonplan/theme": "^7.0.0",
