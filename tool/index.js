@@ -1,5 +1,5 @@
 import { Box, Container } from 'theme-ui'
-import { Group, Meta } from '@carbonplan/components'
+import { Guide, Group, Meta } from '@carbonplan/components'
 import { useState } from 'react'
 
 import ControlPanel from '../components/control-panel'
@@ -25,10 +25,12 @@ const sx = {
 }
 
 const Tool = () => {
-  const [expanded, setExpanded] = useState(false)
-
   return (
     <>
+      <Container>
+        <Guide color='teal' />
+      </Container>
+
       <Meta
         card={'https://images.carbonplan.org/social/maps-demo.png'}
         description={'TK'}
@@ -47,14 +49,17 @@ const Tool = () => {
       >
         <Map>
           <Container>
-            <ControlPanel
-              title='CMIP6 downscaling'
-              expanded={expanded}
-              setExpanded={setExpanded}
-              headerMode='pure'
-            >
+            <ControlPanel tooltip='Data browser' side='left' width={4}>
               <Group spacing={4}>
-                <Box sx={sx.description}>Some explainer.</Box>
+                <Box sx={sx.description}>Data browser intro</Box>
+
+                <ControlPanelDivider sx={{ mb: [-4] }} />
+              </Group>
+            </ControlPanel>
+
+            <ControlPanel tooltip='Adjust display' side='right' width={2}>
+              <Group spacing={4}>
+                <Box sx={sx.description}>Display options intro</Box>
 
                 <ControlPanelDivider sx={{ mb: [-4] }} />
               </Group>
