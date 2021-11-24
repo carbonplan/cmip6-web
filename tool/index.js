@@ -1,10 +1,11 @@
 import { Box, Container } from 'theme-ui'
 import { Guide, Group, Meta } from '@carbonplan/components'
-import { useState } from 'react'
+import { useCallback } from 'react'
 
 import ControlPanel from '../components/control-panel'
 import Map from '../components/map'
 import ControlPanelDivider from '../components/control-panel-divider'
+import { useRegionContext } from '../components/region'
 
 const sx = {
   heading: {
@@ -25,6 +26,14 @@ const sx = {
 }
 
 const Tool = () => {
+  const { showRegionPicker, setShowRegionPicker } = useRegionContext()
+
+  const handleClose = useCallback(() => {
+    if (!showRegionPicker) {
+      setShowRegionPicker(false)
+    }
+  }, [showRegionPicker])
+
   return (
     <>
       <Container>
@@ -49,7 +58,12 @@ const Tool = () => {
       >
         <Map>
           <Container>
-            <ControlPanel tooltip='Data browser' side='left' width={4}>
+            <ControlPanel
+              tooltip='Data browser'
+              side='left'
+              width={4}
+              onClose={handleClose}
+            >
               <Group spacing={4}>
                 <Box sx={sx.description}>Data browser intro</Box>
 

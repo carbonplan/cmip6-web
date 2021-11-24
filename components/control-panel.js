@@ -1,37 +1,28 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Box, Container, IconButton } from 'theme-ui'
-import { Row, Column, Tray } from '@carbonplan/components'
+import { useCallback, useState } from 'react'
+import { Box, IconButton } from 'theme-ui'
+import { Row, Column } from '@carbonplan/components'
 import { ArrowThin } from '@carbonplan/icons'
 
-import { useRegionContext } from './region'
-
-const ControlPanel = ({ children, tooltip, side = 'left', width = 3 }) => {
+const ControlPanel = ({
+  children,
+  tooltip,
+  onClose,
+  side = 'left',
+  width = 3,
+}) => {
   const [expanded, setExpanded] = useState(false)
-
-  const { showRegionPicker, setShowRegionPicker } = useRegionContext()
   const [showTooltip, setShowTooltip] = useState(false)
 
   const handleToggleExpanded = useCallback(() => {
-    // Always allow opening of panel
     if (!expanded) {
       setExpanded(true)
     } else {
-      // Otherwise, when expanded=true...
-      if (showRegionPicker) {
-        // also hide region picker when active...
-        setShowRegionPicker(false)
+      if (onClose) {
+        onClose()
       }
-      // close panel
       setExpanded(false)
     }
-  }, [expanded, showRegionPicker])
-
-  useEffect(() => {
-    // Automatically expand panel when region picker is activated
-    if (!expanded && showRegionPicker) {
-      setExpanded(true)
-    }
-  }, [showRegionPicker])
+  }, [expanded, onClose])
 
   return (
     <>
