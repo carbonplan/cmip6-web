@@ -4,6 +4,7 @@ import { useCallback } from 'react'
 
 import Header from '../components/header'
 import ControlPanel from '../components/control-panel'
+import DatasetsSection from '../components/datasets/datasets-section'
 import Map from '../components/map'
 import ControlPanelDivider from '../components/control-panel-divider'
 import { useRegionContext } from '../components/region'
@@ -19,10 +20,10 @@ const sx = {
     fontSize: [1, 1, 1, 2],
   },
   label: {
+    color: 'secondary',
     fontFamily: 'faux',
     letterSpacing: 'smallcaps',
     fontSize: [2, 2, 2, 3],
-    mb: [2],
   },
 }
 
@@ -58,7 +59,13 @@ const Tool = () => {
               onClose={handleClose}
             >
               <Group spacing={4}>
-                <Box sx={sx.description}>Data browser intro</Box>
+                <Box sx={sx.description}>
+                  Select dimensions of datasets to view and inspect in the map.
+                </Box>
+
+                <ControlPanelDivider />
+
+                <DatasetsSection sx={sx} />
 
                 <ControlPanelDivider sx={{ mb: [-4] }} />
               </Group>
@@ -66,7 +73,9 @@ const Tool = () => {
 
             <ControlPanel tooltip='Adjust display' side='right' width={2}>
               <Group spacing={4}>
-                <Box sx={sx.description}>Display options intro</Box>
+                <Box sx={sx.description}>
+                  Customize display of map layers. Drag to reorder.
+                </Box>
 
                 <ControlPanelDivider sx={{ mb: [-4] }} />
               </Group>

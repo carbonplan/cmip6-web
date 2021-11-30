@@ -1,0 +1,26 @@
+{
+  "version": "0.0.0",
+  "history": "testing",
+  "title": "Placeholder catalog for CarbonPlan's CMIP6 downscaled data archive",
+  "description": "Placeholder catalog",
+  "datasets": [
+    {
+      "name": "WORLDCLIM.TAVG_PREC",
+      "gcm": "other",
+      "experiment": "historical",
+      "timescale": "monthly",
+      "method": "raw",
+      "variables": ["tavg", "prec"],
+      "uri": "https://storage.googleapis.com/carbonplan-share/maps-demo/4d/tavg-prec-month"
+    },
+    {
+      "name": "WORLDCLIM.TAVG",
+      "gcm": "other",
+      "experiment": "historical",
+      "timescale": "monthly",
+      "method": "raw",
+      "variables": ["tavg"],
+      "uri": "https://storage.googleapis.com/carbonplan-share/maps-demo/3d/tavg-month"
+    }
+  ]
+}
