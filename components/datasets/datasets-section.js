@@ -1,11 +1,12 @@
 import { Box, Divider } from 'theme-ui'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
 
 import Section from '../section'
 import data from './data.json'
 import Dataset from './dataset'
 import { useFilters } from './context'
+import { getFiltersCallback } from './utils'
 
 const formatNumber = (value) => String(value).padStart(2, '0')
 
@@ -19,9 +20,7 @@ const DatasetsSection = ({ sx }) => {
     }
   }, [filters.variable])
 
-  const filteredData = data.datasets.filter((d) =>
-    d.variables.some((v) => v === filters.variable)
-  )
+  const filteredData = data.datasets.filter(getFiltersCallback(filters))
 
   return (
     <Section sx={sx.heading} label='Datasets'>

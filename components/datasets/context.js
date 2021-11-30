@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useState } from 'react'
 import data from './data.json'
+import { getFiltersCallback } from './utils'
 
 const DatasetsContext = createContext(null)
 
@@ -22,13 +23,25 @@ export const DatasetsProvider = ({ children }) => {
     variable: 'tavg',
   })
 
+  const handleFiltersChange = (value) => {
+    const cb = getFiltersCallback(value)
+    const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
+      const dataset = datasets[k]
+      accum[k] = { ...dataset, selected: cb(dataset) && dataset.selected }
+      return accum
+    }, {})
+
+    setDatasets(updatedDatasets)
+    setFilters(value)
+  }
+
   return (
     <DatasetsContext.Provider
       value={{
         datasets,
         setDatasets,
         filters,
-        setFilters,
+        setFilters: handleFiltersChange,
       }}
     >
       {children}
@@ -37,7 +50,6 @@ export const DatasetsProvider = ({ children }) => {
 }
 
 // TODO:
-// - de-select datasets that are no longer applicable when search terms change
 // - keep track of desired order, use to sort array in useSelectedDatasets
 // - smart default selection of display properties
 //   - colormap
