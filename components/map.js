@@ -1,19 +1,18 @@
 import { useState } from 'react'
 import { useThemeUI } from 'theme-ui'
-import { Map, Raster, Line, RegionPicker } from '@carbonplan/maps'
-import { useColormap } from '@carbonplan/colormaps'
+import { Map, Line, RegionPicker } from '@carbonplan/maps'
 
+import { useSelectedDatasets } from './datasets'
 import { useRegionContext } from './region'
+import DatasetRaster from './dataset-raster'
 
 const bucket = 'https://storage.googleapis.com/carbonplan-share/'
 
 const MapWrapper = ({ children }) => {
   const { theme } = useThemeUI()
-  const [clim, setClim] = useState([-20, 30])
   const [month, setMonth] = useState(1)
-  const [band, setBand] = useState('tavg')
-  const colormap = useColormap('warm')
   const { showRegionPicker } = useRegionContext()
+  const datasets = useSelectedDatasets()
 
   return (
     <Map zoom={2} center={[0, 0]} debug={false}>
@@ -31,16 +30,9 @@ const MapWrapper = ({ children }) => {
           maxRadius={2000}
         />
       )}
-      <Raster
-        colormap={colormap}
-        clim={clim}
-        display={true}
-        opacity={1}
-        mode={'texture'}
-        source={bucket + 'maps-demo/4d/tavg-prec-month'}
-        variable={'climate'}
-        selector={{ month, band }}
-      />
+      {datasets.map((d) => (
+        <DatasetRaster key={d.name} dataset={d} month={month} />
+      ))}
       {children}
     </Map>
   )
