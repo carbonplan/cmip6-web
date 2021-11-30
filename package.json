@@ -27,7 +27,7 @@
     "@carbonplan/icons": "^1.1.0",
     "@carbonplan/maps": "^1.2.0",
     "@carbonplan/theme": "^7.0.0",
-    "@theme-ui/color": "^0.11.1",
+    "@theme-ui/color": "^0.12.1",
     "next": "^11.1.2",
     "react": "^17.0.2",
     "react-animate-height": "^2.0.23",
