@@ -1,4 +1,4 @@
-import { Box, Label, Checkbox, Flex } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 import { useDataset } from './context'
 
 const Dataset = ({ dataset }) => {
@@ -9,7 +9,9 @@ const Dataset = ({ dataset }) => {
 
   return (
     <Flex sx={{ justifyContent: 'space-between' }}>
-      <Box sx={{ color: display.color }}>{dataset.name}</Box>
+      <Box sx={{ color: selected ? display.color : 'text' }}>
+        {dataset.name}
+      </Box>
 
       <input
         type='checkbox'
