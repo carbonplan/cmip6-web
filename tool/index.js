@@ -1,7 +1,8 @@
 import { Box, Container } from 'theme-ui'
-import { Guide, Group, Meta } from '@carbonplan/components'
+import { Group } from '@carbonplan/components'
 import { useCallback } from 'react'
 
+import Header from '../components/header'
 import ControlPanel from '../components/control-panel'
 import Map from '../components/map'
 import ControlPanelDivider from '../components/control-panel-divider'
@@ -36,15 +37,7 @@ const Tool = () => {
 
   return (
     <>
-      <Container>
-        <Guide color='teal' />
-      </Container>
-
-      <Meta
-        card={'https://images.carbonplan.org/social/maps-demo.png'}
-        description={'TK'}
-        title={'CMIP6 downscaling / research / carbonplan'}
-      />
+      <Header />
 
       <Box
         sx={{
