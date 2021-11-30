@@ -3,13 +3,13 @@ import { useDataset } from './context'
 
 const Dataset = ({ dataset }) => {
   const {
-    dataset: { selected },
+    dataset: { selected, display },
     setSelected,
   } = useDataset(dataset.name)
 
   return (
     <Flex sx={{ justifyContent: 'space-between' }}>
-      <Box>{dataset.name}</Box>
+      <Box sx={{ color: display.color }}>{dataset.name}</Box>
 
       <input
         type='checkbox'

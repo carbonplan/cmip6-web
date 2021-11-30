@@ -44,6 +44,17 @@ export const DatasetsProvider = ({ children }) => {
 //   - color (unique value based on colormap?)
 //   - clim (based on filters.variable?)
 
+const COLORS = [
+  'red',
+  'orange',
+  'yellow',
+  'green',
+  'teal',
+  'blue',
+  'purple',
+  'pink',
+  'grey',
+]
 export const useDataset = (name) => {
   const { datasets, setDatasets } = useContext(DatasetsContext)
 
@@ -54,9 +65,10 @@ export const useDataset = (name) => {
   const setSelected = useCallback(
     (value) => {
       const { [name]: dataset, ...rest } = datasets
-
       if (!dataset.display.colormapName) {
-        dataset.display.colormapName = 'warm'
+        const color = COLORS[Math.floor(Math.random() * COLORS.length)]
+        dataset.display.color = color
+        dataset.display.colormapName = `${color}s`
       }
 
       if (!dataset.display.clim) {
