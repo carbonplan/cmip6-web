@@ -12,6 +12,7 @@ const DatasetRaster = ({ dataset, month }) => {
   const colormap = useColormap(colormapName)
   const { filters } = useFilters()
 
+  // TODO: remove logic and just use variable={filters.variable} with real datasets
   let variable = filters.variable
   const selector = { month }
   if (variables.length > 1) {
