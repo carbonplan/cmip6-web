@@ -4,11 +4,13 @@ import { useCallback } from 'react'
 
 import Header from '../components/header'
 import ControlPanel from '../components/control-panel'
-import DatasetsSection from '../components/datasets/datasets-section'
+import QuerySection from '../components/datasets/query-section'
+import DisplaySection from '../components/datasets/display-section'
 import Map from '../components/map'
 import ControlPanelDivider from '../components/control-panel-divider'
 import { useRegionContext } from '../components/region'
 import { DatasetsProvider } from '../components/datasets/context'
+
 const sx = {
   heading: {
     fontFamily: 'heading',
@@ -66,7 +68,7 @@ const Tool = () => {
 
                   <ControlPanelDivider />
 
-                  <DatasetsSection sx={sx} />
+                  <QuerySection sx={sx} />
 
                   <ControlPanelDivider sx={{ mb: [-4] }} />
                 </Group>
@@ -77,6 +79,8 @@ const Tool = () => {
                   <Box sx={sx.description}>
                     Customize display of map layers. Drag to reorder.
                   </Box>
+
+                  <DisplaySection sx={sx} />
 
                   <ControlPanelDivider sx={{ mb: [-4] }} />
                 </Group>

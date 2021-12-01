@@ -10,7 +10,7 @@ import { getFiltersCallback } from './utils'
 
 const formatNumber = (value) => String(value).padStart(2, '0')
 
-const DatasetsSection = ({ sx }) => {
+const QuerySection = ({ sx }) => {
   const { filters, setFilters } = useFilters()
 
   const variableFilter = useMemo(() => {
@@ -55,4 +55,4 @@ const DatasetsSection = ({ sx }) => {
   )
 }
 
-export default DatasetsSection
+export default QuerySection
