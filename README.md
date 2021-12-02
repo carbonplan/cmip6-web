@@ -1,12 +1,17 @@
-<p align="left">
-  <a href="https://carbonplan.org/#gh-light-mode-only">
-     <img src="https://carbonplan-assets.s3.amazonaws.com/monogram/dark-small.png" height="48px" />
+<p align='left'>
+  <a href='https://carbonplan.org/#gh-light-mode-only'>
+    <img
+      src='https://carbonplan-assets.s3.amazonaws.com/monogram/dark-small.png'
+      height='48px'
+    />
   </a>
-  <a href="https://carbonplan.org/#gh-dark-mode-only">
-    <img src="https://carbonplan-assets.s3.amazonaws.com/monogram/light-small.png" height="48px" />
+  <a href='https://carbonplan.org/#gh-dark-mode-only'>
+    <img
+      src='https://carbonplan-assets.s3.amazonaws.com/monogram/light-small.png'
+      height='48px'
+    />
   </a>
 </p>
-
 
 # carbonplan / cmip6 web
 
