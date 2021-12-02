@@ -2,7 +2,7 @@ import { Raster } from '@carbonplan/maps'
 import { useColormap } from '@carbonplan/colormaps'
 import { useDatasetsStore } from './datasets'
 
-const DatasetRaster = ({ dataset, month }) => {
+const DatasetRaster = ({ dataset, month, index }) => {
   const {
     source,
     variables,
@@ -21,6 +21,7 @@ const DatasetRaster = ({ dataset, month }) => {
 
   return (
     <Raster
+      index={index}
       source={source}
       colormap={colormap}
       clim={clim}

@@ -30,9 +30,9 @@ const MapWrapper = ({ children }) => {
           maxRadius={2000}
         />
       )}
-      {datasets
-        .map((d) => <DatasetRaster key={d.name} dataset={d} month={month} />)
-        .reverse()}
+      {datasets.reverse().map((d, i) => (
+        <DatasetRaster index={i} key={d.name} dataset={d} month={month} />
+      ))}
       {children}
     </Map>
   )
