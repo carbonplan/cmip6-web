@@ -1,10 +1,11 @@
 import { Box, Flex } from 'theme-ui'
-import { useDataset } from './context'
+import { useDataset } from './store'
 
 const Dataset = ({ dataset }) => {
   const {
     dataset: { selected, display },
-    setSelected,
+    selectDataset,
+    deselectDataset,
   } = useDataset(dataset.name)
 
   return (
@@ -16,7 +17,9 @@ const Dataset = ({ dataset }) => {
       <input
         type='checkbox'
         checked={selected}
-        onChange={(e) => setSelected(e.target.checked)}
+        onChange={(e) =>
+          e.target.checked ? selectDataset() : deselectDataset()
+        }
       />
     </Flex>
   )

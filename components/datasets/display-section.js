@@ -2,7 +2,7 @@ import { Box } from 'theme-ui'
 import { Group } from '@carbonplan/components'
 
 import Section from '../section'
-import { useSelectedDatasets } from './context'
+import { useDataset, useSelectedDatasets } from './store'
 import ControlPanelDivider from '../control-panel-divider'
 
 const DisplaySelection = ({ sx }) => {

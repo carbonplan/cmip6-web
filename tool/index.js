@@ -9,7 +9,6 @@ import DisplaySection from '../components/datasets/display-section'
 import Map from '../components/map'
 import ControlPanelDivider from '../components/control-panel-divider'
 import { useRegionContext } from '../components/region'
-import { DatasetsProvider } from '../components/datasets/context'
 
 const sx = {
   heading: {
@@ -41,54 +40,51 @@ const Tool = () => {
   return (
     <>
       <Header />
-      <DatasetsProvider>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            width: '100%',
-            left: 0,
-            overflow: 'clip',
-          }}
-        >
-          <Map>
-            <Container>
-              <ControlPanel
-                tooltip='Data browser'
-                side='left'
-                width={4}
-                onClose={handleClose}
-              >
-                <Group spacing={4}>
-                  <Box sx={sx.description}>
-                    Select dimensions of datasets to view and inspect in the
-                    map.
-                  </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          width: '100%',
+          left: 0,
+          overflow: 'clip',
+        }}
+      >
+        <Map>
+          <Container>
+            <ControlPanel
+              tooltip='Data browser'
+              side='left'
+              width={4}
+              onClose={handleClose}
+            >
+              <Group spacing={4}>
+                <Box sx={sx.description}>
+                  Select dimensions of datasets to view and inspect in the map.
+                </Box>
 
-                  <ControlPanelDivider />
+                <ControlPanelDivider />
 
-                  <QuerySection sx={sx} />
+                <QuerySection sx={sx} />
 
-                  <ControlPanelDivider sx={{ mb: [-4] }} />
-                </Group>
-              </ControlPanel>
+                <ControlPanelDivider sx={{ mb: [-4] }} />
+              </Group>
+            </ControlPanel>
 
-              <ControlPanel tooltip='Adjust display' side='right' width={2}>
-                <Group spacing={4}>
-                  <Box sx={sx.description}>
-                    Customize display of map layers. Drag to reorder.
-                  </Box>
+            <ControlPanel tooltip='Adjust display' side='right' width={2}>
+              <Group spacing={4}>
+                <Box sx={sx.description}>
+                  Customize display of map layers. Drag to reorder.
+                </Box>
 
-                  <DisplaySection sx={sx} />
+                <DisplaySection sx={sx} />
 
-                  <ControlPanelDivider sx={{ mb: [-4] }} />
-                </Group>
-              </ControlPanel>
-            </Container>
-          </Map>
-        </Box>
-      </DatasetsProvider>
+                <ControlPanelDivider sx={{ mb: [-4] }} />
+              </Group>
+            </ControlPanel>
+          </Container>
+        </Map>
+      </Box>
     </>
   )
 }

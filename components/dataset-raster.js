@@ -1,6 +1,6 @@
 import { Raster } from '@carbonplan/maps'
 import { useColormap } from '@carbonplan/colormaps'
-import { useFilters } from './datasets'
+import { useDatasetsStore } from './datasets'
 
 const DatasetRaster = ({ dataset, month }) => {
   const {
@@ -10,7 +10,7 @@ const DatasetRaster = ({ dataset, month }) => {
     display: { opacity, colormapName, clim },
   } = dataset
   const colormap = useColormap(colormapName)
-  const { filters } = useFilters()
+  const filters = useDatasetsStore((state) => state.filters)
 
   // TODO: remove logic and just use variable={filters.variable} with real datasets
   let variable = filters.variable
