@@ -31,6 +31,7 @@ const DatasetDisplay = ({ name, sx }) => {
 
   return (
     <>
+      {dragging && <Box sx={{ height: draggingProps.height, mb: -4 }} />}
       <DraggableCore
         onStart={(e) => {
           const { top, height, width } =
@@ -62,24 +63,29 @@ const DatasetDisplay = ({ name, sx }) => {
             height: dragging ? draggingProps.height : undefined,
           }}
         >
-          <Group spacing={4}>
-            <ControlPanelDivider />
-            <Section sx={sx.heading} label={shortName}>
-              <Group spacing={2}>
-                <Box>Colormap: {colormapName}</Box>
-                <Box>Color range: {clim.join(', ')}</Box>
-                <Box>Opacity: {opacity}</Box>
-              </Group>
-            </Section>
-          </Group>
+          <Box
+            sx={{
+              mt: dragging ? '-8px' : undefined,
+            }}
+          >
+            <Group spacing={4}>
+              <ControlPanelDivider />
+              <Section sx={sx.heading} label={shortName}>
+                <Group spacing={2}>
+                  <Box>Colormap: {colormapName}</Box>
+                  <Box>Color range: {clim.join(', ')}</Box>
+                  <Box>Opacity: {opacity}</Box>
+                </Group>
+              </Section>
+            </Group>
+          </Box>
         </Box>
       </DraggableCore>
-      {dragging && <Box sx={{ height: draggingProps.height }} />}
     </>
   )
 }
 
-const DisplaySelection = ({ sx }) => {
+const DisplaySection = ({ sx }) => {
   const selectedDatasets = useSelectedDatasets()
 
   return (
@@ -91,4 +97,4 @@ const DisplaySelection = ({ sx }) => {
   )
 }
 
-export default DisplaySelection
+export default DisplaySection
