@@ -4,7 +4,6 @@ import { useDatasetsStore } from './datasets'
 
 const DatasetRaster = ({ dataset, month }) => {
   const {
-    name,
     source,
     variables,
     display: { opacity, colormapName, clim },
@@ -22,7 +21,6 @@ const DatasetRaster = ({ dataset, month }) => {
 
   return (
     <Raster
-      key={name}
       source={source}
       colormap={colormap}
       clim={clim}

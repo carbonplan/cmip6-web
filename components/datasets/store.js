@@ -74,7 +74,7 @@ export const useDatasetsStore = create((set) => ({
       }
 
       if (!state.selectedOrder.includes(dataset.name)) {
-        state.selectedOrder.push(dataset.name)
+        state.selectedOrder.unshift(dataset.name)
       }
 
       return { ...state }
