@@ -8,8 +8,7 @@ import { useDataset, useSelectedDatasets } from './store'
 import ControlPanelDivider from '../control-panel-divider'
 
 const DatasetDisplay = ({ name, sx }) => {
-  const [rel, setRel] = useState(null)
-  const [initialTop, setInitialTop] = useState(null)
+  const [draggingProps, setDraggingProps] = useState(null)
   const [top, setTop] = useState(0)
 
   const container = useRef(null)
@@ -28,27 +27,26 @@ const DatasetDisplay = ({ name, sx }) => {
     }
   }
 
-  const dragging = typeof rel === 'number'
+  const dragging = !!draggingProps
 
   return (
     <>
       <DraggableCore
-        onStart={(d) => {
-          //   console.log(e, d)
-          //   e.stopPropagation()
-          setInitialTop(container.current.offsetTop)
-          setRel(e.pageY - container.current.offsetTop)
+        onStart={(e) => {
+          const { top, height, width } =
+            container.current.getBoundingClientRect()
+          setDraggingProps({ top, height, width, cursorOffset: e.pageY - top })
+          setTop(container.current.offsetTop)
         }}
-        onDrag={(d) => {
-          setTop(d.pageY - rel)
+        onDrag={(e) => {
+          setTop(e.pageY - draggingProps.cursorOffset)
         }}
-        onStop={(d) => {
-          const shiftY = top - initialTop
-          const delta = shiftY / container.current.offsetHeight
+        onStop={() => {
+          const shiftY = top - draggingProps.top
+          const delta = shiftY / draggingProps.height
 
           reorderDataset(Math.round(delta))
-          setRel(null)
-          setInitialTop(null)
+          setDraggingProps(null)
           setTop(0)
         }}
       >
@@ -56,9 +54,12 @@ const DatasetDisplay = ({ name, sx }) => {
           onKeyDown={handleKeyDown}
           tabIndex={0}
           ref={container}
+          id={'container'}
           sx={{
             top: top + 'px',
             position: dragging ? 'absolute' : 'relative',
+            width: dragging ? draggingProps.width : undefined,
+            height: dragging ? draggingProps.height : undefined,
           }}
         >
           <Group spacing={4}>
@@ -73,7 +74,7 @@ const DatasetDisplay = ({ name, sx }) => {
           </Group>
         </Box>
       </DraggableCore>
-      {dragging && <Box sx={{ height: container.current.offsetHeight }} />}
+      {dragging && <Box sx={{ height: draggingProps.height }} />}
     </>
   )
 }
