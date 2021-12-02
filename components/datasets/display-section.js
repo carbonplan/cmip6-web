@@ -14,7 +14,7 @@ const DatasetDisplay = ({ name, sx }) => {
   const container = useRef(null)
   const { dataset, reorderDataset } = useDataset(name)
   const {
-    display: { colormapName, clim, opacity },
+    display: { color, colormapName, clim, opacity },
   } = dataset
   const nameElements = name.split('.')
   const shortName = nameElements[nameElements.length - 1]
@@ -70,7 +70,12 @@ const DatasetDisplay = ({ name, sx }) => {
           >
             <Group spacing={4}>
               <ControlPanelDivider />
-              <Section sx={sx.heading} label={shortName}>
+              <Section
+                sx={sx.heading}
+                label={shortName}
+                color={color}
+                expander='left'
+              >
                 <Group spacing={2}>
                   <Box>Colormap: {colormapName}</Box>
                   <Box>Color range: {clim.join(', ')}</Box>

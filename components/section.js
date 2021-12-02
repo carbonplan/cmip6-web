@@ -10,7 +10,15 @@ const spacing = {
   px: [4, 5, 5, 6],
   mx: [-4, -5, -5, -6],
 }
-export const Section = ({ children, label, onClose, onOpen, sx }) => {
+export const Section = ({
+  children,
+  label,
+  onClose,
+  onOpen,
+  sx,
+  color = 'primary',
+  expander = 'right',
+}) => {
   const [showSection, setShowSection] = useState(false)
 
   const handleClick = useCallback(() => {
@@ -20,6 +28,28 @@ export const Section = ({ children, label, onClose, onOpen, sx }) => {
       return !previouslyShown
     })
   }, [onClose, onOpen])
+
+  const content = [
+    <Box key='label' as='span' sx={{ ml: expander === 'left' ? 2 : undefined }}>
+      {label}
+    </Box>,
+    <Expander
+      key='expander'
+      value={showSection}
+      id='section-expander'
+      sx={{
+        color,
+        position: 'relative',
+        fill: color,
+        stroke: color,
+        transition: 'stroke 0.15s',
+      }}
+    />,
+  ]
+
+  if (expander === 'left') {
+    content.reverse()
+  }
 
   return (
     <Box
@@ -38,23 +68,13 @@ export const Section = ({ children, label, onClose, onOpen, sx }) => {
           ...sx,
           ...spacing,
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: expander === 'right' ? 'space-between' : undefined,
           cursor: 'pointer',
+          color,
         }}
         onClick={handleClick}
       >
-        <Box as='span' sx={{ color: 'primary' }}>
-          {label}
-        </Box>
-        <Expander
-          value={showSection}
-          id='section-expander'
-          sx={{
-            position: 'relative',
-            stroke: 'secondary',
-            transition: 'stroke 0.15s',
-          }}
-        />
+        {content}
       </Box>
 
       <AnimateHeight
