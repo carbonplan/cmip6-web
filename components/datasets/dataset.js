@@ -4,8 +4,7 @@ import { useDataset } from './store'
 const Dataset = ({ dataset }) => {
   const {
     dataset: { selected, display },
-    selectDataset,
-    deselectDataset,
+    toggleSelection,
   } = useDataset(dataset.name)
 
   return (
@@ -17,9 +16,7 @@ const Dataset = ({ dataset }) => {
       <input
         type='checkbox'
         checked={selected}
-        onChange={(e) =>
-          e.target.checked ? selectDataset() : deselectDataset()
-        }
+        onChange={(e) => toggleSelection(e.target.checked)}
       />
     </Flex>
   )

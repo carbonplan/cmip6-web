@@ -1,7 +1,6 @@
 import { Box, Divider } from 'theme-ui'
 import { useMemo } from 'react'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
-import shallow from 'zustand/shallow'
 
 import Section from '../section'
 import data from './data.json'
@@ -12,10 +11,8 @@ import { getFiltersCallback } from './utils'
 const formatNumber = (value) => String(value).padStart(2, '0')
 
 const QuerySection = ({ sx }) => {
-  const { filters, setFilters } = useDatasetsStore(
-    ({ filters, setFilters }) => ({ filters, setFilters }),
-    shallow
-  )
+  const filters = useDatasetsStore((state) => state.filters)
+  const setFilters = useDatasetsStore((state) => state.setFilters)
 
   const variableFilter = useMemo(() => {
     return {

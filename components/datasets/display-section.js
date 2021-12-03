@@ -12,7 +12,7 @@ const DatasetDisplay = ({ name, sx }) => {
   const [top, setTop] = useState(0)
 
   const container = useRef(null)
-  const { dataset, reorderDataset } = useDataset(name)
+  const { dataset, reorder } = useDataset(name)
   const {
     display: { color, colormapName, clim, opacity },
   } = dataset
@@ -21,9 +21,9 @@ const DatasetDisplay = ({ name, sx }) => {
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 40) {
-      reorderDataset(1)
+      reorder(1)
     } else if (e.keyCode === 38) {
-      reorderDataset(-1)
+      reorder(-1)
     }
   }
 
@@ -46,7 +46,7 @@ const DatasetDisplay = ({ name, sx }) => {
           const shiftY = top - draggingProps.top
           const delta = shiftY / draggingProps.height
 
-          reorderDataset(Math.round(delta))
+          reorder(Math.round(delta))
           setDraggingProps(null)
           setTop(0)
         }}

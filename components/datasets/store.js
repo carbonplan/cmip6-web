@@ -1,23 +1,9 @@
 import { useCallback } from 'react'
 import create from 'zustand'
+import shallow from 'zustand/shallow'
 
 import data from './data.json'
 import { getDatasetDisplay, getFiltersCallback } from './utils'
-
-const DEFAULT_COLORMAPS = {
-  tavg: 'warm',
-  prec: 'cool',
-}
-
-const DEFAULT_COLORS = {
-  warm: ['purple', 'pink', 'red', 'orange', 'yellow'],
-  cool: ['purple', 'blue', 'teal', 'green', 'yellow'],
-}
-
-const DEFAULT_CLIMS = {
-  tavg: [-20, 30],
-  prec: [0, 300],
-}
 
 const getInitialDatasets = () => {
   return data.datasets.reduce((accum, dataset) => {
@@ -43,7 +29,15 @@ export const useDatasetsStore = create((set) => ({
         const dataset = state.datasets[k]
         const selected = cb(dataset) && dataset.selected
         if (selected) {
-          dataset.display = getDatasetDisplay(dataset, value, state.filters)
+          const colors = Object.keys(accum)
+            .map((name) => accum[name].display.color)
+            .filter(Boolean)
+          dataset.display = getDatasetDisplay(
+            dataset,
+            colors,
+            value,
+            state.filters
+          )
         }
         accum[k] = { ...dataset, selected }
         return accum
@@ -61,9 +55,12 @@ export const useDatasetsStore = create((set) => ({
   selectDataset: (name) =>
     set((state) => {
       const dataset = state.datasets[name]
+      const colors = Object.keys(state.datasets)
+        .map((k) => k !== name && state.datasets[k].display.color)
+        .filter(Boolean)
 
       dataset.selected = true
-      dataset.display = getDatasetDisplay(dataset, state.filters)
+      dataset.display = getDatasetDisplay(dataset, colors, state.filters)
 
       if (!state.selectedOrder.includes(dataset.name)) {
         state.selectedOrder.unshift(dataset.name)
@@ -101,9 +98,17 @@ export const useDatasetsStore = create((set) => ({
 
       return { ...state }
     }),
+  setDatasetDisplay: (name, display) =>
+    set((state) => {
+      const dataset = state.datasets[name]
+      dataset.display = { ...dataset.display, ...display }
+
+      return { ...state }
+    }),
 }))
 
 export const useSelectedDatasets = () => {
+  // TODO: actually meaningfully diff datasets instead of defining new object
   const { datasets, selectedOrder } = useDatasetsStore((state) => ({
     datasets: state.datasets,
     selectedOrder: state.selectedOrder,
@@ -117,9 +122,11 @@ export const useDataset = (name) => {
     useCallback(
       (state) => ({
         dataset: state.datasets[name],
-        selectDataset: () => state.selectDataset(name),
-        deselectDataset: () => state.deselectDataset(name),
-        reorderDataset: (delta) => state.reorderDataset(name, delta),
+        reorder: (delta) => state.reorderDataset(name, delta),
+        toggleSelection: (selected) => {
+          selected ? state.selectDataset(name) : state.deselectDataset(name)
+        },
+        setDisplay: (display) => state.setDatasetDisplay(name, display),
       }),
       [name]
     )
