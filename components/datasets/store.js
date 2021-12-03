@@ -1,28 +1,23 @@
 import { useCallback } from 'react'
 import create from 'zustand'
-import shallow from 'zustand/shallow'
 
 import data from './data.json'
-import { getFiltersCallback } from './utils'
+import { getDatasetDisplay, getFiltersCallback } from './utils'
 
-// TODO:
-// - keep track of desired order, use to sort array in useSelectedDatasets
-// - smart default selection of display properties
-//   - colormap
-//   - color (unique value based on colormap?)
-//   - clim (based on filters.variable?)
+const DEFAULT_COLORMAPS = {
+  tavg: 'warm',
+  prec: 'cool',
+}
 
-const COLORS = [
-  'red',
-  'orange',
-  'yellow',
-  'green',
-  'teal',
-  'blue',
-  'purple',
-  'pink',
-  'grey',
-]
+const DEFAULT_COLORS = {
+  warm: ['purple', 'pink', 'red', 'orange', 'yellow'],
+  cool: ['purple', 'blue', 'teal', 'green', 'yellow'],
+}
+
+const DEFAULT_CLIMS = {
+  tavg: [-20, 30],
+  prec: [0, 300],
+}
 
 const getInitialDatasets = () => {
   return data.datasets.reduce((accum, dataset) => {
@@ -46,11 +41,16 @@ export const useDatasetsStore = create((set) => ({
       const cb = getFiltersCallback(value)
       const updatedDatasets = Object.keys(state.datasets).reduce((accum, k) => {
         const dataset = state.datasets[k]
-        accum[k] = { ...dataset, selected: cb(dataset) && dataset.selected }
+        const selected = cb(dataset) && dataset.selected
+        if (selected) {
+          dataset.display = getDatasetDisplay(dataset, value, state.filters)
+        }
+        accum[k] = { ...dataset, selected }
         return accum
       }, {})
 
       return {
+        ...state,
         selectedOrder: state.selectedOrder.filter(
           (n) => updatedDatasets[n].selected
         ),
@@ -63,15 +63,7 @@ export const useDatasetsStore = create((set) => ({
       const dataset = state.datasets[name]
 
       dataset.selected = true
-      if (!dataset.display.colormapName) {
-        const color = COLORS[Math.floor(Math.random() * COLORS.length)]
-        dataset.display.color = color
-        dataset.display.colormapName = `${color}s`
-      }
-
-      if (!dataset.display.clim) {
-        dataset.display.clim = [-20, 30]
-      }
+      dataset.display = getDatasetDisplay(dataset, state.filters)
 
       if (!state.selectedOrder.includes(dataset.name)) {
         state.selectedOrder.unshift(dataset.name)
