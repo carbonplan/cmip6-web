@@ -8,7 +8,9 @@ import Section from '../section'
 import { useDatasetsStore } from '../store'
 
 const DisplayEditor = ({ name, sx }) => {
-  const updateDataset = useDatasetsStore((state) => state.updateDataset)
+  const updateDatasetDisplay = useDatasetsStore(
+    (state) => state.updateDatasetDisplay
+  )
   const {
     color,
     colormapName,
@@ -27,7 +29,7 @@ const DisplayEditor = ({ name, sx }) => {
           <Select
             value={colormapName}
             onChange={(e) =>
-              updateDataset(name, { colormapName: e.target.value })
+              updateDatasetDisplay(name, { colormapName: e.target.value })
             }
           >
             {colormaps.map(({ name }) => (
@@ -51,7 +53,7 @@ const DisplayEditor = ({ name, sx }) => {
             onBlur={() => {
               const validated = Math.min(Math.max(Number(opacity), 0), 1)
               setOpacity(validated)
-              updateDataset(name, { opacity: validated })
+              updateDatasetDisplay(name, { opacity: validated })
             }}
           />
         </Box>

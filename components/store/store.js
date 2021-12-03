@@ -97,10 +97,30 @@ export const useDatasetsStore = create((set) => ({
 
       return { selectedOrder: [...selectedOrder] }
     }),
-  updateDataset: (name, values) =>
-    set(({ datasets }) => {
-      const dataset = datasets[name]
+  updateDatasetDisplay: (name, values) =>
+    set(({ datasets, filters }) => {
+      const invalidKey = Object.keys(values).find(
+        (k) => !['colormapName', 'clim', 'opacity'].includes(k)
+      )
+      if (invalidKey) {
+        throw new Error(
+          `Unexpected display update. Invalid key: ${invalidKey}, must be one of 'colormapName', 'clim', 'opacity'`
+        )
+      }
 
-      return { datasets: { ...datasets, [name]: { ...dataset, ...values } } }
+      const updatedDataset = { ...datasets[name], ...values }
+      const colors = Object.keys(datasets)
+        .map((k) => k !== name && datasets[k].color)
+        .filter(Boolean)
+
+      return {
+        datasets: {
+          ...datasets,
+          [name]: {
+            ...updatedDataset,
+            ...getDatasetDisplay(updatedDataset, colors, filters),
+          },
+        },
+      }
     }),
 }))
