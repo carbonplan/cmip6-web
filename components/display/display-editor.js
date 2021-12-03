@@ -2,13 +2,19 @@ import { Box } from 'theme-ui'
 import { useState } from 'react'
 import { Group, Input, Select } from '@carbonplan/components'
 import { colormaps } from '@carbonplan/colormaps'
+import shallow from 'zustand/shallow'
 
 import Section from '../section'
-import { useDisplay } from '../datasets/store'
+import { useDatasetsStore } from '../store'
 
 const DisplayEditor = ({ name, sx }) => {
-  const { display, setDisplay } = useDisplay(name)
-  const { color, colormapName, clim, opacity: initialOpacity } = display
+  const updateDataset = useDatasetsStore((state) => state.updateDataset)
+  const {
+    color,
+    colormapName,
+    clim,
+    opacity: initialOpacity,
+  } = useDatasetsStore((state) => state.datasets[name], shallow)
   const [opacity, setOpacity] = useState(initialOpacity)
   const nameElements = name.split('.')
   const shortName = nameElements[nameElements.length - 1]
@@ -20,7 +26,9 @@ const DisplayEditor = ({ name, sx }) => {
           Colormap
           <Select
             value={colormapName}
-            onChange={(e) => setDisplay({ colormapName: e.target.value })}
+            onChange={(e) =>
+              updateDataset(name, { colormapName: e.target.value })
+            }
           >
             {colormaps.map(({ name }) => (
               <option key={name} value={name}>
@@ -43,7 +51,7 @@ const DisplayEditor = ({ name, sx }) => {
             onBlur={() => {
               const validated = Math.min(Math.max(Number(opacity), 0), 1)
               setOpacity(validated)
-              setDisplay({ opacity: validated })
+              updateDataset(name, { opacity: validated })
             }}
           />
         </Box>

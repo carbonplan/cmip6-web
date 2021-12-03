@@ -1,13 +1,12 @@
 import { Raster } from '@carbonplan/maps'
 import { useColormap } from '@carbonplan/colormaps'
-import { useDatasetsStore } from './datasets'
+import shallow from 'zustand/shallow'
 
-const DatasetRaster = ({ dataset, month, index }) => {
-  const {
-    source,
-    variables,
-    display: { opacity, colormapName, clim },
-  } = dataset
+import { useDatasetsStore } from './store'
+
+const DatasetRaster = ({ name, month, index }) => {
+  const dataset = useDatasetsStore((state) => state.datasets[name], shallow)
+  const { source, variables, opacity, colormapName, clim } = dataset
   const colormap = useColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 

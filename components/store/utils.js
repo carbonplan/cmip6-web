@@ -23,7 +23,7 @@ export const getDatasetDisplay = (
   filters,
   oldFilters = {}
 ) => {
-  let { colormapName, color, clim, ...rest } = dataset.display
+  let { colormapName, color, clim } = dataset
 
   if (
     !colormapName ||
@@ -40,5 +40,5 @@ export const getDatasetDisplay = (
     clim = DEFAULT_CLIMS[filters.variable]
   }
 
-  return { ...rest, colormapName, color, clim }
+  return { colormapName, color, clim }
 }

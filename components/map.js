@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useThemeUI } from 'theme-ui'
 import { Map, Line, RegionPicker } from '@carbonplan/maps'
 
-import { useSelectedDatasets } from './datasets'
+import { useDatasetsStore } from './store'
 import { useRegionContext } from './region'
 import DatasetRaster from './dataset-raster'
 
@@ -12,7 +12,7 @@ const MapWrapper = ({ children }) => {
   const { theme } = useThemeUI()
   const [month, setMonth] = useState(1)
   const { showRegionPicker } = useRegionContext()
-  const datasets = useSelectedDatasets()
+  const selectedOrder = useDatasetsStore((state) => state.selectedOrder)
 
   return (
     <Map zoom={2} center={[0, 0]} debug={false}>
@@ -30,9 +30,12 @@ const MapWrapper = ({ children }) => {
           maxRadius={2000}
         />
       )}
-      {datasets.reverse().map((d, i) => (
-        <DatasetRaster index={i} key={d.name} dataset={d} month={month} />
-      ))}
+      {selectedOrder
+        .slice()
+        .reverse()
+        .map((name, i) => (
+          <DatasetRaster index={i} key={name} name={name} month={month} />
+        ))}
       {children}
     </Map>
   )

@@ -2,15 +2,14 @@ import { Box, Divider } from 'theme-ui'
 import { useMemo } from 'react'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
 
+import { getFiltersCallback, useDatasetsStore } from '../store'
 import Section from '../section'
-import data from '../datasets/data.json'
 import Dataset from './dataset'
-import { useDatasetsStore } from '../datasets/store'
-import { getFiltersCallback } from '../datasets/utils'
 
 const formatNumber = (value) => String(value).padStart(2, '0')
 
 const QuerySection = ({ sx }) => {
+  const datasets = useDatasetsStore((state) => state.datasets)
   const filters = useDatasetsStore((state) => state.filters)
   const setFilters = useDatasetsStore((state) => state.setFilters)
 
@@ -21,7 +20,9 @@ const QuerySection = ({ sx }) => {
     }
   }, [filters.variable])
 
-  const filteredData = data.datasets.filter(getFiltersCallback(filters))
+  const resultNames = Object.keys(datasets).filter((k) =>
+    getFiltersCallback(filters)(datasets[k])
+  )
 
   return (
     <Section sx={sx.heading} label='Datasets'>
@@ -43,13 +44,12 @@ const QuerySection = ({ sx }) => {
       </Row>
       <Divider sx={{ my: 4 }} />
       <Box sx={{ ...sx.label, mb: 2 }}>
-        Results{' '}
-        <Badge sx={{ ml: 4 }}>{formatNumber(filteredData.length)}</Badge> /{' '}
-        <Badge>{formatNumber(data.datasets.length)}</Badge>
+        Results <Badge sx={{ ml: 4 }}>{formatNumber(resultNames.length)}</Badge>{' '}
+        / <Badge>{formatNumber(Object.keys(datasets).length)}</Badge>
       </Box>
       <Group spacing={2}>
-        {filteredData.map((d) => (
-          <Dataset key={d.name} dataset={d} />
+        {resultNames.map((name) => (
+          <Dataset key={name} name={name} />
         ))}
       </Group>
     </Section>

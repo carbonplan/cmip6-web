@@ -3,22 +3,22 @@ import { useRef, useState } from 'react'
 import { Group } from '@carbonplan/components'
 import { DraggableCore } from 'react-draggable'
 
-import { useDataset, useSelectedDatasets } from '../datasets/store'
+import { useDatasetsStore } from '../store'
 import ControlPanelDivider from '../control-panel-divider'
 import DisplayEditor from './display-editor'
 
 const DatasetDisplay = ({ name, sx }) => {
   const [draggingProps, setDraggingProps] = useState(null)
   const [top, setTop] = useState(0)
+  const reorderDataset = useDatasetsStore((state) => state.reorderDataset)
 
   const container = useRef(null)
-  const { reorder } = useDataset(name)
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 40) {
-      reorder(1)
+      reorderDataset(name, 1)
     } else if (e.keyCode === 38) {
-      reorder(-1)
+      reorderDataset(name, -1)
     }
   }
 
@@ -41,7 +41,7 @@ const DatasetDisplay = ({ name, sx }) => {
           const shiftY = top - draggingProps.top
           const delta = shiftY / draggingProps.height
 
-          reorder(Math.round(delta))
+          reorderDataset(name, Math.round(delta))
           setDraggingProps(null)
           setTop(0)
         }}
@@ -75,12 +75,12 @@ const DatasetDisplay = ({ name, sx }) => {
 }
 
 const DisplaySection = ({ sx }) => {
-  const selectedDatasets = useSelectedDatasets()
+  const selectedOrder = useDatasetsStore((state) => state.selectedOrder)
 
   return (
     <Group spacing={4}>
-      {selectedDatasets.map((d) => (
-        <DatasetDisplay key={d.name} name={d.name} sx={sx} />
+      {selectedOrder.map((name) => (
+        <DatasetDisplay key={name} name={name} sx={sx} />
       ))}
     </Group>
   )
