@@ -1,23 +1,64 @@
 import { Box } from 'theme-ui'
-import { useEffect, useRef, useState } from 'react'
-import { Group } from '@carbonplan/components'
+import { useRef, useState } from 'react'
+import { Group, Input, Select } from '@carbonplan/components'
+import { colormaps } from '@carbonplan/colormaps'
 import { DraggableCore } from 'react-draggable'
 
 import Section from '../section'
-import { useDataset, useSelectedDatasets } from './store'
+import { useDataset, useDisplay, useSelectedDatasets } from './store'
 import ControlPanelDivider from '../control-panel-divider'
 
+const DatasetDisplayEditor = ({ name, sx }) => {
+  const { display, setDisplay } = useDisplay(name)
+  const { color, colormapName, clim, opacity: initialOpacity } = display
+  const [opacity, setOpacity] = useState(initialOpacity)
+  const nameElements = name.split('.')
+  const shortName = nameElements[nameElements.length - 1]
+
+  return (
+    <Section sx={sx.heading} label={shortName} color={color} expander='left'>
+      <Group spacing={4}>
+        <Box sx={{ ...sx.label, mb: 2 }}>
+          Colormap
+          <Select
+            value={colormapName}
+            onChange={(e) => setDisplay({ colormapName: e.target.value })}
+          >
+            {colormaps.map(({ name }) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </Select>
+        </Box>
+
+        <Box>
+          <Box sx={{ ...sx.label, mb: 2 }}>Color range</Box>
+          {clim.join(', ')}
+        </Box>
+
+        <Box sx={{ ...sx.label, mb: 2 }}>
+          Opacity
+          <Input
+            value={opacity}
+            onChange={(e) => setOpacity(e.target.value)}
+            onBlur={() => {
+              const validated = Math.min(Math.max(Number(opacity), 0), 1)
+              setOpacity(validated)
+              setDisplay({ opacity: validated })
+            }}
+          />
+        </Box>
+      </Group>
+    </Section>
+  )
+}
 const DatasetDisplay = ({ name, sx }) => {
   const [draggingProps, setDraggingProps] = useState(null)
   const [top, setTop] = useState(0)
 
   const container = useRef(null)
-  const { dataset, reorder } = useDataset(name)
-  const {
-    display: { color, colormapName, clim, opacity },
-  } = dataset
-  const nameElements = name.split('.')
-  const shortName = nameElements[nameElements.length - 1]
+  const { reorder } = useDataset(name)
 
   const handleKeyDown = (e) => {
     if (e.keyCode === 40) {
@@ -70,18 +111,7 @@ const DatasetDisplay = ({ name, sx }) => {
           >
             <Group spacing={4}>
               <ControlPanelDivider />
-              <Section
-                sx={sx.heading}
-                label={shortName}
-                color={color}
-                expander='left'
-              >
-                <Group spacing={2}>
-                  <Box>Colormap: {colormapName}</Box>
-                  <Box>Color range: {clim.join(', ')}</Box>
-                  <Box>Opacity: {opacity}</Box>
-                </Group>
-              </Section>
+              <DatasetDisplayEditor name={name} sx={sx} />
             </Group>
           </Box>
         </Box>

@@ -126,9 +126,23 @@ export const useDataset = (name) => {
         toggleSelection: (selected) => {
           selected ? state.selectDataset(name) : state.deselectDataset(name)
         },
-        setDisplay: (display) => state.setDatasetDisplay(name, display),
       }),
       [name]
     )
   )
+}
+
+export const useDisplay = (name) => {
+  const display = useDatasetsStore(
+    useCallback((state) => state.datasets[name].display, [name]),
+    shallow
+  )
+  const setDisplay = useDatasetsStore(
+    useCallback(
+      (state) => (display) => state.setDatasetDisplay(name, display),
+      [name]
+    )
+  )
+
+  return { display, setDisplay }
 }
