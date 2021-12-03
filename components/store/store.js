@@ -25,12 +25,6 @@ export const useDatasetsStore = create((set) => ({
   filters: { variable: 'tavg' },
   selectDataset: (name) =>
     set(({ datasets, selectedOrder, filters }) => {
-      // if (!selectedOrder.includes(name)) {
-      //   console.log('adding', name, selectedOrder)
-      //   selectedOrder.unshift(name)
-      //   console.log('added', selectedOrder)
-      // }
-
       const dataset = datasets[name]
       const colors = Object.keys(datasets)
         .map((k) => k !== name && datasets[k].color)
@@ -64,10 +58,6 @@ export const useDatasetsStore = create((set) => ({
         return accum
       }, {})
 
-      console.log(
-        'setFilters order',
-        selectedOrder.filter((n) => updatedDatasets[n].selected)
-      )
       return {
         selectedOrder: selectedOrder.filter((n) => updatedDatasets[n].selected),
         datasets: updatedDatasets,
