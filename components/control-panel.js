@@ -7,10 +7,11 @@ const ControlPanel = ({
   children,
   tooltip,
   onClose,
+  defaultExpanded = false,
   side = 'left',
   width = 3,
 }) => {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(defaultExpanded)
   const [showTooltip, setShowTooltip] = useState(false)
 
   const handleToggleExpanded = useCallback(() => {

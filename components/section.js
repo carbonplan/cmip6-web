@@ -16,10 +16,11 @@ export const Section = ({
   onClose,
   onOpen,
   sx,
+  defaultExpanded = false,
   color = 'primary',
   expander = 'right',
 }) => {
-  const [showSection, setShowSection] = useState(false)
+  const [showSection, setShowSection] = useState(defaultExpanded)
 
   const handleClick = useCallback(() => {
     setShowSection((previouslyShown) => {

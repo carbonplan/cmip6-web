@@ -25,7 +25,7 @@ const QuerySection = ({ sx }) => {
   )
 
   return (
-    <Section sx={sx.heading} label='Datasets'>
+    <Section sx={sx.heading} label='Datasets' defaultExpanded>
       <Row columns={4}>
         <Column start={1} width={1} sx={sx.label}>
           Variable

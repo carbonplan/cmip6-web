@@ -55,6 +55,7 @@ const Tool = () => {
             <ControlPanel
               tooltip='Data browser'
               side='left'
+              defaultExpanded
               width={4}
               onClose={handleClose}
             >
