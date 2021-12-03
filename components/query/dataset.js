@@ -1,5 +1,5 @@
 import { Box, Flex } from 'theme-ui'
-import { useDataset } from './store'
+import { useDataset } from '../datasets/store'
 
 const Dataset = ({ dataset }) => {
   const {

@@ -3,10 +3,10 @@ import { useMemo } from 'react'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
 
 import Section from '../section'
-import data from './data.json'
+import data from '../datasets/data.json'
 import Dataset from './dataset'
-import { useDatasetsStore } from './store'
-import { getFiltersCallback } from './utils'
+import { useDatasetsStore } from '../datasets/store'
+import { getFiltersCallback } from '../datasets/utils'
 
 const formatNumber = (value) => String(value).padStart(2, '0')
 

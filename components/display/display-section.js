@@ -1,58 +1,12 @@
 import { Box } from 'theme-ui'
 import { useRef, useState } from 'react'
-import { Group, Input, Select } from '@carbonplan/components'
-import { colormaps } from '@carbonplan/colormaps'
+import { Group } from '@carbonplan/components'
 import { DraggableCore } from 'react-draggable'
 
-import Section from '../section'
-import { useDataset, useDisplay, useSelectedDatasets } from './store'
+import { useDataset, useSelectedDatasets } from '../datasets/store'
 import ControlPanelDivider from '../control-panel-divider'
+import DisplayEditor from './display-editor'
 
-const DatasetDisplayEditor = ({ name, sx }) => {
-  const { display, setDisplay } = useDisplay(name)
-  const { color, colormapName, clim, opacity: initialOpacity } = display
-  const [opacity, setOpacity] = useState(initialOpacity)
-  const nameElements = name.split('.')
-  const shortName = nameElements[nameElements.length - 1]
-
-  return (
-    <Section sx={sx.heading} label={shortName} color={color} expander='left'>
-      <Group spacing={4}>
-        <Box sx={{ ...sx.label, mb: 2 }}>
-          Colormap
-          <Select
-            value={colormapName}
-            onChange={(e) => setDisplay({ colormapName: e.target.value })}
-          >
-            {colormaps.map(({ name }) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </Select>
-        </Box>
-
-        <Box>
-          <Box sx={{ ...sx.label, mb: 2 }}>Color range</Box>
-          {clim.join(', ')}
-        </Box>
-
-        <Box sx={{ ...sx.label, mb: 2 }}>
-          Opacity
-          <Input
-            value={opacity}
-            onChange={(e) => setOpacity(e.target.value)}
-            onBlur={() => {
-              const validated = Math.min(Math.max(Number(opacity), 0), 1)
-              setOpacity(validated)
-              setDisplay({ opacity: validated })
-            }}
-          />
-        </Box>
-      </Group>
-    </Section>
-  )
-}
 const DatasetDisplay = ({ name, sx }) => {
   const [draggingProps, setDraggingProps] = useState(null)
   const [top, setTop] = useState(0)
@@ -111,7 +65,7 @@ const DatasetDisplay = ({ name, sx }) => {
           >
             <Group spacing={4}>
               <ControlPanelDivider />
-              <DatasetDisplayEditor name={name} sx={sx} />
+              <DisplayEditor name={name} sx={sx} />
             </Group>
           </Box>
         </Box>
