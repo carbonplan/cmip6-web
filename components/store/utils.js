@@ -67,18 +67,15 @@ export const getDatasetDisplay = (
   dataset,
   existingColors,
   filters,
-  oldFilters = {}
+  forceUpdate = false
 ) => {
   let { colormapName, color, clim } = dataset
 
-  if (
-    !colormapName ||
-    colormapName === DEFAULT_COLORMAPS[oldFilters.variable]
-  ) {
+  if (!colormapName || forceUpdate) {
     colormapName = DEFAULT_COLORMAPS[filters.variable]
   }
 
-  if (!clim || clim === DEFAULT_CLIMS[oldFilters.variable]) {
+  if (!clim || forceUpdate) {
     clim = DEFAULT_CLIMS[filters.variable]
   }
 

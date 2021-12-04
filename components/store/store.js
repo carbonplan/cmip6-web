@@ -42,7 +42,7 @@ export const useDatasetsStore = create((set) => ({
       }
     }),
   setFilters: (value) =>
-    set(({ datasets, filters, selectedOrder }) => {
+    set(({ datasets, selectedOrder }) => {
       const cb = getFiltersCallback(value)
       const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
         const dataset = datasets[k]
@@ -52,7 +52,7 @@ export const useDatasetsStore = create((set) => ({
           const colors = Object.keys(accum)
             .map((name) => accum[name].color)
             .filter(Boolean)
-          displayUpdates = getDatasetDisplay(dataset, colors, value, filters)
+          displayUpdates = getDatasetDisplay(dataset, colors, value, true)
         }
         accum[k] = { ...dataset, ...displayUpdates, selected }
         return accum
