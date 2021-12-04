@@ -16,7 +16,7 @@ const Header = () => {
 
       <Box sx={{ position: 'absolute', top: 0, width: '100%', zIndex: 5000 }}>
         <Container>
-          <HeaderComponent />
+          <HeaderComponent dimmer='top' />
         </Container>
       </Box>
     </>
