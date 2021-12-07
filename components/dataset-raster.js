@@ -2,7 +2,7 @@ import { Raster } from '@carbonplan/maps'
 import { useColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
-import { useDatasetsStore } from './store'
+import { useDatasetsStore } from './datasets'
 
 const DatasetRaster = ({ name, month, index }) => {
   const dataset = useDatasetsStore((state) => state.datasets[name], shallow)

@@ -2,7 +2,7 @@ import { Box, Divider } from 'theme-ui'
 import { useMemo } from 'react'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
 
-import { getFiltersCallback, useDatasetsStore } from '../store'
+import { getFiltersCallback, useDatasetsStore } from '../datasets'
 import Section from '../section'
 import Dataset from './dataset'
 

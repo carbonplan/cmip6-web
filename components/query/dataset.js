@@ -1,6 +1,6 @@
 import { Box, Flex } from 'theme-ui'
 import shallow from 'zustand/shallow'
-import { useDatasetsStore } from '../store'
+import { useDatasetsStore } from '../datasets'
 
 const Dataset = ({ name }) => {
   const { selected, color } = useDatasetsStore(
