@@ -1,3 +1,5 @@
+import { Box } from 'theme-ui'
+
 import { useRegionStore } from '../region'
 import Section from '../section'
 
@@ -13,7 +15,13 @@ const RegionSection = ({ sx }) => {
       onOpen={openRegionPicker}
       onClose={closeRegionPicker}
     >
-      Regional data: {JSON.stringify(regionData)}
+      Regional data:
+      {Object.keys(regionData).map((k) => {
+        const value = regionData[k]
+          ? `{ ${Object.keys(regionData[k]).join(', ')} }`
+          : 'null'
+        return <Box key={k}>{`${k}: ${value}`}</Box>
+      })}
     </Section>
   )
 }
