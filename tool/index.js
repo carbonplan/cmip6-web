@@ -1,6 +1,5 @@
 import { Box, Container } from 'theme-ui'
 import { Group } from '@carbonplan/components'
-import { useCallback } from 'react'
 
 import Header from '../components/header'
 import ControlPanel from '../components/control-panel'
@@ -32,16 +31,7 @@ const sx = {
 }
 
 const Tool = () => {
-  const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
-  const setShowRegionPicker = useRegionStore(
-    (state) => state.setShowRegionPicker
-  )
-
-  const handleClose = useCallback(() => {
-    if (!showRegionPicker) {
-      setShowRegionPicker(false)
-    }
-  }, [showRegionPicker])
+  const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
 
   return (
     <>
@@ -63,7 +53,7 @@ const Tool = () => {
               side='left'
               defaultExpanded
               width={4}
-              onClose={handleClose}
+              onClose={closeRegionPicker}
             >
               <Group spacing={4}>
                 <Box sx={sx.description}>
