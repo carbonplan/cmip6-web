@@ -2,10 +2,11 @@ import create from 'zustand'
 
 export const useRegionStore = create((set) => ({
   showRegionPicker: false,
-  setRegionPicker: (value) => set({ showRegionPicker: value }),
+  openRegionPicker: () => set({ showRegionPicker: true }),
+  closeRegionPicker: () => set({ showRegionPicker: false, regionData: {} }),
   regionData: {},
   setRegionData: (key, value) =>
-    set((state) => {
-      return {}
+    set(({ regionData }) => {
+      return { regionData: { ...regionData, [key]: value } }
     }),
 }))

@@ -6,6 +6,7 @@ import Header from '../components/header'
 import ControlPanel from '../components/control-panel'
 import QuerySection from '../components/query/query-section'
 import DisplaySection from '../components/display/display-section'
+import { RegionSection } from '../components/sections'
 import Map from '../components/map'
 import ControlPanelDivider from '../components/control-panel-divider'
 import { useRegionStore } from '../components/region'
@@ -70,6 +71,10 @@ const Tool = () => {
                 <ControlPanelDivider />
 
                 <QuerySection sx={sx} />
+
+                <ControlPanelDivider />
+
+                <RegionSection sx={sx} />
 
                 <ControlPanelDivider sx={{ mb: [-4] }} />
               </Group>

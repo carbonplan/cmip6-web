@@ -3,9 +3,11 @@ import { useColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from './datasets'
+import { useRegionStore } from './region'
 
 const DatasetRaster = ({ name, month, index }) => {
   const dataset = useDatasetsStore((state) => state.datasets[name], shallow)
+  const setRegionData = useRegionStore((state) => state.setRegionData)
   const { source, variables, opacity, colormapName, clim } = dataset
   const colormap = useColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
@@ -29,6 +31,7 @@ const DatasetRaster = ({ name, month, index }) => {
       mode={'texture'}
       variable={variable}
       selector={selector}
+      regionOptions={{ setData: (v) => setRegionData(name, v) }}
     />
   )
 }
