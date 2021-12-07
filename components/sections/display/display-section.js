@@ -3,8 +3,8 @@ import { useRef, useState } from 'react'
 import { Group } from '@carbonplan/components'
 import { DraggableCore } from 'react-draggable'
 
-import { useDatasetsStore } from '../datasets'
-import ControlPanelDivider from '../control-panel-divider'
+import { useDatasetsStore } from '../../datasets'
+import ControlPanelDivider from '../../control-panel-divider'
 import DisplayEditor from './display-editor'
 
 const DatasetDisplay = ({ name, sx }) => {

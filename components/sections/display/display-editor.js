@@ -4,8 +4,8 @@ import { Group, Input, Select } from '@carbonplan/components'
 import { colormaps } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
-import Section from '../section'
-import { useDatasetsStore } from '../datasets'
+import Section from '../../section'
+import { useDatasetsStore } from '../../datasets'
 
 const DisplayEditor = ({ name, sx }) => {
   const updateDatasetDisplay = useDatasetsStore(
