@@ -1,5 +1,6 @@
 import { Box, Container } from 'theme-ui'
 import { Group } from '@carbonplan/components'
+import { useState } from 'react'
 
 import Header from '../components/header'
 import ControlPanel from '../components/control-panel'
@@ -31,11 +32,12 @@ const sx = {
 }
 
 const Tool = () => {
+  const [loading, setLoading] = useState(false)
   const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
 
   return (
     <>
-      <Header />
+      <Header loading={loading} />
       <Box
         sx={{
           position: 'absolute',
@@ -46,7 +48,7 @@ const Tool = () => {
           overflow: 'clip',
         }}
       >
-        <Map>
+        <Map setLoading={setLoading}>
           <Container>
             <ControlPanel
               tooltip='Data browser'

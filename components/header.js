@@ -1,7 +1,7 @@
 import { Box, Container } from 'theme-ui'
 import { Meta, Guide, Header as HeaderComponent } from '@carbonplan/components'
 
-const Header = () => {
+const Header = ({ loading }) => {
   return (
     <>
       <Meta
@@ -16,7 +16,7 @@ const Header = () => {
 
       <Box sx={{ position: 'absolute', top: 0, width: '100%', zIndex: 5000 }}>
         <Container>
-          <HeaderComponent dimmer='top' />
+          <HeaderComponent dimmer='top' status={loading ? 'loading' : null} />
         </Container>
       </Box>
     </>

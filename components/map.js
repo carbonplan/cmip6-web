@@ -8,14 +8,14 @@ import DatasetRaster from './dataset-raster'
 
 const bucket = 'https://storage.googleapis.com/carbonplan-share/'
 
-const MapWrapper = ({ children }) => {
+const MapWrapper = ({ children, setLoading }) => {
   const { theme } = useThemeUI()
   const [month, setMonth] = useState(1)
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const selectedOrder = useDatasetsStore((state) => state.selectedOrder)
 
   return (
-    <Map zoom={2} center={[0, 0]} debug={false}>
+    <Map zoom={2} center={[0, 0]} debug={false} setLoading={setLoading}>
       <Line
         color={theme.rawColors.primary}
         source={bucket + 'maps-demo/land'}
