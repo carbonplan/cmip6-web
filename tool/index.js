@@ -8,7 +8,7 @@ import QuerySection from '../components/query/query-section'
 import DisplaySection from '../components/display/display-section'
 import Map from '../components/map'
 import ControlPanelDivider from '../components/control-panel-divider'
-import { useRegionContext } from '../components/region'
+import { useRegionStore } from '../components/region'
 
 const sx = {
   heading: {
@@ -29,7 +29,10 @@ const sx = {
 }
 
 const Tool = () => {
-  const { showRegionPicker, setShowRegionPicker } = useRegionContext()
+  const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
+  const setShowRegionPicker = useRegionStore(
+    (state) => state.setShowRegionPicker
+  )
 
   const handleClose = useCallback(() => {
     if (!showRegionPicker) {

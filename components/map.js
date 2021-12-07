@@ -3,7 +3,7 @@ import { useThemeUI } from 'theme-ui'
 import { Map, Line, RegionPicker } from '@carbonplan/maps'
 
 import { useDatasetsStore } from './datasets'
-import { useRegionContext } from './region'
+import { useRegionStore } from './region'
 import DatasetRaster from './dataset-raster'
 
 const bucket = 'https://storage.googleapis.com/carbonplan-share/'
@@ -11,7 +11,7 @@ const bucket = 'https://storage.googleapis.com/carbonplan-share/'
 const MapWrapper = ({ children }) => {
   const { theme } = useThemeUI()
   const [month, setMonth] = useState(1)
-  const { showRegionPicker } = useRegionContext()
+  const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const selectedOrder = useDatasetsStore((state) => state.selectedOrder)
 
   return (
