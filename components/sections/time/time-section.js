@@ -1,36 +1,48 @@
 import { Group, Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
 
-import DoubleSlider from './double-slider'
+import RangeSlider from './range-slider'
 import { useDatasetsStore } from '../../datasets'
 import Section from '../../section'
+import { useState } from 'react'
 
 const TimeSection = ({ sx }) => {
   const { display, range } = useDatasetsStore((state) => state.time)
+  const [showDisplay, setShowDisplay] = useState(false)
   const setTime = useDatasetsStore((state) => state.setTime)
 
   return (
     <Section sx={sx.heading} label='Time'>
       <Group>
-        <DoubleSlider
-          min={0}
-          max={300}
-          start={range.min}
-          end={range.max}
-          minWidth={30}
-          maxWidth={100}
-          setStart={(v) =>
-            setTime({ display: Math.max(v, display), range: { min: v } })
-          }
-          setEnd={(v) =>
-            setTime({ display: Math.min(v, display), range: { max: v } })
-          }
-        />
+        <Box>
+          <RangeSlider
+            min={0}
+            max={300}
+            start={range.min}
+            width={30}
+            value={display}
+            setStart={(v) => {
+              const min = v
+              const max = v + 30
+              setTime({
+                display: Math.min(Math.max(min, display), max),
+                range: { min, max },
+              })
+            }}
+          />
+          <Flex sx={{ justifyContent: 'space-between' }}>
+            <Box>0</Box>
+            <Box>300</Box>
+          </Flex>
+        </Box>
+
         <Box>
           <Slider
             value={display}
             min={range.min}
             max={range.max}
+            onMouseDown={() => setShowDisplay(true)}
+            onMouseUp={() => setShowDisplay(false)}
             step={1}
             onChange={(e) => setTime({ display: parseFloat(e.target.value) })}
           />
@@ -43,7 +55,16 @@ const TimeSection = ({ sx }) => {
               justifyContent: 'flex-end',
             }}
           >
-            <Box sx={{ mr: '-10px' }}>{display}</Box>
+            <Box
+              sx={{
+                color: 'secondary',
+                opacity: showDisplay ? 1 : 0,
+                transition: '0.2s',
+                mr: '-10px',
+              }}
+            >
+              {display}
+            </Box>
           </Flex>
           <Flex sx={{ justifyContent: 'space-between' }}>
             <Box>{range.min}</Box>
