@@ -35,7 +35,6 @@ const QuerySection = ({ sx }) => {
             values={variableFilter}
             setValues={(obj) =>
               setFilters({
-                ...filters,
                 variable: Object.keys(obj).find((k) => obj[k]),
               })
             }

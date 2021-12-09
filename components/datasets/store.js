@@ -22,6 +22,7 @@ const getInitialDatasets = () => {
 export const useDatasetsStore = create((set) => ({
   datasets: getInitialDatasets(),
   selectedOrder: [],
+  time: { display: 0, range: { min: 0, max: 31 } },
   filters: { variable: 'tavg' },
   selectDataset: (name) =>
     set(({ datasets, selectedOrder, filters }) => {
@@ -41,9 +42,24 @@ export const useDatasetsStore = create((set) => ({
         selectedOrder: [name].concat(selectedOrder),
       }
     }),
+  setTime: ({ display, range }) =>
+    set(({ time }) => {
+      return {
+        time: {
+          display: display ?? time.display,
+          range: range
+            ? {
+                min: range.min ?? time.range.min,
+                max: range.max ?? time.range.max,
+              }
+            : time.range,
+        },
+      }
+    }),
   setFilters: (value) =>
-    set(({ datasets, selectedOrder }) => {
-      const cb = getFiltersCallback(value)
+    set(({ filters, datasets, selectedOrder }) => {
+      const updatedFilters = { ...filters, ...value }
+      const cb = getFiltersCallback(updatedFilters)
       const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
         const dataset = datasets[k]
         const selected = cb(dataset) && dataset.selected
@@ -52,7 +68,12 @@ export const useDatasetsStore = create((set) => ({
           const colors = Object.keys(accum)
             .map((name) => accum[name].color)
             .filter(Boolean)
-          displayUpdates = getDatasetDisplay(dataset, colors, value, true)
+          displayUpdates = getDatasetDisplay(
+            dataset,
+            colors,
+            updatedFilters,
+            true
+          )
         }
         accum[k] = { ...dataset, ...displayUpdates, selected }
         return accum
@@ -61,7 +82,7 @@ export const useDatasetsStore = create((set) => ({
       return {
         selectedOrder: selectedOrder.filter((n) => updatedDatasets[n].selected),
         datasets: updatedDatasets,
-        filters: value,
+        filters: updatedFilters,
       }
     }),
 

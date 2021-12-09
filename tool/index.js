@@ -8,6 +8,7 @@ import {
   DisplaySection,
   QuerySection,
   RegionSection,
+  TimeSection,
 } from '../components/sections'
 import Map from '../components/map'
 import ControlPanelDivider from '../components/control-panel-divider'
@@ -65,6 +66,10 @@ const Tool = () => {
                 <ControlPanelDivider />
 
                 <QuerySection sx={sx} />
+
+                <ControlPanelDivider />
+
+                <TimeSection sx={sx} />
 
                 <ControlPanelDivider />
 
