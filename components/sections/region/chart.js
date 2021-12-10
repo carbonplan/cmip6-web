@@ -1,6 +1,7 @@
 import { Box } from 'theme-ui'
-import { Chart, Grid, Line, Plot, TickLabels } from '@carbonplan/charts'
+import { Chart, Circle, Grid, Line, Plot, TickLabels } from '@carbonplan/charts'
 import { useDatasetsStore } from '../../datasets'
+import React from 'react'
 
 const getArrayData = (arr) => {
   const { sum, min, max } = arr.reduce(
@@ -18,25 +19,34 @@ const getArrayData = (arr) => {
 
 const ChartWrapper = ({ data }) => {
   const datasets = useDatasetsStore((state) => state.datasets)
-  const timeRange = useDatasetsStore((state) => state.time.range)
+  const { display, range: timeRange } = useDatasetsStore((state) => state.time)
   const variable = useDatasetsStore((state) => state.filters.variable)
+
+  console.log(data)
 
   const range = [Infinity, -Infinity]
   const lines = Object.keys(data)
     .filter((key) => data[key].value)
     .map((name) => {
+      let circle
       const value = data[name].value[variable]
       const lineData = Object.keys(value).map((time) => {
         const { avg, min, max } = getArrayData(value[time])
         range[0] = Math.min(range[0], min)
         range[1] = Math.max(range[1], max)
-        return [Number(time), avg]
+
+        let point = [Number(time), avg]
+        if (display === point[0]) {
+          circle = point
+        }
+        return point
       })
 
       return {
         key: name,
+        circle,
         color: datasets[name].color,
-        data: lineData,
+        lineData,
       }
     })
 
@@ -50,8 +60,11 @@ const ChartWrapper = ({ data }) => {
         <Grid horizontal vertical />
         <TickLabels right bottom />
         <Plot>
-          {lines.map(({ key, ...props }) => (
-            <Line key={key} {...props} />
+          {lines.map(({ key, circle, color, lineData }) => (
+            <React.Fragment key={key}>
+              <Line color={color} data={lineData} />
+              {circle && <Circle x={circle[0]} y={circle[1]} color={color} />}
+            </React.Fragment>
           ))}
         </Plot>
       </Chart>

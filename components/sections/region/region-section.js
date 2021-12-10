@@ -1,5 +1,3 @@
-import { Box } from 'theme-ui'
-
 import { useRegionStore } from '../../region'
 import Section from '../../section'
 import Chart from './chart'
