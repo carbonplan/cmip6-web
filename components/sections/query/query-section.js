@@ -8,6 +8,12 @@ import Dataset from './dataset'
 
 const formatNumber = (value) => String(value).padStart(2, '0')
 
+const LABEL_MAP = {
+  tasmax: 'tmax',
+  tasmin: 'tmin',
+  pr: 'prec',
+}
+
 const QuerySection = ({ sx }) => {
   const datasets = useDatasetsStore((state) => state.datasets)
   const filters = useDatasetsStore((state) => state.filters)
@@ -15,8 +21,9 @@ const QuerySection = ({ sx }) => {
 
   const variableFilter = useMemo(() => {
     return {
-      tasmax: filters.variable === 'tasmax',
-      tasmin: filters.variable === 'tasmin',
+      [LABEL_MAP.tasmax]: filters.variable === 'tasmax',
+      [LABEL_MAP.tasmin]: filters.variable === 'tasmin',
+      [LABEL_MAP.pr]: filters.variable === 'prec',
     }
   }, [filters.variable])
 
@@ -35,7 +42,7 @@ const QuerySection = ({ sx }) => {
             values={variableFilter}
             setValues={(obj) =>
               setFilters({
-                variable: Object.keys(obj).find((k) => obj[k]),
+                variable: Object.keys(LABEL_MAP).find((k) => obj[LABEL_MAP[k]]),
               })
             }
           />
