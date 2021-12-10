@@ -5,22 +5,13 @@
   "description": "Placeholder catalog",
   "datasets": [
     {
-      "name": "WORLDCLIM.TAVG_PREC",
+      "name": "jhamman.test-pyramid",
       "gcm": "other",
       "experiment": "historical",
-      "timescale": "monthly",
+      "timescale": "daily",
       "method": "raw",
-      "variables": ["tavg", "prec"],
-      "uri": "https://storage.googleapis.com/carbonplan-share/maps-demo/4d/tavg-prec-month"
-    },
-    {
-      "name": "WORLDCLIM.TAVG",
-      "gcm": "other",
-      "experiment": "historical",
-      "timescale": "monthly",
-      "method": "raw",
-      "variables": ["tavg"],
-      "uri": "https://storage.googleapis.com/carbonplan-share/maps-demo/3d/tavg-month"
+      "variables": ["tasmax", "tasmin"],
+      "uri": "https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-2/CMIP.AS-RCEC.TaiESM1.historical.day.gn/r1i1p1f1"
     }
   ]
 }

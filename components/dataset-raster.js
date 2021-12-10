@@ -4,24 +4,29 @@ import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from './datasets'
 import { useRegionStore } from './region'
+import { useMemo } from 'react'
 
-const DatasetRaster = ({ name, month, index }) => {
-  const dataset = useDatasetsStore((state) => state.datasets[name], shallow)
+const DatasetRaster = ({ name, index }) => {
+  const { source, opacity, colormapName, clim } = useDatasetsStore(
+    (state) => state.datasets[name],
+    shallow
+  )
   const setRegionData = useRegionStore((state) => state.setRegionData)
-  const { source, variables, opacity, colormapName, clim } = dataset
+  const time = useDatasetsStore((state) => state.time)
   const colormap = useColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 
-  // TODO: remove logic and just use variable={filters.variable} with real datasets
-  let variable = filters.variable
-  const selector = { month }
-  if (variables.length > 1) {
-    variable = 'climate'
-    selector.band = filters.variable
-  }
+  const timeRange = useMemo(
+    () =>
+      new Array(time.range.max - time.range.min + 1)
+        .fill(null)
+        .map((el, i) => time.range.min + i),
+    [time.range.min, time.range.max]
+  )
 
   return (
     <Raster
+      key={filters.variable}
       index={index}
       source={source}
       colormap={colormap}
@@ -29,9 +34,12 @@ const DatasetRaster = ({ name, month, index }) => {
       display={true}
       opacity={opacity}
       mode={'texture'}
-      variable={variable}
-      selector={selector}
-      regionOptions={{ setData: (v) => setRegionData(name, v) }}
+      variable={filters.variable}
+      selector={{ time: time.display }}
+      regionOptions={{
+        setData: (v) => setRegionData(name, v),
+        selector: { time: timeRange },
+      }}
     />
   )
 }

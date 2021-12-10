@@ -10,12 +10,11 @@ const bucket = 'https://storage.googleapis.com/carbonplan-share/'
 
 const MapWrapper = ({ children, setLoading }) => {
   const { theme } = useThemeUI()
-  const [month, setMonth] = useState(1)
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const selectedOrder = useDatasetsStore((state) => state.selectedOrder)
 
   return (
-    <Map zoom={2} center={[0, 0]} debug={false} setLoading={setLoading}>
+    <Map zoom={0} center={[0, 0]} debug={false} setLoading={setLoading}>
       <Line
         color={theme.rawColors.primary}
         source={bucket + 'maps-demo/land'}
@@ -34,7 +33,7 @@ const MapWrapper = ({ children, setLoading }) => {
         .slice()
         .reverse()
         .map((name, i) => (
-          <DatasetRaster index={i} key={name} name={name} month={month} />
+          <DatasetRaster index={i} key={name} name={name} />
         ))}
       {children}
     </Map>

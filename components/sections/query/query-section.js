@@ -15,8 +15,8 @@ const QuerySection = ({ sx }) => {
 
   const variableFilter = useMemo(() => {
     return {
-      tavg: filters.variable === 'tavg',
-      prec: filters.variable === 'prec',
+      tasmax: filters.variable === 'tasmax',
+      tasmin: filters.variable === 'tasmin',
     }
   }, [filters.variable])
 

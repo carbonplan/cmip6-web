@@ -1,7 +1,8 @@
 import { Box } from 'theme-ui'
 
-import { useRegionStore } from '../region'
-import Section from '../section'
+import { useRegionStore } from '../../region'
+import Section from '../../section'
+import Chart from './chart'
 
 const RegionSection = ({ sx }) => {
   const openRegionPicker = useRegionStore((state) => state.openRegionPicker)
@@ -15,13 +16,11 @@ const RegionSection = ({ sx }) => {
       onOpen={openRegionPicker}
       onClose={closeRegionPicker}
     >
-      Regional data:
-      {Object.keys(regionData).map((k) => {
-        const value = regionData[k]
-          ? `{ ${Object.keys(regionData[k]).join(', ')} }`
-          : 'null'
-        return <Box key={k}>{`${k}: ${value}`}</Box>
-      })}
+      {Object.keys(regionData).filter((k) => regionData[k]).length === 0 ? (
+        'none'
+      ) : (
+        <Chart data={regionData} />
+      )}
     </Section>
   )
 }

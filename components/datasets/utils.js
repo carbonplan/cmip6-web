@@ -3,8 +3,8 @@ export const getFiltersCallback = (filters) => {
 }
 
 const DEFAULT_COLORMAPS = {
-  tavg: 'warm',
-  prec: 'cool',
+  tasmax: 'warm',
+  tasmin: 'cool',
 }
 
 // TODO: use real colormap values
@@ -60,8 +60,8 @@ const DEFAULT_COLORS = {
 }
 
 const DEFAULT_CLIMS = {
-  tavg: [-20, 30],
-  prec: [0, 300],
+  tasmax: [0, 300],
+  tasmin: [0, 300],
 }
 export const getDatasetDisplay = (
   dataset,

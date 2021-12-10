@@ -23,7 +23,7 @@ export const useDatasetsStore = create((set) => ({
   datasets: getInitialDatasets(),
   selectedOrder: [],
   time: { display: 0, range: { min: 0, max: 31 } },
-  filters: { variable: 'tavg' },
+  filters: { variable: 'tasmax' },
   selectDataset: (name) =>
     set(({ datasets, selectedOrder, filters }) => {
       const dataset = datasets[name]
