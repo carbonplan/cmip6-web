@@ -20,35 +20,29 @@ const getArrayData = (arr) => {
 const ChartWrapper = ({ data }) => {
   const datasets = useDatasetsStore((state) => state.datasets)
   const { display, range: timeRange } = useDatasetsStore((state) => state.time)
-  const variable = useDatasetsStore((state) => state.filters.variable)
-
-  console.log(data)
 
   const range = [Infinity, -Infinity]
-  const lines = Object.keys(data)
-    .filter((key) => data[key].value)
-    .map((name) => {
-      let circle
-      const value = data[name].value[variable]
-      const lineData = Object.keys(value).map((time) => {
-        const { avg, min, max } = getArrayData(value[time])
-        range[0] = Math.min(range[0], min)
-        range[1] = Math.max(range[1], max)
+  const lines = data.map(([name, value]) => {
+    let circle
+    const lineData = Object.keys(value).map((time) => {
+      const { avg, min, max } = getArrayData(value[time])
+      range[0] = Math.min(range[0], min)
+      range[1] = Math.max(range[1], max)
 
-        let point = [Number(time), avg]
-        if (display === point[0]) {
-          circle = point
-        }
-        return point
-      })
-
-      return {
-        key: name,
-        circle,
-        color: datasets[name].color,
-        lineData,
+      let point = [Number(time), avg]
+      if (display === point[0]) {
+        circle = point
       }
+      return point
     })
+
+    return {
+      key: name,
+      circle,
+      color: datasets[name].color,
+      lineData,
+    }
+  })
 
   return (
     <Box sx={{ width: '100%', height: '200px' }}>
