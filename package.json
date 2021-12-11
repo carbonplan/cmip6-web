@@ -35,6 +35,7 @@
     "react-draggable": "^4.4.4",
     "rehype-slug": "^4.0.1",
     "theme-ui": "^0.12.1",
+    "zarr-js": "^2.1.3",
     "zustand": "^3.6.5"
   },
   "devDependencies": {
