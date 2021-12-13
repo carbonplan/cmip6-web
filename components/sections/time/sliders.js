@@ -1,9 +1,44 @@
 import { Group, Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { useDatasetsStore } from '../../datasets'
 import DateStrings from './date-strings'
+
+const TimeSlider = ({ value, range, onChange, debounce = false }) => {
+  const [sliderValue, setSliderValue] = useState(value)
+  const handleChange = useCallback(
+    (e) => {
+      const updatedValue = parseFloat(e.target.value)
+      setSliderValue(updatedValue)
+      if (!debounce) {
+        onChange(updatedValue)
+      }
+    },
+    [onChange, debounce]
+  )
+
+  const handleBlur = useCallback(() => {
+    if (debounce) onChange(sliderValue)
+  }, [onChange, sliderValue])
+
+  return (
+    <Box>
+      <Slider
+        value={sliderValue}
+        min={range[0]}
+        max={range[1]}
+        step={1}
+        onMouseUp={handleBlur}
+        onChange={handleChange}
+      />
+      <Flex sx={{ justifyContent: 'space-between' }}>
+        <Box>{range[0]}</Box>
+        <Box>{range[1]}</Box>
+      </Flex>
+    </Box>
+  )
+}
 
 const Sliders = ({ dateStrings }) => {
   const ds = useRef(new DateStrings(dateStrings)).current
@@ -30,47 +65,19 @@ const Sliders = ({ dateStrings }) => {
 
   return (
     <Group>
-      <Box>
-        <Slider
-          value={year}
-          min={ranges.year[0]}
-          max={ranges.year[1]}
-          step={1}
-          onChange={(e) => setYear(parseFloat(e.target.value))}
-        />
-        <Flex sx={{ justifyContent: 'space-between' }}>
-          <Box>{ranges.year[0]}</Box>
-          <Box>{ranges.year[1]}</Box>
-        </Flex>
-      </Box>
-
-      <Box>
-        <Slider
-          value={month}
-          min={ranges.month[0]}
-          max={ranges.month[1]}
-          step={1}
-          onChange={(e) => setMonth(parseFloat(e.target.value))}
-        />
-        <Flex sx={{ justifyContent: 'space-between' }}>
-          <Box>{ranges.month[0]}</Box>
-          <Box>{ranges.month[1]}</Box>
-        </Flex>
-      </Box>
-
-      <Box>
-        <Slider
-          value={day}
-          min={ranges.day[0]}
-          max={ranges.day[1]}
-          step={1}
-          onChange={(e) => setDay(parseFloat(e.target.value))}
-        />
-        <Flex sx={{ justifyContent: 'space-between' }}>
-          <Box>{ranges.day[0]}</Box>
-          <Box>{ranges.day[1]}</Box>
-        </Flex>
-      </Box>
+      <TimeSlider
+        value={year}
+        range={ranges.year}
+        onChange={setYear}
+        debounce
+      />
+      <TimeSlider
+        value={month}
+        range={ranges.month}
+        onChange={setMonth}
+        debounce
+      />
+      <TimeSlider value={day} range={ranges.day} onChange={setDay} />
     </Group>
   )
 }
