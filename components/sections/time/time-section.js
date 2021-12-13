@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect } from 'react'
 import zarr from 'zarr-js'
 
 import { useDatasetsStore } from '../../datasets'
 
-import Inputs from './inputs'
+import Sliders from './sliders'
 import Section from '../../section'
 
 const useDateStrings = (source) => {
@@ -30,13 +30,13 @@ const TimeSection = ({ sx }) => {
   const timescale = useDatasetsStore((state) => state.filters.timescale)
   const dateStrings = useDateStrings(DATESTRING_SOURCES[timescale])
 
-  if (dateStrings.loading || !dateStrings.value) {
-    return 'Loading...'
-  }
-
   return (
     <Section sx={sx.heading} label='Time'>
-      <Inputs dateStrings={dateStrings.value} />
+      {dateStrings.loading || !dateStrings.value ? (
+        'Loading...'
+      ) : (
+        <Sliders dateStrings={dateStrings.value} />
+      )}
     </Section>
   )
 }
