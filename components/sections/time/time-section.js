@@ -6,10 +6,9 @@ import { useDatasetsStore } from '../../datasets'
 import Inputs from './inputs'
 import Section from '../../section'
 
-const useDateStrings = (dataset) => {
+const useDateStrings = (source) => {
   const dateStrings = useDatasetsStore((state) => state.dateStrings)
   const setDateStrings = useDatasetsStore((state) => state.setDateStrings)
-  const source = useDatasetsStore((state) => state.datasets[dataset].source)
 
   useEffect(() => {
     if (!dateStrings.loading && !dateStrings.value) {
@@ -23,12 +22,13 @@ const useDateStrings = (dataset) => {
   return dateStrings
 }
 
-const DATESTRING_DATASETS = {
-  daily: 'CMIP.AWI.AWI-ESM-1-1-LR',
+const DATESTRING_SOURCES = {
+  daily:
+    'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-4/CMIP.AWI.AWI-ESM-1-1-LR.historical.day.gn/r1i1p1f1',
 }
 const TimeSection = ({ sx }) => {
   const timescale = useDatasetsStore((state) => state.filters.timescale)
-  const dateStrings = useDateStrings(DATESTRING_DATASETS[timescale])
+  const dateStrings = useDateStrings(DATESTRING_SOURCES[timescale])
 
   if (dateStrings.loading || !dateStrings.value) {
     return 'Loading...'
