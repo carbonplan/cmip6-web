@@ -23,7 +23,7 @@ const QuerySection = ({ sx }) => {
     return {
       [LABEL_MAP.tasmax]: filters.variable === 'tasmax',
       [LABEL_MAP.tasmin]: filters.variable === 'tasmin',
-      [LABEL_MAP.pr]: filters.variable === 'prec',
+      [LABEL_MAP.pr]: filters.variable === 'pr',
     }
   }, [filters.variable])
 
