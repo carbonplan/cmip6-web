@@ -47,7 +47,7 @@ const ChartWrapper = ({ data }) => {
   return (
     <Box sx={{ width: '100%', height: '200px' }}>
       <Chart
-        x={[timeRange.min, timeRange.max]}
+        x={timeRange}
         y={range}
         padding={{ left: 0, right: 30, top: 0, bottom: 50 }}
       >

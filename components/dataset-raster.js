@@ -18,10 +18,10 @@ const DatasetRaster = ({ name, index }) => {
 
   const timeRange = useMemo(
     () =>
-      new Array(time.range.max - time.range.min + 1)
+      new Array(time.range[1] - time.range[0] + 1)
         .fill(null)
-        .map((el, i) => time.range.min + i),
-    [time.range.min, time.range.max]
+        .map((el, i) => time.range[0] + i),
+    [time.range[0], time.range[1]]
   )
 
   return (

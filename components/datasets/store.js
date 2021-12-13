@@ -49,12 +49,7 @@ export const useDatasetsStore = create((set) => ({
       return {
         time: {
           display: display ?? time.display,
-          range: range
-            ? {
-                min: range.min ?? time.range.min,
-                max: range.max ?? time.range.max,
-              }
-            : time.range,
+          range: range ?? time.range,
         },
       }
     }),
