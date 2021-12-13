@@ -5,7 +5,24 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDatasetsStore } from '../../datasets'
 import DateStrings from './date-strings'
 
-const TimeSlider = ({ value, range, onChange, debounce = false }) => {
+const sx = {
+  label: {
+    fontFamily: 'mono',
+    letterSpacing: 'mono',
+    textTransform: 'uppercase',
+    fontSize: [1],
+  },
+}
+const TimeSlider = ({
+  value,
+  range,
+  onChange,
+  formatLabel,
+  formatValue,
+  showValue,
+  debounce = false,
+}) => {
+  const [sliding, setSliding] = useState(false)
   const [sliderValue, setSliderValue] = useState(value)
   const handleChange = useCallback(
     (e) => {
@@ -18,9 +35,21 @@ const TimeSlider = ({ value, range, onChange, debounce = false }) => {
     [onChange, debounce]
   )
 
-  const handleBlur = useCallback(() => {
+  const handleMouseUp = useCallback(() => {
+    setSliding(false)
     if (debounce) onChange(sliderValue)
   }, [onChange, sliderValue])
+
+  const handleMouseDown = useCallback(() => {
+    setSliding(true)
+  }, [onChange, sliderValue])
+
+  let formattedValue = sliderValue
+  if (formatValue) {
+    formattedValue = formatValue(sliderValue)
+  } else if (formatLabel) {
+    formattedValue = formatLabel(sliderValue)
+  }
 
   return (
     <Box>
@@ -29,12 +58,26 @@ const TimeSlider = ({ value, range, onChange, debounce = false }) => {
         min={range[0]}
         max={range[1]}
         step={1}
-        onMouseUp={handleBlur}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
         onChange={handleChange}
       />
       <Flex sx={{ justifyContent: 'space-between' }}>
-        <Box>{range[0]}</Box>
-        <Box>{range[1]}</Box>
+        <Box sx={sx.label}>
+          {formatLabel ? formatLabel(range[0]) : range[0]}
+        </Box>
+        <Box
+          sx={{
+            ...sx.label,
+            opacity: sliding || showValue ? 1 : 0,
+            transition: 'opacity 0.2s',
+          }}
+        >
+          {formattedValue}
+        </Box>
+        <Box sx={sx.label}>
+          {formatLabel ? formatLabel(range[1]) : range[1]}
+        </Box>
       </Flex>
     </Box>
   )
@@ -75,9 +118,32 @@ const Sliders = ({ dateStrings }) => {
         value={month}
         range={ranges.month}
         onChange={setMonth}
+        formatLabel={(d) =>
+          new Date(year, d - 1, day).toLocaleString('default', {
+            month: 'short',
+          })
+        }
         debounce
       />
-      <TimeSlider value={day} range={ranges.day} onChange={setDay} />
+      <TimeSlider
+        value={day}
+        range={ranges.day}
+        onChange={setDay}
+        formatLabel={(d) =>
+          new Date(year, month - 1, d).toLocaleString('default', {
+            month: 'short',
+            day: 'numeric',
+          })
+        }
+        formatValue={(d) =>
+          new Date(year, month - 1, d).toLocaleString('default', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          })
+        }
+        showValue
+      />
     </Group>
   )
 }
