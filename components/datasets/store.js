@@ -24,7 +24,7 @@ export const useDatasetsStore = create((set) => ({
   selectedOrder: [],
   time: { display: 0, range: { min: 0, max: 31 } },
   dateStrings: { loading: false, value: null },
-  filters: { variable: 'tasmax' },
+  filters: { variable: 'tasmax', timescale: 'daily' },
   setDateStrings: (value) => set({ dateStrings: value }),
   selectDataset: (name) =>
     set(({ datasets, selectedOrder, filters }) => {
