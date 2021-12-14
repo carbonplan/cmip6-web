@@ -1,26 +1,10 @@
 import { useEffect } from 'react'
-import zarr from 'zarr-js'
 
 import { useDatasetsStore } from '../../datasets'
+import { useTimeStore } from '../../time'
 
 import Sliders from './sliders'
 import Section from '../../section'
-
-const useDateStrings = (source) => {
-  const dateStrings = useDatasetsStore((state) => state.dateStrings)
-  const setDateStrings = useDatasetsStore((state) => state.setDateStrings)
-
-  useEffect(() => {
-    if (!dateStrings.loading && !dateStrings.value) {
-      setDateStrings({ loading: true })
-      zarr().load(`${source}/0/date_str`, (err, array) => {
-        setDateStrings({ loading: false, value: Array.from(array.data) })
-      })
-    }
-  }, [dateStrings.loading, !dateStrings.value, source])
-
-  return dateStrings
-}
 
 const DATESTRING_SOURCES = {
   daily:
@@ -28,15 +12,18 @@ const DATESTRING_SOURCES = {
 }
 const TimeSection = ({ sx }) => {
   const timescale = useDatasetsStore((state) => state.filters.timescale)
-  const dateStrings = useDateStrings(DATESTRING_SOURCES[timescale])
+  const dateStrings = useTimeStore((state) => state.dateStrings)
+  const loadDateStrings = useTimeStore((state) => state.loadDateStrings)
+
+  useEffect(() => {
+    if (!dateStrings) {
+      loadDateStrings(DATESTRING_SOURCES[timescale])
+    }
+  }, [!dateStrings])
 
   return (
     <Section sx={sx.heading} label='Time'>
-      {dateStrings.loading || !dateStrings.value ? (
-        'Loading...'
-      ) : (
-        <Sliders dateStrings={dateStrings.value} />
-      )}
+      {dateStrings ? <Sliders /> : 'Loading...'}
     </Section>
   )
 }

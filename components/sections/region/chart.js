@@ -1,6 +1,7 @@
 import { Box } from 'theme-ui'
 import { Chart, Circle, Grid, Line, Plot, TickLabels } from '@carbonplan/charts'
 import { useDatasetsStore } from '../../datasets'
+import { useTimeStore } from '../../time'
 import React from 'react'
 
 const getArrayData = (arr) => {
@@ -19,7 +20,13 @@ const getArrayData = (arr) => {
 
 const ChartWrapper = ({ data }) => {
   const datasets = useDatasetsStore((state) => state.datasets)
-  const { display, range: timeRange } = useDatasetsStore((state) => state.time)
+  const display = useTimeStore((state) => state.display)
+  const dateStrings = useTimeStore((state) => state.dateStrings)
+  const timeRange = useTimeStore((state) => state.range)
+
+  if (!dateStrings) {
+    return 'Loading...'
+  }
 
   const range = [Infinity, -Infinity]
   const lines = data.map(([name, value]) => {
@@ -52,7 +59,16 @@ const ChartWrapper = ({ data }) => {
         padding={{ left: 0, right: 30, top: 0, bottom: 50 }}
       >
         <Grid horizontal vertical />
-        <TickLabels right bottom />
+        <TickLabels right />
+        <TickLabels
+          bottom
+          format={(d) =>
+            dateStrings.indexToDate(d).toLocaleString('default', {
+              month: 'numeric',
+              day: 'numeric',
+            })
+          }
+        />
         <Plot>
           {lines.map(({ key, circle, color, lineData }) => (
             <React.Fragment key={key}>

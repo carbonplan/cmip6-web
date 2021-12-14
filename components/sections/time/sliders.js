@@ -2,8 +2,7 @@ import { Group, Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { useDatasetsStore } from '../../datasets'
-import DateStrings from './date-strings'
+import { useTimeStore } from '../../time'
 
 const sx = {
   label: {
@@ -83,28 +82,30 @@ const TimeSlider = ({
   )
 }
 
-const Sliders = ({ dateStrings }) => {
-  const ds = useRef(new DateStrings(dateStrings)).current
+const Sliders = () => {
+  const dateStrings = useTimeStore((state) => state.dateStrings)
 
-  const setTime = useDatasetsStore((state) => state.setTime)
-  const display = useDatasetsStore((state) => state.time.display)
+  const setDisplay = useTimeStore((state) => state.setDisplay)
+  const setRange = useTimeStore((state) => state.setRange)
+  const display = useTimeStore((state) => state.display)
 
-  const [year, setYear] = useState(() => ds.indexToValues(0).year)
-  const [month, setMonth] = useState(() => ds.indexToValues(0).month)
-  const [day, setDay] = useState(() => ds.indexToValues(0).day)
+  const [year, setYear] = useState(() => dateStrings.indexToValues(0).year)
+  const [month, setMonth] = useState(() => dateStrings.indexToValues(0).month)
+  const [day, setDay] = useState(() => dateStrings.indexToValues(0).day)
 
   const ranges = useMemo(() => {
     return {
-      year: ds.getYearRange(),
-      month: ds.getMonthRange(display),
-      day: ds.getDayRange(display),
+      year: dateStrings.getYearRange(),
+      month: dateStrings.getMonthRange(display),
+      day: dateStrings.getDayRange(display),
     }
   }, [display])
 
   useEffect(() => {
-    const index = ds.valuesToIndex({ year, month, day })
-    setTime({ display: index, range: ds.getDisplayRange(index) })
-  }, [year, month, day, ds])
+    const index = dateStrings.valuesToIndex({ year, month, day })
+    setDisplay(index)
+    setRange(dateStrings.getDisplayRange(index))
+  }, [year, month, day, dateStrings])
 
   return (
     <Group>

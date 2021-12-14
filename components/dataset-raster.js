@@ -3,6 +3,7 @@ import { useColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from './datasets'
+import { useTimeStore } from './time'
 import { useRegionStore } from './region'
 import { useMemo } from 'react'
 
@@ -12,16 +13,17 @@ const DatasetRaster = ({ name, index }) => {
     shallow
   )
   const setRegionData = useRegionStore((state) => state.setRegionData)
-  const time = useDatasetsStore((state) => state.time)
+  const range = useTimeStore((state) => state.range)
+  const display = useTimeStore((state) => state.display)
   const colormap = useColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 
   const timeRange = useMemo(
     () =>
-      new Array(time.range[1] - time.range[0] + 1)
+      new Array(range[1] - range[0] + 1)
         .fill(null)
-        .map((el, i) => time.range[0] + i),
-    [time.range[0], time.range[1]]
+        .map((el, i) => range[0] + i),
+    [range[0], range[1]]
   )
 
   return (
@@ -35,7 +37,7 @@ const DatasetRaster = ({ name, index }) => {
       opacity={opacity}
       mode={'texture'}
       variable={filters.variable}
-      selector={{ time: time.display }}
+      selector={{ time: display }}
       regionOptions={{
         setData: (v) => setRegionData(name, v),
         selector: { time: timeRange },

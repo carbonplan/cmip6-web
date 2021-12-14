@@ -22,10 +22,7 @@ const getInitialDatasets = () => {
 export const useDatasetsStore = create((set) => ({
   datasets: getInitialDatasets(),
   selectedOrder: [],
-  time: { display: 0, range: { min: 0, max: 31 } },
-  dateStrings: { loading: false, value: null },
   filters: { variable: 'tasmax', timescale: 'daily' },
-  setDateStrings: (value) => set({ dateStrings: value }),
   selectDataset: (name) =>
     set(({ datasets, selectedOrder, filters }) => {
       const dataset = datasets[name]
@@ -42,15 +39,6 @@ export const useDatasetsStore = create((set) => ({
       return {
         datasets: { ...datasets, [name]: updatedDataset },
         selectedOrder: [name].concat(selectedOrder),
-      }
-    }),
-  setTime: ({ display, range }) =>
-    set(({ time }) => {
-      return {
-        time: {
-          display: display ?? time.display,
-          range: range ?? time.range,
-        },
       }
     }),
   setFilters: (value) =>
