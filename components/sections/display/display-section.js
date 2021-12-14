@@ -52,8 +52,12 @@ const DatasetDisplay = ({ name, sx }) => {
           ref={container}
           id={'container'}
           sx={{
+            bg: 'background',
             top: top + 'px',
             position: dragging ? 'absolute' : 'relative',
+            mx: [-4, -5, -5, -6],
+            px: [4, 5, 5, 6],
+            zIndex: dragging ? 10 : undefined,
             width: dragging ? draggingProps.width : undefined,
             height: dragging ? draggingProps.height : undefined,
           }}
