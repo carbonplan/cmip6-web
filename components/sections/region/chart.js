@@ -63,7 +63,7 @@ const ChartWrapper = ({ data }) => {
         <TickLabels
           bottom
           format={(d) =>
-            dateStrings.indexToDate(d).toLocaleString('default', {
+            dateStrings.indexToDate(Math.round(d)).toLocaleString('default', {
               month: 'numeric',
               day: 'numeric',
             })
