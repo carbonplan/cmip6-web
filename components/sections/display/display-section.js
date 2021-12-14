@@ -7,7 +7,7 @@ import { useDatasetsStore } from '../../datasets'
 import ControlPanelDivider from '../../control-panel-divider'
 import DisplayEditor from './display-editor'
 
-const DatasetDisplay = ({ name, sx }) => {
+const DatasetDisplay = ({ offset, onDrag, onStop, name, sx }) => {
   const [draggingProps, setDraggingProps] = useState(null)
   const [top, setTop] = useState(0)
   const reorderDataset = useDatasetsStore((state) => state.reorderDataset)
@@ -35,13 +35,19 @@ const DatasetDisplay = ({ name, sx }) => {
           setTop(container.current.offsetTop)
         }}
         onDrag={(e) => {
-          setTop(e.pageY - draggingProps.cursorOffset)
+          const updatedTop = e.pageY - draggingProps.cursorOffset
+          setTop(updatedTop)
+
+          const shiftY = updatedTop - draggingProps.top
+          const delta = shiftY / draggingProps.height
+          onDrag(delta)
         }}
         onStop={() => {
           const shiftY = top - draggingProps.top
           const delta = shiftY / draggingProps.height
 
           reorderDataset(name, Math.round(delta))
+          onStop()
           setDraggingProps(null)
           setTop(0)
         }}
@@ -52,6 +58,7 @@ const DatasetDisplay = ({ name, sx }) => {
           ref={container}
           id={'container'}
           sx={{
+            mt: offset,
             bg: 'background',
             top: top + 'px',
             position: dragging ? 'absolute' : 'relative',
@@ -79,13 +86,32 @@ const DatasetDisplay = ({ name, sx }) => {
 }
 
 const DisplaySection = ({ sx }) => {
+  const [dragging, setDragging] = useState(null)
   const selectedOrder = useDatasetsStore((state) => state.selectedOrder)
 
   return (
     <Group spacing={4}>
-      {selectedOrder.map((name) => (
-        <DatasetDisplay key={name} name={name} sx={sx} />
-      ))}
+      {selectedOrder.map((name, index) => {
+        let offset = 0
+        if (dragging) {
+          const difference = index - dragging.index
+          if (difference > 0 && dragging.delta >= difference) {
+            offset = '-72px'
+          } else if (difference < 0 && dragging.delta <= difference) {
+            offset = '72px'
+          }
+        }
+        return (
+          <DatasetDisplay
+            key={name}
+            name={name}
+            sx={sx}
+            offset={offset}
+            onDrag={(delta) => setDragging({ index, delta })}
+            onStop={() => setDragging(null)}
+          />
+        )
+      })}
     </Group>
   )
 }
