@@ -1,7 +1,7 @@
 import { Box } from 'theme-ui'
 import { useState } from 'react'
-import { Group, Input, Select } from '@carbonplan/components'
-import { colormaps } from '@carbonplan/colormaps'
+import { Colorbar, Group, Input, Select } from '@carbonplan/components'
+import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
 import Section from '../../section'
@@ -17,6 +17,7 @@ const DisplayEditor = ({ name, sx }) => {
     clim,
     opacity: initialOpacity,
   } = useDatasetsStore((state) => state.datasets[name], shallow)
+  const colormap = useThemedColormap(colormapName)
   const [opacity, setOpacity] = useState(initialOpacity)
   const nameElements = name.split('.')
   const shortName = nameElements[nameElements.length - 1]
@@ -42,7 +43,7 @@ const DisplayEditor = ({ name, sx }) => {
 
         <Box>
           <Box sx={{ ...sx.label, mb: 2 }}>Color range</Box>
-          {clim.join(', ')}
+          <Colorbar colormap={colormap} clim={clim} horizontal width='100%' />
         </Box>
 
         <Box sx={{ ...sx.label, mb: 2 }}>
