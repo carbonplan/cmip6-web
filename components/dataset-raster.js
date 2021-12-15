@@ -1,5 +1,5 @@
 import { Raster } from '@carbonplan/maps'
-import { useColormap } from '@carbonplan/colormaps'
+import { useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from './datasets'
@@ -15,7 +15,7 @@ const DatasetRaster = ({ name, index }) => {
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const range = useTimeStore((state) => state.range)
   const display = useTimeStore((state) => state.display)
-  const colormap = useColormap(colormapName)
+  const colormap = useThemedColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 
   const timeRange = useMemo(
