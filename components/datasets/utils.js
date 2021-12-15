@@ -1,3 +1,5 @@
+import { makeColormap } from '@carbonplan/colormaps'
+
 export const getFiltersCallback = (filters) => {
   return (d) => d.variables.some((v) => v === filters.variable)
 }
@@ -8,61 +10,9 @@ const DEFAULT_COLORMAPS = {
   pr: 'cool',
 }
 
-// TODO: use real colormap values
-const DEFAULT_COLORS = {
-  warm: ['purple', 'pink', 'red', 'orange', 'yellow'],
-  cool: ['purple', 'blue', 'teal', 'green', 'yellow'],
-  reds: ['red'],
-  oranges: ['orange'],
-  yellows: ['yellow'],
-  greens: ['green'],
-  teals: ['teal'],
-  blues: ['blue'],
-  purples: ['purple'],
-  pinks: ['pink'],
-  greys: ['grey'],
-  fire: ['fir'],
-  earth: ['eart'],
-  water: ['wate'],
-  heart: ['hear'],
-  wind: ['win'],
-  pinkgreen: ['pink', 'green'],
-  redteal: ['red', 'teal'],
-  orangeblue: ['orange', 'blue'],
-  yellowpurple: ['yellow', 'purple'],
-  redgrey: ['red'],
-  orangegrey: ['orange'],
-  yellowgrey: ['yellow'],
-  greengrey: ['green'],
-  tealgrey: ['teal'],
-  bluegrey: ['blue'],
-  purplegrey: ['purple'],
-  pinkgrey: ['pink'],
-  rainbow: [
-    'purple',
-    'blue',
-    'teal',
-    'green',
-    'yellow',
-    'orange',
-    'red',
-    'pink',
-  ],
-  sinebow: [
-    'red',
-    'orange',
-    'yellow',
-    'green',
-    'teal',
-    'blue',
-    'purple',
-    'pink',
-  ],
-}
-
 const DEFAULT_CLIMS = {
-  tasmax: [0, 300],
-  tasmin: [0, 300],
+  tasmax: [200, 320],
+  tasmin: [200, 300],
   pr: [0, 0.0004],
 }
 export const getDatasetDisplay = (
@@ -81,7 +31,10 @@ export const getDatasetDisplay = (
     clim = DEFAULT_CLIMS[filters.variable]
   }
 
-  const colors = DEFAULT_COLORS[colormapName]
+  const colors = makeColormap(colormapName, { count: 9, mode: 'dark' })
+    .slice(4)
+    .map((c) => `rgb(${c.join(',')})`)
+
   // TODO: handle repeating colors?
   color = colors.find((c) => !existingColors.includes(c)) || colors[0]
 
