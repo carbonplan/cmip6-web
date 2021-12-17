@@ -9,4 +9,5 @@ export const useRegionStore = create((set) => ({
     set(({ regionData }) => {
       return { regionData: { ...regionData, [key]: value } }
     }),
+  clearRegionData: () => set({ regionData: {} }),
 }))
