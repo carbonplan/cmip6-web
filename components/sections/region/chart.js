@@ -1,8 +1,16 @@
 import { Box } from 'theme-ui'
-import { Chart, Circle, Grid, Line, Plot, TickLabels } from '@carbonplan/charts'
+import {
+  Chart,
+  Circle,
+  Grid,
+  Label,
+  Line,
+  Plot,
+  TickLabels,
+} from '@carbonplan/charts'
 import { useDatasetsStore } from '../../datasets'
 import { useTimeStore } from '../../time'
-import React from 'react'
+import React, { useState } from 'react'
 
 const getArrayData = (arr) => {
   const { sum, min, max } = arr.reduce(
@@ -19,6 +27,7 @@ const getArrayData = (arr) => {
 }
 
 const ChartWrapper = ({ data }) => {
+  const [active, setActive] = useState(null)
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useTimeStore((state) => state.display)
   const dateStrings = useTimeStore((state) => state.dateStrings)
@@ -55,6 +64,7 @@ const ChartWrapper = ({ data }) => {
     })
 
   const loading = data.some(([name, value]) => !value)
+  const activeLine = lines.find(({ key }) => key === active)
 
   return (
     <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
@@ -92,13 +102,31 @@ const ChartWrapper = ({ data }) => {
             })
           }
         />
+        {!loading && activeLine?.circle && (
+          <Label x={activeLine.circle[0]} y={activeLine.circle[1]}>
+            <Box
+              sx={{
+                color: activeLine.color,
+                mt: 1,
+                ml: 1,
+              }}
+            >
+              {activeLine.key}
+            </Box>
+          </Label>
+        )}
         <Plot>
           {!loading &&
             lines.map(({ key, circle, color, lineData }) => (
-              <React.Fragment key={key}>
+              <Box
+                as='g'
+                key={key}
+                onMouseOver={() => setActive(key)}
+                onMouseLeave={() => setActive(null)}
+              >
                 <Line color={color} data={lineData} />
                 {circle && <Circle x={circle[0]} y={circle[1]} color={color} />}
-              </React.Fragment>
+              </Box>
             ))}
         </Plot>
       </Chart>
