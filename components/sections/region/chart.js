@@ -93,12 +93,13 @@ const ChartWrapper = ({ data }) => {
           }
         />
         <Plot>
-          {lines.map(({ key, circle, color, lineData }) => (
-            <React.Fragment key={key}>
-              <Line color={color} data={lineData} />
-              {circle && <Circle x={circle[0]} y={circle[1]} color={color} />}
-            </React.Fragment>
-          ))}
+          {!loading &&
+            lines.map(({ key, circle, color, lineData }) => (
+              <React.Fragment key={key}>
+                <Line color={color} data={lineData} />
+                {circle && <Circle x={circle[0]} y={circle[1]} color={color} />}
+              </React.Fragment>
+            ))}
         </Plot>
       </Chart>
     </Box>
