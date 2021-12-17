@@ -12,6 +12,7 @@ const DatasetRaster = ({ name, index }) => {
     (state) => state.datasets[name],
     shallow
   )
+  const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const range = useTimeStore((state) => state.range)
   const display = useTimeStore((state) => state.display)
@@ -39,7 +40,7 @@ const DatasetRaster = ({ name, index }) => {
       variable={filters.variable}
       selector={{ time: display }}
       regionOptions={{
-        setData: (v) => setRegionData(name, v),
+        setData: showRegionPicker ? (v) => setRegionData(name, v) : null,
         selector: { time: timeRange },
       }}
     />
