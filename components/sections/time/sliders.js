@@ -12,6 +12,16 @@ const sx = {
     fontSize: [1],
   },
 }
+
+function debounceFunc(func, wait) {
+  let timeout
+  return function (...args) {
+    const context = this
+    clearTimeout(timeout)
+    timeout = setTimeout(() => func.apply(context, args), wait)
+  }
+}
+
 const TimeSlider = ({
   value,
   range,
@@ -19,24 +29,30 @@ const TimeSlider = ({
   formatLabel,
   formatValue,
   showValue,
-  debounce = false,
+  debounce = 0,
 }) => {
   const [sliding, setSliding] = useState(false)
   const [sliderValue, setSliderValue] = useState(value)
+  const debouncedOnChange = useMemo(
+    () => debounceFunc(onChange, debounce),
+    [onChange, debounce]
+  )
+
   const handleChange = useCallback(
     (e) => {
       const updatedValue = parseFloat(e.target.value)
       setSliderValue(updatedValue)
-      if (!debounce) {
+      if (debounce) {
+        debouncedOnChange(updatedValue)
+      } else {
         onChange(updatedValue)
       }
     },
-    [onChange, debounce]
+    [onChange, debouncedOnChange, debounce]
   )
 
   const handleMouseUp = useCallback(() => {
     setSliding(false)
-    if (debounce) onChange(sliderValue)
   }, [onChange, sliderValue])
 
   const handleMouseDown = useCallback(() => {
@@ -109,12 +125,7 @@ const Sliders = () => {
 
   return (
     <Group>
-      <TimeSlider
-        value={year}
-        range={ranges.year}
-        onChange={setYear}
-        debounce
-      />
+      <TimeSlider value={year} range={ranges.year} onChange={setYear} />
       <TimeSlider
         value={month}
         range={ranges.month}
@@ -124,7 +135,6 @@ const Sliders = () => {
             month: 'short',
           })
         }
-        debounce
       />
       <TimeSlider
         value={day}
