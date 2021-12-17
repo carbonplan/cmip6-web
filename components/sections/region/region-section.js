@@ -11,31 +11,19 @@ const RegionSection = ({ sx }) => {
   const regionData = useRegionStore((state) => state.regionData)
   const variable = useDatasetsStore((state) => state.filters.variable)
 
-  const loading = useMemo(
-    () =>
-      Object.keys(regionData).some(
-        (k) => regionData[k] && !regionData[k].value
-      ),
-    [regionData]
-  )
-
   const variableData = useMemo(
     () =>
       Object.keys(regionData)
-        .filter(
-          (k) =>
-            regionData[k] &&
-            regionData[k].value &&
-            regionData[k].value[variable]
-        )
-        .map((key) => [key, regionData[key].value[variable]]),
+        .filter((k) => regionData[k])
+        .map((key) => [
+          key,
+          regionData[key].value ? regionData[key].value[variable] : undefined,
+        ]),
     [regionData, variable]
   )
 
   let content
-  if (loading) {
-    content = 'Loading...'
-  } else if (variableData.length > 0) {
+  if (variableData.length > 0) {
     content = <Chart data={variableData} />
   } else {
     content = 'Select a dataset to view regional data'

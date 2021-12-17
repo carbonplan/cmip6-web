@@ -24,35 +24,58 @@ const ChartWrapper = ({ data }) => {
   const dateStrings = useTimeStore((state) => state.dateStrings)
   const timeRange = useTimeStore((state) => state.range)
 
+  // We cannot render domain before dateStrings have been loaded, so return generic loading text
   if (!dateStrings) {
     return 'Loading...'
   }
 
   const range = [Infinity, -Infinity]
-  const lines = data.map(([name, value]) => {
-    let circle
-    const lineData = Object.keys(value).map((time) => {
-      const { avg, min, max } = getArrayData(value[time])
-      range[0] = Math.min(range[0], min)
-      range[1] = Math.max(range[1], max)
+  const lines = data
+    .filter(([name, value]) => value)
+    .map(([name, value]) => {
+      let circle
+      const lineData = Object.keys(value).map((time) => {
+        const { avg, min, max } = getArrayData(value[time])
+        range[0] = Math.min(range[0], min)
+        range[1] = Math.max(range[1], max)
 
-      let point = [Number(time), avg]
-      if (display === point[0]) {
-        circle = point
+        let point = [Number(time), avg]
+        if (display === point[0]) {
+          circle = point
+        }
+        return point
+      })
+
+      return {
+        key: name,
+        circle,
+        color: datasets[name].color,
+        lineData,
       }
-      return point
     })
 
-    return {
-      key: name,
-      circle,
-      color: datasets[name].color,
-      lineData,
-    }
-  })
+  const loading = data.some(([name, value]) => !value)
 
   return (
-    <Box sx={{ width: '100%', height: '200px' }}>
+    <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
+      {loading && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '30%',
+            left: 0,
+            right: 0,
+            zIndex: 1,
+            width: '95px',
+            mx: 'auto',
+            fontFamily: 'mono',
+            letterSpacing: 'mono',
+            textTransform: 'uppercase',
+          }}
+        >
+          Loading...
+        </Box>
+      )}
       <Chart
         x={timeRange}
         y={range}
