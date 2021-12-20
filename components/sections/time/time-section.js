@@ -7,8 +7,7 @@ import Sliders from './sliders'
 import Section from '../../section'
 
 const DATESTRING_SOURCES = {
-  daily:
-    'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-7/ScenarioMIP.NUIST.NESM3.ssp585.day.gn/r1i1p1f1',
+  day: 'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-7/ScenarioMIP.NUIST.NESM3.ssp585.day.gn/r1i1p1f1',
 }
 const TimeSection = ({ sx }) => {
   const timescale = useDatasetsStore((state) => state.filters.timescale)
