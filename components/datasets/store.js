@@ -8,6 +8,9 @@ const getInitialDatasets = (data) => {
       name: dataset.name,
       source: dataset.uri,
       variables: dataset.variables,
+      gcm: dataset.gcm,
+      method: dataset.method,
+      experiment: dataset.experiment,
       selected: false,
       opacity: 1,
       colormapName: null,
@@ -18,6 +21,24 @@ const getInitialDatasets = (data) => {
   }, {})
 }
 
+const getInitialFilters = (data) => {
+  return data.datasets.reduce(
+    (accum, ds) => {
+      accum.gcm[ds.gcm] = true
+      accum.method[ds.method] = true
+      accum.experiment[ds.experiment] = true
+      return accum
+    },
+    {
+      variable: 'tasmax',
+      timescale: 'day',
+      gcm: {},
+      experiment: {},
+      method: {},
+    }
+  )
+}
+
 export const useDatasetsStore = create((set) => ({
   datasets: null,
   fetchDatasets: async () => {
@@ -25,10 +46,14 @@ export const useDatasetsStore = create((set) => ({
       'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-7/catalog.json'
     )
     const data = await result.json()
-    set({ datasets: getInitialDatasets(data) })
+
+    set({
+      datasets: getInitialDatasets(data),
+      filters: getInitialFilters(data),
+    })
   },
   selectedOrder: [],
-  filters: { variable: 'tasmax', timescale: 'daily' },
+  filters: null,
   selectDataset: (name) =>
     set(({ datasets, selectedOrder, filters }) => {
       const dataset = datasets[name]

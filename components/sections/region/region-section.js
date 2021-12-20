@@ -9,7 +9,7 @@ const RegionSection = ({ sx }) => {
   const openRegionPicker = useRegionStore((state) => state.openRegionPicker)
   const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
   const regionData = useRegionStore((state) => state.regionData)
-  const variable = useDatasetsStore((state) => state.filters.variable)
+  const variable = useDatasetsStore((state) => state.filters?.variable)
 
   const variableData = useMemo(
     () =>
