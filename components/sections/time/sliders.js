@@ -84,6 +84,7 @@ const TimeSlider = ({
         <Box
           sx={{
             ...sx.label,
+            color: 'secondary',
             opacity: sliding || showValue ? 1 : 0,
             transition: 'opacity 0.2s',
           }}
@@ -126,22 +127,6 @@ const Sliders = () => {
   return (
     <Group>
       <TimeSlider
-        value={year}
-        range={ranges.year}
-        onChange={setYear}
-        debounce={300}
-      />
-      <TimeSlider
-        value={month}
-        range={ranges.month}
-        onChange={setMonth}
-        formatLabel={(d) =>
-          new Date(year, d - 1, day).toLocaleString('default', {
-            month: 'short',
-          })
-        }
-      />
-      <TimeSlider
         value={day}
         range={ranges.day}
         onChange={setDay}
@@ -158,6 +143,25 @@ const Sliders = () => {
             year: 'numeric',
           })
         }
+        showValue
+      />
+      <TimeSlider
+        value={month}
+        range={ranges.month}
+        onChange={setMonth}
+        formatLabel={(d) =>
+          new Date(year, d - 1, day).toLocaleString('default', {
+            month: 'short',
+          })
+        }
+        debounce={30}
+        showValue
+      />
+      <TimeSlider
+        value={year}
+        range={ranges.year}
+        onChange={setYear}
+        debounce={300}
         showValue
       />
     </Group>
