@@ -1,9 +1,8 @@
 import create from 'zustand'
 
-import data from './data.json'
 import { getDatasetDisplay, getFiltersCallback } from './utils'
 
-const getInitialDatasets = () => {
+const getInitialDatasets = (data) => {
   return data.datasets.reduce((accum, dataset) => {
     accum[dataset.name] = {
       name: dataset.name,
@@ -20,7 +19,14 @@ const getInitialDatasets = () => {
 }
 
 export const useDatasetsStore = create((set) => ({
-  datasets: getInitialDatasets(),
+  datasets: null,
+  fetchDatasets: async () => {
+    const result = await fetch(
+      'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-7/catalog.json'
+    )
+    const data = await result.json()
+    set({ datasets: getInitialDatasets(data) })
+  },
   selectedOrder: [],
   filters: { variable: 'tasmax', timescale: 'daily' },
   selectDataset: (name) =>

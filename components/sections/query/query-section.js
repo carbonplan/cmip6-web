@@ -1,5 +1,5 @@
 import { Box, Divider } from 'theme-ui'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
 
 import { getFiltersCallback, useDatasetsStore } from '../../datasets'
@@ -17,10 +17,16 @@ const LABEL_MAP = {
 
 const QuerySection = ({ sx }) => {
   const datasets = useDatasetsStore((state) => state.datasets)
+  const fetchDatasets = useDatasetsStore((state) => state.fetchDatasets)
   const filters = useDatasetsStore((state) => state.filters)
   const setFilters = useDatasetsStore((state) => state.setFilters)
   const clearRegionData = useRegionStore((state) => state.clearRegionData)
 
+  useEffect(() => {
+    if (!datasets) {
+      fetchDatasets()
+    }
+  }, [])
   const variableFilter = useMemo(() => {
     return {
       [LABEL_MAP.tasmax]: filters.variable === 'tasmax',
@@ -29,41 +35,50 @@ const QuerySection = ({ sx }) => {
     }
   }, [filters.variable])
 
-  const resultNames = Object.keys(datasets).filter((k) =>
-    getFiltersCallback(filters)(datasets[k])
-  )
+  const resultNames = datasets
+    ? Object.keys(datasets).filter((k) =>
+        getFiltersCallback(filters)(datasets[k])
+      )
+    : []
 
   return (
     <Section sx={sx.heading} label='Datasets' defaultExpanded>
-      <Row columns={4}>
-        <Column start={1} width={1} sx={sx.label}>
-          Variable
-        </Column>
-        <Column start={2} width={3}>
-          <Filter
-            values={variableFilter}
-            setValues={(obj) => {
-              const variable = Object.keys(LABEL_MAP).find(
-                (k) => obj[LABEL_MAP[k]]
-              )
-              if (variable !== filters.variable) {
-                setFilters({ variable })
-                clearRegionData()
-              }
-            }}
-          />
-        </Column>
-      </Row>
-      <Divider sx={{ my: 4 }} />
-      <Box sx={{ ...sx.label, mb: 2 }}>
-        Results <Badge sx={{ ml: 4 }}>{formatNumber(resultNames.length)}</Badge>{' '}
-        / <Badge>{formatNumber(Object.keys(datasets).length)}</Badge>
-      </Box>
-      <Group spacing={2}>
-        {resultNames.map((name) => (
-          <Dataset key={name} name={name} />
-        ))}
-      </Group>
+      {datasets ? (
+        <>
+          <Row columns={4}>
+            <Column start={1} width={1} sx={sx.label}>
+              Variable
+            </Column>
+            <Column start={2} width={3}>
+              <Filter
+                values={variableFilter}
+                setValues={(obj) => {
+                  const variable = Object.keys(LABEL_MAP).find(
+                    (k) => obj[LABEL_MAP[k]]
+                  )
+                  if (variable !== filters.variable) {
+                    setFilters({ variable })
+                    clearRegionData()
+                  }
+                }}
+              />
+            </Column>
+          </Row>
+          <Divider sx={{ my: 4 }} />
+          <Box sx={{ ...sx.label, mb: 2 }}>
+            Results{' '}
+            <Badge sx={{ ml: 4 }}>{formatNumber(resultNames.length)}</Badge> /{' '}
+            <Badge>{formatNumber(Object.keys(datasets).length)}</Badge>
+          </Box>
+          <Group spacing={2}>
+            {resultNames.map((name) => (
+              <Dataset key={name} name={name} />
+            ))}
+          </Group>
+        </>
+      ) : (
+        'Loading...'
+      )}
     </Section>
   )
 }
