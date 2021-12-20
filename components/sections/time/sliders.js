@@ -125,7 +125,12 @@ const Sliders = () => {
 
   return (
     <Group>
-      <TimeSlider value={year} range={ranges.year} onChange={setYear} />
+      <TimeSlider
+        value={year}
+        range={ranges.year}
+        onChange={setYear}
+        debounce={300}
+      />
       <TimeSlider
         value={month}
         range={ranges.month}
