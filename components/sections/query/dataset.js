@@ -15,7 +15,16 @@ const Dataset = ({ name }) => {
 
   return (
     <Flex sx={{ justifyContent: 'space-between' }}>
-      <Box sx={{ color: selected ? color : 'text' }}>{name}</Box>
+      <Box
+        sx={{
+          color: selected ? color : 'text',
+          fontFamily: 'faux',
+          letterSpacing: 'faux',
+          fontSize: [1, 1, 1, 2],
+        }}
+      >
+        {name}
+      </Box>
 
       <input
         type='checkbox'
