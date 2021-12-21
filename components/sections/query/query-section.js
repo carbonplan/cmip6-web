@@ -16,7 +16,15 @@ const LABEL_MAP = {
   pr: 'prec',
 
   // timescale
+  year: 'yearly',
+  month: 'monthly',
   day: 'daily',
+
+  // experiment
+  historical: 'historical',
+  ssp245: 'SSP2-4.5',
+  ssp370: 'SSP3-7.0',
+  ssp585: 'SSP5-8.5',
 }
 
 const Inner = ({ sx }) => {
@@ -35,9 +43,20 @@ const Inner = ({ sx }) => {
 
   const timescaleFilter = useMemo(() => {
     return {
+      [LABEL_MAP.year]: filters.timescale === 'year',
+      [LABEL_MAP.month]: filters.timescale === 'month',
       [LABEL_MAP.day]: filters.timescale === 'day',
     }
   }, [filters.timescale])
+
+  const experimentFilter = useMemo(() => {
+    return {
+      [LABEL_MAP.historical]: filters.experiment === 'historical',
+      [LABEL_MAP.ssp245]: filters.experiment === 'ssp245',
+      [LABEL_MAP.ssp370]: filters.experiment === 'ssp370',
+      [LABEL_MAP.ssp585]: filters.experiment === 'ssp585',
+    }
+  }, [filters.experiment])
 
   const resultNames = Object.keys(datasets).filter((k) =>
     getFiltersCallback(filters)(datasets[k])
@@ -84,11 +103,16 @@ const Inner = ({ sx }) => {
         </Column>
         <Column start={2} width={3}>
           <Filter
-            values={filters.experiment}
+            values={experimentFilter}
             setValues={(obj) => {
-              setFilters({ experiment: obj })
+              const experiment = Object.keys(LABEL_MAP).find(
+                (k) => obj[LABEL_MAP[k]]
+              )
+              if (experiment !== filters.experiment) {
+                setFilters({ experiment })
+                clearRegionData()
+              }
             }}
-            multiSelect
           />
         </Column>
       </Row>

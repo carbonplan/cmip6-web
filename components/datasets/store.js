@@ -11,6 +11,7 @@ const getInitialDatasets = (data) => {
       gcm: dataset.gcm,
       method: dataset.method,
       experiment: dataset.experiment,
+      timescale: dataset.timescale,
       selected: false,
       opacity: 1,
       colormapName: null,
@@ -26,14 +27,13 @@ const getInitialFilters = (data) => {
     (accum, ds) => {
       accum.gcm[ds.gcm] = true
       accum.method[ds.method] = true
-      accum.experiment[ds.experiment] = true
       return accum
     },
     {
       variable: 'tasmax',
       timescale: 'day',
+      experiment: 'historical',
       gcm: {},
-      experiment: {},
       method: {},
     }
   )

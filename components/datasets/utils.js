@@ -3,9 +3,10 @@ import { makeColormap } from '@carbonplan/colormaps'
 export const getFiltersCallback = (filters) => {
   return (d) =>
     d.variables.some((v) => v === filters.variable) &&
+    d.timescale === filters.timescale &&
+    d.experiment === filters.experiment &&
     filters.gcm[d.gcm] &&
-    filters.method[d.method] &&
-    filters.experiment[d.experiment]
+    filters.method[d.method]
 }
 
 const DEFAULT_COLORMAPS = {
