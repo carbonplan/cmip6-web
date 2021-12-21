@@ -27,11 +27,12 @@ const TimeSlider = ({
     (e) => {
       const updatedValue = parseFloat(e.target.value)
       setSliderValue(updatedValue)
-      if (!debounce) {
+
+      if (!debounce || !sliding) {
         onChange(updatedValue)
       }
     },
-    [onChange, debounce]
+    [onChange, debounce, sliding]
   )
 
   const handleMouseUp = useCallback(() => {

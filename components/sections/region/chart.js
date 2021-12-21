@@ -98,21 +98,23 @@ const ChartWrapper = ({ data }) => {
     <Box>
       <Flex sx={{ gap: 3, minHeight: '40px', mb: 4, flexWrap: 'wrap' }}>
         {!loading &&
-          lines.map(({ key, circle, color }) => (
-            <Box key={key} sx={{ color }}>
-              <Box
-                sx={{
-                  fontSize: 0,
-                  fontFamily: 'mono',
-                  letterSpacing: 'mono',
-                  textTransform: 'uppercase',
-                }}
-              >
-                {getShortName(key)}
+          lines
+            .filter((l) => l.circle)
+            .map(({ key, circle, color }) => (
+              <Box key={key} sx={{ color }}>
+                <Box
+                  sx={{
+                    fontSize: 0,
+                    fontFamily: 'mono',
+                    letterSpacing: 'mono',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {getShortName(key)}
+                </Box>
+                <Box sx={{ fontSize: 3 }}>{formatValue(circle[1])}</Box>
               </Box>
-              <Box sx={{ fontSize: 3 }}>{formatValue(circle[1])}</Box>
-            </Box>
-          ))}
+            ))}
       </Flex>
       <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
         {loading && (
