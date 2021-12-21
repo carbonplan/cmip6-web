@@ -107,7 +107,6 @@ const ChartWrapper = ({ data }) => {
                     fontSize: 0,
                     fontFamily: 'mono',
                     letterSpacing: 'mono',
-                    textTransform: 'uppercase',
                   }}
                 >
                   {shortNames[key]}
@@ -171,6 +170,7 @@ const ChartWrapper = ({ data }) => {
               <Box
                 sx={{
                   color: activeLine.color,
+                  textTransform: 'none',
                   mt: 1,
                   ml: 1,
                 }}

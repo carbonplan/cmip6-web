@@ -26,7 +26,12 @@ const DisplayEditor = ({ name, sx }) => {
     [name, datasets]
   )
   return (
-    <Section sx={sx.heading} label={shortName} color={color} expander='left'>
+    <Section
+      sx={{ ...sx.heading, textTransform: 'none' }}
+      label={shortName}
+      color={color}
+      expander='left'
+    >
       <Group spacing={4}>
         <Box sx={{ ...sx.label, mb: 2 }}>
           Colormap
