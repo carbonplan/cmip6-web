@@ -63,7 +63,7 @@ export const useDatasetsStore = create((set) => ({
 
       const updatedDataset = {
         ...dataset,
-        ...getDatasetDisplay(dataset, colors, filters),
+        ...getDatasetDisplay(dataset, colors, filters, true),
         selected: true,
       }
 
