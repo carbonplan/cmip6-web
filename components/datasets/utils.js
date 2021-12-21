@@ -45,3 +45,8 @@ export const getDatasetDisplay = (
 
   return { colormapName, color, clim }
 }
+
+export const getShortName = (name) => {
+  const nameElements = name.split('.')
+  return nameElements[nameElements.length - 1]
+}

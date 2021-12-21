@@ -5,7 +5,7 @@ import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
 import Section from '../../section'
-import { useDatasetsStore } from '../../datasets'
+import { getShortName, useDatasetsStore } from '../../datasets'
 
 const DisplayEditor = ({ name, sx }) => {
   const updateDatasetDisplay = useDatasetsStore(
@@ -19,11 +19,14 @@ const DisplayEditor = ({ name, sx }) => {
   } = useDatasetsStore((state) => state.datasets[name], shallow)
   const colormap = useThemedColormap(colormapName)
   const [opacity, setOpacity] = useState(initialOpacity)
-  const nameElements = name.split('.')
-  const shortName = nameElements[nameElements.length - 1]
 
   return (
-    <Section sx={sx.heading} label={shortName} color={color} expander='left'>
+    <Section
+      sx={sx.heading}
+      label={getShortName(name)}
+      color={color}
+      expander='left'
+    >
       <Group spacing={4}>
         <Box sx={{ ...sx.label, mb: 2 }}>
           Colormap

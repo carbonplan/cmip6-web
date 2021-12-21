@@ -1,4 +1,4 @@
-import { Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 import React, { useState } from 'react'
 import { format } from 'd3-format'
 
@@ -11,7 +11,7 @@ import {
   Plot,
   TickLabels,
 } from '@carbonplan/charts'
-import { useDatasetsStore } from '../../datasets'
+import { getShortName, useDatasetsStore } from '../../datasets'
 import { useTimeStore } from '../../time'
 
 const getArrayData = (arr) => {
@@ -29,7 +29,7 @@ const getArrayData = (arr) => {
 }
 
 // TODO: add units
-export const formatLabel = (value) => {
+export const formatValue = (value) => {
   let result
   if (value === 0) {
     result = 0
@@ -47,7 +47,11 @@ export const formatLabel = (value) => {
     result = format('0.2s')(value)
   }
 
-  return <Box sx={{ whiteSpace: 'nowrap' }}>{result}</Box>
+  return (
+    <Box as='span' sx={{ whiteSpace: 'nowrap' }}>
+      {result}
+    </Box>
+  )
 }
 
 const ChartWrapper = ({ data }) => {
@@ -91,91 +95,111 @@ const ChartWrapper = ({ data }) => {
   const activeLine = lines.find(({ key }) => key === active)
 
   return (
-    <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
-      {loading && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '30%',
-            left: 0,
-            right: 0,
-            zIndex: 1,
-            width: '95px',
-            mx: 'auto',
-            fontFamily: 'mono',
-            letterSpacing: 'mono',
-            textTransform: 'uppercase',
-          }}
-        >
-          Loading...
-        </Box>
-      )}
-      <Chart
-        x={timeRange}
-        y={range}
-        padding={{ left: 0, right: 0, top: 0, bottom: 50 }}
-      >
-        <Grid horizontal vertical />
-        <TickLabels
-          left
-          count={4}
-          format={formatLabel}
-          sx={{ right: 0, transform: 'translate(100%, -100%)' }}
-        />
-        <TickLabels
-          right
-          count={4}
-          format={formatLabel}
-          sx={{
-            left: 0,
-            width: 'fit-content',
-            transform: 'translate(-100%, -100%)',
-          }}
-        />
-        <TickLabels
-          bottom
-          format={(d) =>
-            dateStrings.indexToDate(Math.round(d)).toLocaleString('default', {
-              month: 'numeric',
-              day: 'numeric',
-            })
-          }
-        />
-        {!loading && activeLine?.circle && (
-          <Label x={activeLine.circle[0]} y={activeLine.circle[1]}>
-            <Box
-              sx={{
-                color: activeLine.color,
-                mt: 1,
-                ml: 1,
-              }}
-            >
-              {activeLine.key}
-            </Box>
-          </Label>
-        )}
-        <Plot>
-          {!loading &&
-            lines.map(({ key, circle, color, lineData }) => (
+    <Box>
+      <Flex sx={{ gap: 3, minHeight: '40px', mb: 4, flexWrap: 'wrap' }}>
+        {!loading &&
+          lines.map(({ key, circle, color }) => (
+            <Box key={key} sx={{ color }}>
               <Box
-                as='g'
-                key={key}
-                onMouseOver={() => setActive(key)}
-                onMouseLeave={() => setActive(null)}
+                sx={{
+                  fontSize: 0,
+                  fontFamily: 'mono',
+                  letterSpacing: 'mono',
+                  textTransform: 'uppercase',
+                }}
               >
-                <Line color={color} data={lineData} width={1.5} />
-                {circle && (
-                  <Circle
-                    size={[22, 18, 16]}
-                    x={circle[0]}
-                    y={circle[1]}
-                    color={color}
-                  />
-                )}
+                {getShortName(key)}
               </Box>
-            ))}
-        </Plot>
-      </Chart>
+              <Box sx={{ fontSize: 3 }}>{formatValue(circle[1])}</Box>
+            </Box>
+          ))}
+      </Flex>
+      <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
+        {loading && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '30%',
+              left: 0,
+              right: 0,
+              zIndex: 1,
+              width: '95px',
+              mx: 'auto',
+              fontFamily: 'mono',
+              letterSpacing: 'mono',
+              textTransform: 'uppercase',
+            }}
+          >
+            Loading...
+          </Box>
+        )}
+        <Chart
+          x={timeRange}
+          y={range}
+          padding={{ left: 0, right: 0, top: 0, bottom: 50 }}
+        >
+          <Grid horizontal vertical />
+          <TickLabels
+            left
+            count={4}
+            format={formatValue}
+            sx={{ right: 0, transform: 'translate(100%, -100%)' }}
+          />
+          <TickLabels
+            right
+            count={4}
+            format={formatValue}
+            sx={{
+              left: 0,
+              width: 'fit-content',
+              transform: 'translate(-100%, -100%)',
+            }}
+          />
+          <TickLabels
+            bottom
+            format={(d) =>
+              dateStrings.indexToDate(Math.round(d)).toLocaleString('default', {
+                month: 'numeric',
+                day: 'numeric',
+              })
+            }
+          />
+          {!loading && activeLine?.circle && (
+            <Label x={activeLine.circle[0]} y={activeLine.circle[1]}>
+              <Box
+                sx={{
+                  color: activeLine.color,
+                  mt: 1,
+                  ml: 1,
+                }}
+              >
+                {activeLine.key}
+              </Box>
+            </Label>
+          )}
+          <Plot>
+            {!loading &&
+              lines.map(({ key, circle, color, lineData }) => (
+                <Box
+                  as='g'
+                  key={key}
+                  onMouseOver={() => setActive(key)}
+                  onMouseLeave={() => setActive(null)}
+                >
+                  <Line color={color} data={lineData} width={1.5} />
+                  {circle && (
+                    <Circle
+                      size={[22, 18, 16]}
+                      x={circle[0]}
+                      y={circle[1]}
+                      color={color}
+                    />
+                  )}
+                </Box>
+              ))}
+          </Plot>
+        </Chart>
+      </Box>
     </Box>
   )
 }
