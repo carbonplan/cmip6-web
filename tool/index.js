@@ -26,9 +26,11 @@ const sx = {
   },
   label: {
     color: 'secondary',
-    fontFamily: 'faux',
-    letterSpacing: 'smallcaps',
-    fontSize: [2, 2, 2, 3],
+    fontFamily: 'mono',
+    letterSpacing: 'mono',
+    fontSize: [1, 1, 1, 2],
+    textTransform: 'uppercase',
+    mt: ['3px', '3px', '3px', '1px'],
   },
 }
 
@@ -60,7 +62,8 @@ const Tool = () => {
             >
               <Group spacing={4}>
                 <Box sx={sx.description}>
-                  Select dimensions of datasets to view and inspect in the map.
+                  This explorer lets you browse a catalog of climate data. Use
+                  the panels below to select datasets, variables, and times.
                 </Box>
 
                 <ControlPanelDivider />

@@ -68,9 +68,9 @@ const TimeSlider = ({
         <Box
           sx={{
             ...sx.label,
-            color: 'secondary',
+            color: sliding ? 'primary' : 'secondary',
             opacity: sliding || showValue ? 1 : 0,
-            transition: 'opacity 0.2s',
+            transition: 'opacity 0.2s, color 0.2s',
           }}
         >
           {formattedValue}
