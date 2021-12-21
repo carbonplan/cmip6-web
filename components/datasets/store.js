@@ -115,25 +115,6 @@ export const useDatasetsStore = create((set) => ({
         selectedOrder: selectedOrder.filter((n) => n !== dataset.name),
       }
     }),
-  reorderDataset: (name, delta) =>
-    set(({ selectedOrder }) => {
-      const index = selectedOrder.indexOf(name)
-      if (index < 0) {
-        throw new Error(
-          `Attempted to reorder unexpected dataset, ${name} not found`
-        )
-      }
-
-      const updatedIndex = Math.min(
-        Math.max(0, index + delta),
-        selectedOrder.length - 1
-      )
-
-      selectedOrder.splice(index, 1)
-      selectedOrder.splice(updatedIndex, 0, name)
-
-      return { selectedOrder: [...selectedOrder] }
-    }),
   updateDatasetDisplay: (name, values) =>
     set(({ datasets, filters }) => {
       const invalidKey = Object.keys(values).find(
