@@ -1,4 +1,7 @@
 import { Box } from 'theme-ui'
+import React, { useState } from 'react'
+import { format } from 'd3-format'
+
 import {
   Chart,
   Circle,
@@ -10,7 +13,6 @@ import {
 } from '@carbonplan/charts'
 import { useDatasetsStore } from '../../datasets'
 import { useTimeStore } from '../../time'
-import React, { useState } from 'react'
 
 const getArrayData = (arr) => {
   const { sum, min, max } = arr.reduce(
@@ -24,6 +26,28 @@ const getArrayData = (arr) => {
     { sum: 0, min: Infinity, max: -Infinity }
   )
   return { avg: sum / arr.length, min, max }
+}
+
+// TODO: add units
+export const formatLabel = (value) => {
+  let result
+  if (value === 0) {
+    result = 0
+  } else if (value < 0.0001) {
+    result = format('.0e')(value)
+  } else if (value < 0.01) {
+    result = format('.2')(value)
+  } else if (value < 1) {
+    result = format('.2f')(value)
+  } else if (value < 10) {
+    result = format('.1f')(value)
+  } else if (value < 10000) {
+    result = format('.0f')(value)
+  } else {
+    result = format('0.2s')(value)
+  }
+
+  return <Box sx={{ whiteSpace: 'nowrap' }}>{result}</Box>
 }
 
 const ChartWrapper = ({ data }) => {
@@ -89,10 +113,25 @@ const ChartWrapper = ({ data }) => {
       <Chart
         x={timeRange}
         y={range}
-        padding={{ left: 0, right: 30, top: 0, bottom: 50 }}
+        padding={{ left: 0, right: 0, top: 0, bottom: 50 }}
       >
         <Grid horizontal vertical />
-        <TickLabels right />
+        <TickLabels
+          left
+          count={4}
+          format={formatLabel}
+          sx={{ right: 0, transform: 'translate(100%, -100%)' }}
+        />
+        <TickLabels
+          right
+          count={4}
+          format={formatLabel}
+          sx={{
+            left: 0,
+            width: 'fit-content',
+            transform: 'translate(-100%, -100%)',
+          }}
+        />
         <TickLabels
           bottom
           format={(d) =>
@@ -124,8 +163,15 @@ const ChartWrapper = ({ data }) => {
                 onMouseOver={() => setActive(key)}
                 onMouseLeave={() => setActive(null)}
               >
-                <Line color={color} data={lineData} />
-                {circle && <Circle x={circle[0]} y={circle[1]} color={color} />}
+                <Line color={color} data={lineData} width={1.5} />
+                {circle && (
+                  <Circle
+                    size={[22, 18, 16]}
+                    x={circle[0]}
+                    y={circle[1]}
+                    color={color}
+                  />
+                )}
               </Box>
             ))}
         </Plot>
