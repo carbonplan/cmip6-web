@@ -20,7 +20,7 @@ class DateStrings {
     return new Date(year, rawMonth - 1, day)
   }
 
-  valuesToIndex({ year, month, day }, exact = false) {
+  valuesToIndex({ year, month, day }, allowEmpty = false) {
     let date = new Date(year, month - 1, day)
     const first = this.indexToDate(0)
     const last = this.indexToDate(this.length - 1)
@@ -30,34 +30,28 @@ class DateStrings {
     }
 
     let diff = timeDay.count(first, date)
-    let values = this.indexToValues(diff)
-    if (year === values.year && month === values.month && day === values.day) {
-      return diff
-    } else if (exact) {
+    let attemptCount = 0
+
+    while (attemptCount < 5) {
+      const values = this.indexToValues(diff)
+      if (
+        year === values.year &&
+        month === values.month &&
+        day === values.day
+      ) {
+        return diff
+      }
+      const lastAttempt = new Date(values.year, values.month - 1, values.day)
+      diff = diff + timeDay.count(lastAttempt, date)
+      attemptCount++
+    }
+
+    if (allowEmpty) {
       return null
     } else {
-      let delta = 1
-      // TODO: also look forward in time (360 day calendar?)
-      while (delta < 5) {
-        date = new Date(year, month - 1, day - delta)
-        diff = timeDay.count(first, date)
-        values = this.indexToValues(diff)
-
-        // use diff if year and month are matching
-        if (year === values.year && month === values.month) {
-          console.log('approximating', values)
-          return diff
-        }
-        delta++
-      }
-
-      console.log(
-        'no match',
-        delta,
-        this.dateStrings[diff],
-        `${year}-${month}-${day}`
+      throw new Error(
+        `No exact match found for {year: ${year}, month: ${month}, day: ${day}}, found ${this.dateStrings[diff]} in ${attemptCount} attempts`
       )
-      return diff
     }
   }
 
@@ -69,12 +63,13 @@ class DateStrings {
   }
 
   getMonthRange(index) {
-    const { year, month } = this.indexToValues(index)
+    const { year } = this.indexToValues(index)
 
     let start = 1
     while (
       start <= 12 &&
-      typeof this.valuesToIndex({ year, month, day: start }, true) !== 'number'
+      typeof this.valuesToIndex({ year, month: start, day: 1 }, true) !==
+        'number'
     ) {
       start++
     }
@@ -82,7 +77,7 @@ class DateStrings {
     let end = 12
     while (
       end > 0 &&
-      typeof this.valuesToIndex({ year, month, day: end }, true) !== 'number'
+      typeof this.valuesToIndex({ year, month: end, day: 1 }, true) !== 'number'
     ) {
       end--
     }
