@@ -175,7 +175,7 @@ const ChartWrapper = ({ data }) => {
                   ml: 1,
                 }}
               >
-                {activeLine.key}
+                {shortNames[activeLine.key]}
               </Box>
             </Label>
           )}
