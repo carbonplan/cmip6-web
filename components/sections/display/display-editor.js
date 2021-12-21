@@ -1,13 +1,14 @@
 import { Box } from 'theme-ui'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Colorbar, Group, Input, Select } from '@carbonplan/components'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
 import Section from '../../section'
-import { getShortName, useDatasetsStore } from '../../datasets'
+import { getSelectedShortNames, useDatasetsStore } from '../../datasets'
 
 const DisplayEditor = ({ name, sx }) => {
+  const datasets = useDatasetsStore((state) => state.datasets)
   const updateDatasetDisplay = useDatasetsStore(
     (state) => state.updateDatasetDisplay
   )
@@ -20,13 +21,12 @@ const DisplayEditor = ({ name, sx }) => {
   const colormap = useThemedColormap(colormapName)
   const [opacity, setOpacity] = useState(initialOpacity)
 
+  const shortName = useMemo(
+    () => getSelectedShortNames(datasets)[name],
+    [name, datasets]
+  )
   return (
-    <Section
-      sx={sx.heading}
-      label={getShortName(name)}
-      color={color}
-      expander='left'
-    >
+    <Section sx={sx.heading} label={shortName} color={color} expander='left'>
       <Group spacing={4}>
         <Box sx={{ ...sx.label, mb: 2 }}>
           Colormap

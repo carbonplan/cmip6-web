@@ -11,7 +11,7 @@ import {
   Plot,
   TickLabels,
 } from '@carbonplan/charts'
-import { getShortName, useDatasetsStore } from '../../datasets'
+import { getSelectedShortNames, useDatasetsStore } from '../../datasets'
 import { useTimeStore } from '../../time'
 
 const getArrayData = (arr) => {
@@ -93,7 +93,7 @@ const ChartWrapper = ({ data }) => {
 
   const loading = data.some(([name, value]) => !value)
   const activeLine = lines.find(({ key }) => key === active)
-
+  const shortNames = getSelectedShortNames(datasets)
   return (
     <Box>
       <Flex sx={{ gap: 3, minHeight: '40px', mb: 4, flexWrap: 'wrap' }}>
@@ -110,7 +110,7 @@ const ChartWrapper = ({ data }) => {
                     textTransform: 'uppercase',
                   }}
                 >
-                  {getShortName(key)}
+                  {shortNames[key]}
                 </Box>
                 <Box sx={{ fontSize: 3 }}>{formatValue(circle[1])}</Box>
               </Box>

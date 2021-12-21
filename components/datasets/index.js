@@ -1,2 +1,2 @@
 export { useDatasetsStore } from './store'
-export { getFiltersCallback, getShortName } from './utils'
+export { getFiltersCallback, getSelectedShortNames } from './utils'

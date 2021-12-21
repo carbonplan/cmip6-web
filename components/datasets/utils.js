@@ -46,7 +46,38 @@ export const getDatasetDisplay = (
   return { colormapName, color, clim }
 }
 
-export const getShortName = (name) => {
-  const nameElements = name.split('.')
-  return nameElements[nameElements.length - 1]
+const countUniqueValues = (datasets, attribute) => {
+  const counts = {}
+  for (const name in datasets) {
+    if (datasets[name].selected) {
+      const value = datasets[name][attribute]
+      counts[value] ||= 0
+      counts[value] += 1
+    }
+  }
+
+  return Object.keys(counts).length
+}
+
+export const getSelectedShortNames = (datasets) => {
+  let uniqueIdentifiers
+  if (
+    Object.keys(datasets || {}).filter((key) => datasets[key].selected)
+      .length === 1
+  ) {
+    uniqueIdentifiers = ['gcm']
+  } else {
+    uniqueIdentifiers = ['gcm', 'method', 'experiment'].filter(
+      (identifier) => countUniqueValues(datasets, identifier) > 1
+    )
+  }
+
+  const result = {}
+  for (const name in datasets) {
+    result[name] = uniqueIdentifiers
+      .map((identifier) => datasets[name][identifier])
+      .join('.')
+  }
+
+  return result
 }
