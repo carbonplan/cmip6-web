@@ -143,7 +143,6 @@ const Inner = ({ sx }) => {
               )
               setFilters({ timescale })
             }}
-            multiSelect
           />
         </Column>
       </Row>

@@ -22,7 +22,7 @@ const TimeSection = ({ sx }) => {
   const isHistorical = experiment === 'historical'
 
   useEffect(() => {
-    if (timescale) {
+    if (timescale && DATESTRING_SOURCES[timescale]) {
       loadDateStrings(
         DATESTRING_SOURCES[timescale][isHistorical ? 'historical' : 'projected']
       )
