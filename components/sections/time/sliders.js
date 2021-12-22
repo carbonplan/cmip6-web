@@ -23,6 +23,12 @@ const TimeSlider = ({
 }) => {
   const [sliding, setSliding] = useState(false)
   const [sliderValue, setSliderValue] = useState(value)
+  useEffect(() => {
+    if (!sliding && sliderValue !== value) {
+      setSliderValue(value)
+    }
+  }, [sliding, sliderValue, value])
+
   const handleChange = useCallback(
     (e) => {
       const updatedValue = parseFloat(e.target.value)
@@ -91,9 +97,9 @@ const Sliders = () => {
   const setRange = useTimeStore((state) => state.setRange)
   const display = useTimeStore((state) => state.display)
 
-  const [year, setYear] = useState(() => dateStrings.indexToValues(0).year)
-  const [month, setMonth] = useState(() => dateStrings.indexToValues(0).month)
-  const [day, setDay] = useState(() => dateStrings.indexToValues(0).day)
+  const [{ year, month, day }, setValues] = useState(() =>
+    dateStrings.indexToValues(0)
+  )
 
   const ranges = useMemo(() => {
     return {
@@ -103,18 +109,19 @@ const Sliders = () => {
     }
   }, [display])
 
-  useEffect(() => {
-    const index = dateStrings.valuesToIndex({ year, month, day })
+  const onChange = (updates) => {
+    const index = dateStrings.getNearestIndex({ year, month, day, ...updates })
+    setValues(dateStrings.indexToValues(index))
     setDisplay(index)
     setRange(dateStrings.getDisplayRange(index))
-  }, [year, month, day, dateStrings])
+  }
 
   return (
     <Group>
       <TimeSlider
         value={day}
         range={ranges.day}
-        onChange={setDay}
+        onChange={(value) => onChange({ day: value })}
         formatLabel={(d) =>
           new Date(year, month - 1, d).toLocaleString('default', {
             month: 'short',
@@ -133,9 +140,9 @@ const Sliders = () => {
       <TimeSlider
         value={month}
         range={ranges.month}
-        onChange={setMonth}
+        onChange={(value) => onChange({ month: value })}
         formatLabel={(d) =>
-          new Date(year, d - 1, day).toLocaleString('default', {
+          new Date(year, d - 1, 1).toLocaleString('default', {
             month: 'short',
           })
         }
@@ -145,7 +152,7 @@ const Sliders = () => {
       <TimeSlider
         value={year}
         range={ranges.year}
-        onChange={setYear}
+        onChange={(value) => onChange({ year: value })}
         debounce
         showValue
       />

@@ -55,6 +55,26 @@ class DateStrings {
     }
   }
 
+  getNearestIndex({ year, month, day }) {
+    let currentDay = day
+    let currentIndex = this.valuesToIndex(
+      { year, month, day: currentDay },
+      true
+    )
+    while (currentDay > 0 && typeof currentIndex !== 'number') {
+      currentDay--
+      currentIndex = this.valuesToIndex({ year, month, day: currentDay }, true)
+    }
+
+    if (!currentDay) {
+      throw new Error(
+        `No nearby index found for {year: ${year}, month: ${month}, day: ${day}}`
+      )
+    }
+
+    return currentIndex
+  }
+
   getYearRange() {
     const { year: firstYear } = this.indexToValues(0)
     const { year: lastYear } = this.indexToValues(this.length - 1)
@@ -88,21 +108,8 @@ class DateStrings {
   getDayRange(index) {
     const { year, month } = this.indexToValues(index)
 
-    let day = 31
-    while (
-      day > 0 &&
-      typeof this.valuesToIndex({ year, month, day }, true) !== 'number'
-    ) {
-      day--
-    }
-
-    if (!day) {
-      throw new Error(
-        `End date not found for index: ${index}, date: ${
-          this.dateStrings[this.indexToDate]
-        }`
-      )
-    }
+    const endIndex = this.getNearestIndex({ year, month, day: 31 })
+    const { day } = this.indexToValues(endIndex)
 
     return [1, day]
   }
