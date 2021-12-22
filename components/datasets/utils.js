@@ -20,13 +20,52 @@ const DEFAULT_CLIMS = {
   tasmin: [200, 300],
   pr: [0, 0.0004],
 }
+
+const DIVERGING = ['pinkgreen', 'redteal', 'orangeblue', 'yellowpurple']
+
+const getColors = (colormapName) => {
+  let rawColors
+  if (colormapName.endsWith('grey')) {
+    rawColors = makeColormap(colormapName, { count: 9, mode: 'dark' }).slice(
+      0,
+      4
+    )
+  } else if (DIVERGING.includes(colormapName)) {
+    rawColors = makeColormap(colormapName, { count: 9, mode: 'dark' })
+    rawColors = rawColors.slice(0, 3).concat(rawColors.slice(5))
+  } else {
+    rawColors = makeColormap(colormapName, { count: 9, mode: 'dark' }).slice(4)
+  }
+
+  return rawColors.map((c) => `rgb(${c.join(',')})`)
+}
+
+const getLeastUsedColor = (colors, existingColors) => {
+  const counts = colors.reduce((accum, color) => ({ ...accum, [color]: 0 }), {})
+
+  existingColors.forEach((color) => {
+    if (typeof counts[color] === 'number') {
+      counts[color] += 1
+    }
+  })
+
+  let leastUsed
+  colors.forEach((color) => {
+    if (!leastUsed || counts[color] < counts[leastUsed]) {
+      leastUsed = color
+    }
+  })
+
+  return leastUsed
+}
+
 export const getDatasetDisplay = (
   dataset,
   existingColors,
   filters,
   forceUpdate = false
 ) => {
-  let { colormapName, color, clim } = dataset
+  let { colormapName, clim } = dataset
 
   if (!colormapName || forceUpdate) {
     colormapName = DEFAULT_COLORMAPS[filters.variable]
@@ -36,12 +75,7 @@ export const getDatasetDisplay = (
     clim = DEFAULT_CLIMS[filters.variable]
   }
 
-  const colors = makeColormap(colormapName, { count: 9, mode: 'dark' })
-    .slice(4)
-    .map((c) => `rgb(${c.join(',')})`)
-
-  // TODO: handle repeating colors?
-  color = colors.find((c) => !existingColors.includes(c)) || colors[0]
+  const color = getLeastUsedColor(getColors(colormapName), existingColors)
 
   return { colormapName, color, clim }
 }
