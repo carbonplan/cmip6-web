@@ -40,6 +40,15 @@
       "method": "RAW",
       "variables": ["tasmax", "tasmin", "pr"],
       "uri": "https://cmip6cdn.azureedge.net/scratch/cmip6-web-test-7/ScenarioMIP.NCC.NorESM2-MM.ssp585.day.gn/r1i1p1f1"
+    },
+    {
+      "name": "GCP",
+      "gcm": "NorESM2-MM",
+      "experiment": "ssp585",
+      "timescale": "day",
+      "method": "RAW",
+      "variables": ["tasmax", "tasmin", "pr"],
+      "uri": "https://storage.googleapis.com/carbonplan-scratch/cmip6-web-test-7/ScenarioMIP.NCC.NorESM2-MM.ssp585.day.gn/r1i1p1f1"
     }
   ]
 }
