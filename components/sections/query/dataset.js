@@ -1,4 +1,4 @@
-import { Box, Flex } from 'theme-ui'
+import { Box, Checkbox, Flex, Label } from 'theme-ui'
 import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from '../../datasets'
@@ -26,18 +26,34 @@ const Dataset = ({ name }) => {
         {name}
       </Box>
 
-      <input
-        type='checkbox'
-        checked={selected}
-        onChange={(e) => {
-          if (e.target.checked) {
-            selectDataset(name)
-          } else {
-            deselectDataset(name)
-            setRegionData(name, null)
-          }
-        }}
-      />
+      <Label sx={{ width: 'inherit', display: 'block', position: 'relative' }}>
+        <Checkbox
+          checked={selected}
+          onChange={(e) => {
+            if (e.target.checked) {
+              selectDataset(name)
+            } else {
+              deselectDataset(name)
+              setRegionData(name, null)
+            }
+          }}
+          sx={{
+            width: '18px',
+            transition: 'color 0.15s',
+            'input:not(:checked) ~ &': {
+              color: 'secondary',
+            },
+
+            '@media (hover: hover) and (pointer: fine)': {
+              'input:hover ~ &': { color: 'primary' },
+            },
+
+            'input:focus ~ &': {
+              bg: 'inherit',
+            },
+          }}
+        />
+      </Label>
     </Flex>
   )
 }
