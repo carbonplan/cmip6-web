@@ -82,8 +82,11 @@ export const Section = ({
         duration={150}
         height={showSection && children ? 'auto' : 0}
         easing={'linear'}
+        style={{ pointerEvents: 'none' }}
       >
-        <Box sx={{ pt: [4] }}>{children || null}</Box>
+        <Box sx={{ pt: [3], pb: [1] }}>
+          <Box sx={{ pointerEvents: 'all' }}>{children || null}</Box>
+        </Box>
       </AnimateHeight>
     </Box>
   )

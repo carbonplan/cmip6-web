@@ -143,14 +143,16 @@ const Inner = ({ sx }) => {
               )
               setFilters({ timescale })
             }}
-            multiSelect
           />
         </Column>
       </Row>
       <Divider sx={{ my: 4 }} />
-      <Box sx={{ ...sx.label, mb: 2 }}>
+      <Box sx={{ ...sx.label, mb: 3 }}>
         Results <Badge sx={{ ml: 4 }}>{formatNumber(resultNames.length)}</Badge>{' '}
-        / <Badge>{formatNumber(Object.keys(datasets).length)}</Badge>
+        <Box as='span'>/</Box>{' '}
+        <Badge sx={{ color: 'secondary' }}>
+          {formatNumber(Object.keys(datasets).length)}
+        </Badge>
       </Box>
       <Group spacing={2}>
         {resultNames.map((name) => (

@@ -1,6 +1,6 @@
 import { Group, Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useTimeStore } from '../../time'
 
@@ -12,16 +12,6 @@ const sx = {
     fontSize: [1],
   },
 }
-
-function debounceFunc(func, wait) {
-  let timeout
-  return function (...args) {
-    const context = this
-    clearTimeout(timeout)
-    timeout = setTimeout(() => func.apply(context, args), wait)
-  }
-}
-
 const TimeSlider = ({
   value,
   range,
@@ -29,30 +19,25 @@ const TimeSlider = ({
   formatLabel,
   formatValue,
   showValue,
-  debounce = 0,
+  debounce = false,
 }) => {
   const [sliding, setSliding] = useState(false)
   const [sliderValue, setSliderValue] = useState(value)
-  const debouncedOnChange = useMemo(
-    () => debounceFunc(onChange, debounce),
-    [onChange, debounce]
-  )
-
   const handleChange = useCallback(
     (e) => {
       const updatedValue = parseFloat(e.target.value)
       setSliderValue(updatedValue)
-      if (debounce) {
-        debouncedOnChange(updatedValue)
-      } else {
+
+      if (!debounce || !sliding) {
         onChange(updatedValue)
       }
     },
-    [onChange, debouncedOnChange, debounce]
+    [onChange, debounce, sliding]
   )
 
   const handleMouseUp = useCallback(() => {
     setSliding(false)
+    if (debounce) onChange(sliderValue)
   }, [onChange, sliderValue])
 
   const handleMouseDown = useCallback(() => {
@@ -84,9 +69,9 @@ const TimeSlider = ({
         <Box
           sx={{
             ...sx.label,
-            color: 'secondary',
+            color: sliding ? 'primary' : 'secondary',
             opacity: sliding || showValue ? 1 : 0,
-            transition: 'opacity 0.2s',
+            transition: 'opacity 0.2s, color 0.2s',
           }}
         >
           {formattedValue}
@@ -154,14 +139,14 @@ const Sliders = () => {
             month: 'short',
           })
         }
-        debounce={30}
+        debounce
         showValue
       />
       <TimeSlider
         value={year}
         range={ranges.year}
         onChange={setYear}
-        debounce={300}
+        debounce
         showValue
       />
     </Group>
