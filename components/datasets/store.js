@@ -43,7 +43,7 @@ export const useDatasetsStore = create((set) => ({
   datasets: null,
   fetchDatasets: async () => {
     const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-7/catalog.json'
+      'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-8/catalog.json'
     )
     const data = await result.json()
 
