@@ -25,6 +25,10 @@ const DisplayEditor = ({ name, sx }) => {
     () => getSelectedShortNames(datasets)[name],
     [name, datasets]
   )
+
+  const setClim = (setter) => {
+    updateDatasetDisplay(name, { clim: setter(clim) })
+  }
   return (
     <Section
       sx={{ ...sx.heading, textTransform: 'none' }}
@@ -40,6 +44,18 @@ const DisplayEditor = ({ name, sx }) => {
             onChange={(e) =>
               updateDatasetDisplay(name, { colormapName: e.target.value })
             }
+            size='xs'
+            sx={{
+              mt: [1],
+              display: 'block',
+            }}
+            sxSelect={{
+              textTransform: 'uppercase',
+              fontFamily: 'mono',
+              fontSize: [1, 1, 1, 2],
+              width: '100%',
+              pb: [1],
+            }}
           >
             {colormaps.map(({ name }) => (
               <option key={name} value={name}>
@@ -50,13 +66,29 @@ const DisplayEditor = ({ name, sx }) => {
         </Box>
 
         <Box>
-          <Box sx={{ ...sx.label, mb: 2 }}>Color range</Box>
-          <Colorbar colormap={colormap} clim={clim} horizontal width='100%' />
+          <Box sx={{ ...sx.label, mb: 1 }}>Color range</Box>
+          <Colorbar
+            colormap={colormap}
+            clim={clim}
+            setClim={setClim}
+            horizontal
+            bottom
+            width={'100%'}
+            sxClim={{ fontSize: [1, 1, 1, 2], pt: [1], pb: ['2px'] }}
+          />
         </Box>
 
         <Box sx={{ ...sx.label, mb: 2 }}>
           Opacity
           <Input
+            size='xs'
+            sx={{
+              width: '100%',
+              fontSize: [1, 1, 1, 2],
+              fontFamily: 'mono',
+              letterSpacing: 'mono',
+              pb: ['2px', '2px', '2px', '4px'],
+            }}
             value={opacity}
             onChange={(e) => setOpacity(e.target.value)}
             onBlur={() => {
