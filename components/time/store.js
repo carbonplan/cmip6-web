@@ -7,6 +7,7 @@ export const useTimeStore = create((set) => ({
   display: 0,
   range: [0, 31],
   dateStrings: null,
+  updatingTime: false,
   loadDateStrings: (source) => {
     set({ dateStrings: null })
     zarr().load(`${source}/0/date_str`, (err, array) => {
@@ -17,4 +18,5 @@ export const useTimeStore = create((set) => ({
   },
   setDisplay: (value) => set({ display: value }),
   setRange: (value) => set({ range: value }),
+  setUpdatingTime: (value) => set({ updatingTime: value }),
 }))

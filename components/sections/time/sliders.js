@@ -21,6 +21,8 @@ const TimeSlider = ({
   showValue,
   debounce = false,
 }) => {
+  const setUpdatingTime = useTimeStore((state) => state.setUpdatingTime)
+
   const [sliding, setSliding] = useState(false)
   const [sliderValue, setSliderValue] = useState(value)
   useEffect(() => {
@@ -43,12 +45,15 @@ const TimeSlider = ({
 
   const handleMouseUp = useCallback(() => {
     setSliding(false)
+    setUpdatingTime(false)
     if (debounce) onChange(sliderValue)
-  }, [onChange, sliderValue])
+  }, [onChange, sliderValue, debounce])
 
   const handleMouseDown = useCallback(() => {
     setSliding(true)
-  }, [onChange, sliderValue])
+    console.log({ debounce })
+    if (debounce) setUpdatingTime(true)
+  }, [onChange, sliderValue, debounce])
 
   let formattedValue = sliderValue
   if (formatValue) {

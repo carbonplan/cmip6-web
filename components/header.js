@@ -1,7 +1,17 @@
 import { Box, Container } from 'theme-ui'
 import { Meta, Guide, Header as HeaderComponent } from '@carbonplan/components'
+import { useTimeStore } from './time'
 
 const Header = ({ loading }) => {
+  const updatingTime = useTimeStore((state) => state.updatingTime)
+  let status = null
+  console.log({ updatingTime })
+  if (loading) {
+    status = 'loading'
+  } else if (updatingTime) {
+    status = 'release to update'
+  }
+
   return (
     <>
       <Meta
@@ -16,7 +26,7 @@ const Header = ({ loading }) => {
 
       <Box sx={{ position: 'absolute', top: 0, width: '100%', zIndex: 5000 }}>
         <Container>
-          <HeaderComponent dimmer='top' status={loading ? 'loading' : null} />
+          <HeaderComponent dimmer='top' status={status} />
         </Container>
       </Box>
     </>
