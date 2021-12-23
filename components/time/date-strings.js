@@ -29,7 +29,7 @@ class DateStrings {
       throw new Error('outside range')
     }
 
-    let diff = timeDay.count(first, date)
+    let diff = Math.min(timeDay.count(first, date), this.length - 1)
     let attemptCount = 0
 
     while (attemptCount < 5) {
