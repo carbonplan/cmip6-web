@@ -39,6 +39,7 @@ const Dataset = ({ name }) => {
           }}
           sx={{
             width: '18px',
+            cursor: 'pointer',
             transition: 'color 0.15s',
             'input:not(:checked) ~ &': {
               color: 'secondary',

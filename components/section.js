@@ -39,11 +39,16 @@ export const Section = ({
       value={showSection}
       id='section-expander'
       sx={{
-        color,
+        width: '24px',
+        mt: ['-1px'],
         position: 'relative',
-        fill: color,
         stroke: color,
         transition: 'stroke 0.15s',
+        '@media (hover: hover) and (pointer: fine)': {
+          '&:hover': {
+            stroke: color,
+          },
+        },
       }}
     />,
   ]
@@ -59,7 +64,7 @@ export const Section = ({
         bg: 'transparent',
         transition: 'background-color 0.15s',
         '@media (hover: hover) and (pointer: fine)': {
-          '&:hover #section-expander': { stroke: 'primary' },
+          '&:hover #section-expander': { stroke: color },
           '&:hover': { bg: alpha('muted', 0.1) },
         },
       }}
