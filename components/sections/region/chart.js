@@ -111,7 +111,7 @@ const ChartWrapper = ({ data }) => {
                 >
                   {shortNames[key]}
                 </Box>
-                <Box sx={{ fontSize: 3 }}>{formatValue(circle[1])}</Box>
+                <Box sx={{ fontSize: [4] }}>{formatValue(circle[1])}</Box>
               </Box>
             ))}
       </Flex>

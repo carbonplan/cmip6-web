@@ -1,5 +1,10 @@
 import { Box, Container } from 'theme-ui'
-import { Meta, Guide, Header as HeaderComponent } from '@carbonplan/components'
+import {
+  Meta,
+  Guide,
+  Dimmer,
+  Header as HeaderComponent,
+} from '@carbonplan/components'
 import { useTimeStore } from './time'
 
 const Header = ({ loading }) => {
@@ -26,7 +31,12 @@ const Header = ({ loading }) => {
 
       <Box sx={{ position: 'absolute', top: 0, width: '100%', zIndex: 5000 }}>
         <Container>
-          <HeaderComponent dimmer='top' status={status} />
+          <HeaderComponent
+            menuItems={[
+              <Dimmer key='dimmer' sx={{ mt: '-2px', color: 'primary' }} />,
+            ]}
+            status={status}
+          />
         </Container>
       </Box>
     </>
