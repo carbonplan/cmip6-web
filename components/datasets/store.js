@@ -1,5 +1,7 @@
 import create from 'zustand'
+import zarr from 'zarr-js'
 
+import DateStrings from '../time/date-strings'
 import { getDatasetDisplay, getFiltersCallback } from './utils'
 
 const getInitialDatasets = (data) => {
@@ -12,6 +14,7 @@ const getInitialDatasets = (data) => {
       method: dataset.method,
       experiment: dataset.experiment,
       timescale: dataset.timescale,
+      dateStrings: null,
       selected: false,
       opacity: 1,
       colormapName: null,
@@ -39,7 +42,7 @@ const getInitialFilters = (data) => {
   )
 }
 
-export const useDatasetsStore = create((set) => ({
+export const useDatasetsStore = create((set, get) => ({
   datasets: null,
   fetchDatasets: async () => {
     const result = await fetch(
@@ -54,8 +57,19 @@ export const useDatasetsStore = create((set) => ({
   },
   selectedOrder: [],
   filters: null,
+  loadDateStrings: (name) => {
+    zarr().load(`${get().datasets[name].source}/0/date_str`, (err, array) => {
+      const dateStrings = new DateStrings(Array.from(array.data))
+      const { datasets } = get()
+      const dataset = datasets[name]
+      set({
+        datasets: { ...datasets, [name]: { ...dataset, dateStrings } },
+      })
+    })
+  },
+
   selectDataset: (name) =>
-    set(({ datasets, selectedOrder, filters }) => {
+    set(({ datasets, selectedOrder, filters, loadDateStrings }) => {
       const dataset = datasets[name]
       const colors = Object.keys(datasets)
         .map((k) => k !== name && datasets[k].color)
@@ -65,6 +79,10 @@ export const useDatasetsStore = create((set) => ({
         ...dataset,
         ...getDatasetDisplay(dataset, colors, filters, true),
         selected: true,
+      }
+
+      if (!dataset.dateStrings) {
+        loadDateStrings(name)
       }
 
       return {
