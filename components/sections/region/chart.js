@@ -70,15 +70,16 @@ const ChartWrapper = ({ data }) => {
     return state.datasets[activeName]?.dateStrings
   })
 
+  const timeRange = useMemo(
+    () => dateStrings?.getDisplayRange(display),
+    [dateStrings, display]
+  )
+
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
   if (!dateStrings) {
     return 'Loading...'
   }
 
-  const timeRange = useMemo(
-    () => dateStrings.getDisplayRange(display),
-    [dateStrings, display]
-  )
   const displayTime = dateStrings.valuesToIndex(display)
 
   const range = [Infinity, -Infinity]
@@ -92,7 +93,8 @@ const ChartWrapper = ({ data }) => {
         range[1] = Math.max(range[1], max)
 
         const activeTime = dateStrings.valuesToIndex(
-          datasets[name].dateStrings.indexToValues(Number(time))
+          datasets[name].dateStrings.indexToValues(Number(time)),
+          true
         )
         let point = [activeTime, avg]
         if (displayTime === point[0]) {

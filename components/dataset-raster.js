@@ -35,6 +35,10 @@ const DatasetRaster = ({ name, index }) => {
   }
 
   const time = dateStrings.valuesToIndex(display, true)
+  if (typeof time !== 'number') {
+    // todo: validate that this isn't the "active" dataset
+    return null
+  }
 
   return (
     <Raster
