@@ -8,24 +8,33 @@ import { useRegionStore } from './region'
 import { useMemo } from 'react'
 
 const DatasetRaster = ({ name, index }) => {
-  const { source, opacity, colormapName, clim } = useDatasetsStore(
+  const { dateStrings, source, opacity, colormapName, clim } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
   )
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)
-  const range = useTimeStore((state) => state.range)
-  const display = useTimeStore((state) => state.display)
+  const display = useTimeStore((state) => state.display, shallow)
   const colormap = useThemedColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 
-  const timeRange = useMemo(
-    () =>
-      new Array(range[1] - range[0] + 1)
-        .fill(null)
-        .map((el, i) => range[0] + i),
-    [range[0], range[1]]
-  )
+  const timeRange = useMemo(() => {
+    if (!dateStrings) {
+      return
+    }
+
+    const range = dateStrings.getDisplayRange(display)
+
+    return new Array(range[1] - range[0] + 1)
+      .fill(null)
+      .map((el, i) => range[0] + i)
+  }, [dateStrings, display])
+
+  if (!dateStrings) {
+    return null
+  }
+
+  const time = dateStrings.valuesToIndex(display, true)
 
   return (
     <Raster
@@ -38,7 +47,7 @@ const DatasetRaster = ({ name, index }) => {
       opacity={opacity}
       mode={'texture'}
       variable={filters.variable}
-      selector={{ time: display }}
+      selector={{ time }}
       regionOptions={{
         setData: showRegionPicker ? (v) => setRegionData(name, v) : null,
         selector: { time: timeRange },

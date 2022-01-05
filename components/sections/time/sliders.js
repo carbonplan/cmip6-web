@@ -95,30 +95,28 @@ const TimeSlider = ({
   )
 }
 
-const Sliders = () => {
-  const dateStrings = useTimeStore((state) => state.dateStrings)
+const YEAR_RANGES = {
+  HISTORICAL: [1950, 2014],
+  PROJECTED: [2015, 2100],
+}
 
-  const setDisplay = useTimeStore((state) => state.setDisplay)
-  const setRange = useTimeStore((state) => state.setRange)
+const Sliders = ({ dateStrings, historical = false }) => {
   const display = useTimeStore((state) => state.display)
-
-  const [{ year, month, day }, setValues] = useState(() =>
-    dateStrings.indexToValues(0)
-  )
+  const { year, month, day } = display
+  const setDisplay = useTimeStore((state) => state.setDisplay)
 
   const ranges = useMemo(() => {
     return {
-      year: dateStrings.getYearRange(),
-      month: dateStrings.getMonthRange(display),
+      year: historical ? YEAR_RANGES.HISTORICAL : YEAR_RANGES.PROJECTED,
+      month: [1, 12],
       day: dateStrings.getDayRange(display),
     }
-  }, [display])
+  }, [historical, display, dateStrings])
 
   const onChange = (updates) => {
     const index = dateStrings.getNearestIndex({ year, month, day, ...updates })
-    setValues(dateStrings.indexToValues(index))
-    setDisplay(index)
-    setRange(dateStrings.getDisplayRange(index))
+
+    setDisplay(dateStrings.indexToValues(index))
   }
 
   return (
