@@ -84,8 +84,6 @@ const Tool = () => {
 
             <ControlPanel tooltip='Adjust display' side='right' width={2}>
               <Group spacing={4}>
-                <Box sx={sx.description}>Customize display of map layers.</Box>
-
                 <DisplaySection sx={sx} />
 
                 <ControlPanelDivider sx={{ mb: [-4] }} />

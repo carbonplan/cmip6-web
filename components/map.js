@@ -11,7 +11,11 @@ const bucket = 'https://storage.googleapis.com/carbonplan-share/'
 const MapWrapper = ({ children, setLoading }) => {
   const { theme } = useThemeUI()
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
-  const selectedOrder = useDatasetsStore((state) => state.selectedOrder)
+  const datasets = useDatasetsStore((state) => state.datasets)
+
+  const selectedDatasets = Object.keys(datasets || {}).filter(
+    (name) => datasets[name].selected
+  )
 
   return (
     <Map zoom={0} center={[0, 0]} debug={false} setLoading={setLoading}>
@@ -29,12 +33,9 @@ const MapWrapper = ({ children, setLoading }) => {
           maxRadius={2000}
         />
       )}
-      {selectedOrder
-        .slice()
-        .reverse()
-        .map((name, i) => (
-          <DatasetRaster index={i} key={name} name={name} />
-        ))}
+      {selectedDatasets.map((name, i) => (
+        <DatasetRaster index={i} key={name} name={name} />
+      ))}
       {children}
     </Map>
   )

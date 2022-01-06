@@ -48,6 +48,10 @@ const getInitialFilters = (data) => {
 
 export const useDatasetsStore = create((set, get) => ({
   datasets: null,
+  active: null,
+  filters: null,
+  displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
+  updatingTime: false,
   fetchDatasets: async () => {
     const result = await fetch(
       'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-8/catalog.json'
@@ -59,13 +63,8 @@ export const useDatasetsStore = create((set, get) => ({
       filters: getInitialFilters(data),
     })
   },
-  selectedOrder: [],
-  filters: null,
-  displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
-  updatingTime: false,
   setDisplayTime: (value) => set({ displayTime: value }),
   setUpdatingTime: (value) => set({ updatingTime: value }),
-
   loadDateStrings: (name) => {
     zarr().load(`${get().datasets[name].source}/0/date_str`, (err, array) => {
       const dateStrings = new DateStrings(Array.from(array.data))
@@ -76,9 +75,19 @@ export const useDatasetsStore = create((set, get) => ({
       })
     })
   },
+  setActive: (name) =>
+    set(({ datasets, selectDataset }) => {
+      // ensure that `active` dataset is also `selected`
+      if (name && !datasets[name].selected) {
+        selectDataset(name)
+      }
 
+      return {
+        active: name,
+      }
+    }),
   selectDataset: (name) =>
-    set(({ datasets, selectedOrder, filters, loadDateStrings }) => {
+    set(({ datasets, filters, loadDateStrings }) => {
       const dataset = datasets[name]
       const colors = Object.keys(datasets)
         .map((k) => k !== name && datasets[k].color)
@@ -96,13 +105,13 @@ export const useDatasetsStore = create((set, get) => ({
 
       return {
         datasets: { ...datasets, [name]: updatedDataset },
-        selectedOrder: [name].concat(selectedOrder),
       }
     }),
   setFilters: (value) =>
-    set(({ displayTime, filters, datasets, selectedOrder }) => {
+    set(({ active, displayTime, filters, datasets }) => {
       const updatedFilters = { ...filters, ...value }
       const cb = getFiltersCallback(updatedFilters)
+      let updatedActive = active
       const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
         const dataset = datasets[k]
         const selected = cb(dataset) && dataset.selected
@@ -117,6 +126,8 @@ export const useDatasetsStore = create((set, get) => ({
             updatedFilters,
             true
           )
+        } else if (active === k) {
+          updatedActive = null
         }
         accum[k] = { ...dataset, ...displayUpdates, selected }
         return accum
@@ -134,7 +145,7 @@ export const useDatasetsStore = create((set, get) => ({
       }
 
       return {
-        selectedOrder: selectedOrder.filter((n) => updatedDatasets[n].selected),
+        active: updatedActive,
         datasets: updatedDatasets,
         filters: updatedFilters,
         displayTime: updatedDisplayTime,
@@ -142,7 +153,7 @@ export const useDatasetsStore = create((set, get) => ({
     }),
 
   deselectDataset: (name) =>
-    set(({ datasets, selectedOrder }) => {
+    set(({ active, datasets }) => {
       const dataset = datasets[name]
       const updatedDataset = {
         ...dataset,
@@ -150,8 +161,8 @@ export const useDatasetsStore = create((set, get) => ({
       }
 
       return {
+        active: active === name ? null : active,
         datasets: { ...datasets, [name]: updatedDataset },
-        selectedOrder: selectedOrder.filter((n) => n !== dataset.name),
       }
     }),
   updateDatasetDisplay: (name, values) =>

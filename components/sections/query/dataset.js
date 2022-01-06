@@ -4,7 +4,27 @@ import shallow from 'zustand/shallow'
 import { useDatasetsStore } from '../../datasets'
 import { useRegionStore } from '../../region'
 
+const sx = {
+  checkbox: {
+    width: '18px',
+    cursor: 'pointer',
+    transition: 'color 0.15s',
+    'input:not(:checked) ~ &': {
+      color: 'secondary',
+    },
+
+    '@media (hover: hover) and (pointer: fine)': {
+      'input:hover ~ &': { color: 'primary' },
+    },
+
+    'input:focus ~ &': {
+      bg: 'inherit',
+    },
+  },
+}
 const Dataset = ({ name }) => {
+  const active = useDatasetsStore((state) => state.active === name)
+  const setActive = useDatasetsStore((state) => state.setActive)
   const { selected, color } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
@@ -26,35 +46,48 @@ const Dataset = ({ name }) => {
         {name}
       </Box>
 
-      <Label sx={{ width: 'inherit', display: 'block', position: 'relative' }}>
-        <Checkbox
-          checked={selected}
-          onChange={(e) => {
-            if (e.target.checked) {
-              selectDataset(name)
-            } else {
-              deselectDataset(name)
-              setRegionData(name, null)
-            }
-          }}
+      <Box>
+        <Label
           sx={{
-            width: '18px',
-            cursor: 'pointer',
-            transition: 'color 0.15s',
-            'input:not(:checked) ~ &': {
-              color: 'secondary',
-            },
-
-            '@media (hover: hover) and (pointer: fine)': {
-              'input:hover ~ &': { color: 'primary' },
-            },
-
-            'input:focus ~ &': {
-              bg: 'inherit',
-            },
+            width: 'inherit',
+            display: 'inline-block',
+            position: 'relative',
           }}
-        />
-      </Label>
+        >
+          <Checkbox
+            checked={active}
+            onChange={(e) => {
+              if (e.target.checked && !active) {
+                setActive(name)
+              } else if (active) {
+                setActive(null)
+              }
+            }}
+            sx={sx.checkbox}
+          />
+        </Label>
+
+        <Label
+          sx={{
+            width: 'inherit',
+            display: 'inline-block',
+            position: 'relative',
+          }}
+        >
+          <Checkbox
+            checked={selected}
+            onChange={(e) => {
+              if (e.target.checked) {
+                selectDataset(name)
+              } else {
+                deselectDataset(name)
+                setRegionData(name, null)
+              }
+            }}
+            sx={sx.checkbox}
+          />
+        </Label>
+      </Box>
     </Flex>
   )
 }

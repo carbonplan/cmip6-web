@@ -1,21 +1,15 @@
-import { Group } from '@carbonplan/components'
+import { Box } from 'theme-ui'
 
 import { useDatasetsStore } from '../../datasets'
-import ControlPanelDivider from '../../control-panel-divider'
 import DisplayEditor from './display-editor'
 
 const DisplaySection = ({ sx }) => {
-  const selectedOrder = useDatasetsStore((state) => state.selectedOrder)
+  const active = useDatasetsStore((state) => state.active)
 
-  return (
-    <Group spacing={4}>
-      {selectedOrder.map((name) => (
-        <Group key={name} spacing={4}>
-          <ControlPanelDivider />
-          <DisplayEditor name={name} sx={sx} />
-        </Group>
-      ))}
-    </Group>
+  return active ? (
+    <DisplayEditor name={active} sx={sx} />
+  ) : (
+    <Box sx={sx.description}>Select a dataset.</Box>
   )
 }
 
