@@ -51,7 +51,6 @@ const TimeSlider = ({
 
   const handleMouseDown = useCallback(() => {
     setSliding(true)
-    console.log({ debounce })
     if (debounce) setUpdatingTime(true)
   }, [onChange, sliderValue, debounce])
 

@@ -10,7 +10,6 @@ import { useDatasetsStore } from './datasets'
 const Header = ({ loading }) => {
   const updatingTime = useDatasetsStore((state) => state.updatingTime)
   let status = null
-  console.log({ updatingTime })
   if (loading) {
     status = 'loading'
   } else if (updatingTime) {
