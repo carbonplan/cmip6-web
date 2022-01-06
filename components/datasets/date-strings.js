@@ -75,48 +75,15 @@ class DateStrings {
     return currentIndex
   }
 
-  getYearRange() {
-    const { year: firstYear } = this.indexToValues(0)
-    const { year: lastYear } = this.indexToValues(this.length - 1)
-
-    return [firstYear, lastYear]
-  }
-
-  getMonthRange(index) {
-    const { year } = this.indexToValues(index)
-
-    let start = 1
-    while (
-      start <= 12 &&
-      typeof this.valuesToIndex({ year, month: start, day: 1 }, true) !==
-        'number'
-    ) {
-      start++
-    }
-
-    let end = 12
-    while (
-      end > 0 &&
-      typeof this.valuesToIndex({ year, month: end, day: 1 }, true) !== 'number'
-    ) {
-      end--
-    }
-
-    return [start, end]
-  }
-
-  getDayRange(index) {
-    const { year, month } = this.indexToValues(index)
-
+  getDayRange({ year, month }) {
     const endIndex = this.getNearestIndex({ year, month, day: 31 })
     const { day } = this.indexToValues(endIndex)
 
     return [1, day]
   }
 
-  getDisplayRange(index) {
-    const { year, month } = this.indexToValues(index)
-    const [start, end] = this.getDayRange(index)
+  getDisplayRange({ year, month }) {
+    const [start, end] = this.getDayRange({ year, month })
 
     return [
       this.valuesToIndex({ year, month, day: start }),

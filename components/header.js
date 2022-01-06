@@ -5,12 +5,11 @@ import {
   Dimmer,
   Header as HeaderComponent,
 } from '@carbonplan/components'
-import { useTimeStore } from './time'
+import { useDatasetsStore } from './datasets'
 
 const Header = ({ loading }) => {
-  const updatingTime = useTimeStore((state) => state.updatingTime)
+  const updatingTime = useDatasetsStore((state) => state.updatingTime)
   let status = null
-  console.log({ updatingTime })
   if (loading) {
     status = 'loading'
   } else if (updatingTime) {

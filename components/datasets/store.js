@@ -1,7 +1,13 @@
 import create from 'zustand'
+import zarr from 'zarr-js'
 
+import DateStrings from './date-strings'
 import { getDatasetDisplay, getFiltersCallback } from './utils'
 
+const DEFAULT_DISPLAY_TIMES = {
+  HISTORICAL: { year: 1950, month: 1, day: 1 },
+  PROJECTED: { year: 2015, month: 1, day: 1 },
+}
 const getInitialDatasets = (data) => {
   return data.datasets.reduce((accum, dataset) => {
     accum[dataset.name] = {
@@ -12,6 +18,7 @@ const getInitialDatasets = (data) => {
       method: dataset.method,
       experiment: dataset.experiment,
       timescale: dataset.timescale,
+      dateStrings: null,
       selected: false,
       opacity: 1,
       colormapName: null,
@@ -39,7 +46,7 @@ const getInitialFilters = (data) => {
   )
 }
 
-export const useDatasetsStore = create((set) => ({
+export const useDatasetsStore = create((set, get) => ({
   datasets: null,
   fetchDatasets: async () => {
     const result = await fetch(
@@ -54,8 +61,24 @@ export const useDatasetsStore = create((set) => ({
   },
   selectedOrder: [],
   filters: null,
+  displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
+  updatingTime: false,
+  setDisplayTime: (value) => set({ displayTime: value }),
+  setUpdatingTime: (value) => set({ updatingTime: value }),
+
+  loadDateStrings: (name) => {
+    zarr().load(`${get().datasets[name].source}/0/date_str`, (err, array) => {
+      const dateStrings = new DateStrings(Array.from(array.data))
+      const { datasets } = get()
+      const dataset = datasets[name]
+      set({
+        datasets: { ...datasets, [name]: { ...dataset, dateStrings } },
+      })
+    })
+  },
+
   selectDataset: (name) =>
-    set(({ datasets, selectedOrder, filters }) => {
+    set(({ datasets, selectedOrder, filters, loadDateStrings }) => {
       const dataset = datasets[name]
       const colors = Object.keys(datasets)
         .map((k) => k !== name && datasets[k].color)
@@ -67,13 +90,17 @@ export const useDatasetsStore = create((set) => ({
         selected: true,
       }
 
+      if (!dataset.dateStrings) {
+        loadDateStrings(name)
+      }
+
       return {
         datasets: { ...datasets, [name]: updatedDataset },
         selectedOrder: [name].concat(selectedOrder),
       }
     }),
   setFilters: (value) =>
-    set(({ filters, datasets, selectedOrder }) => {
+    set(({ displayTime, filters, datasets, selectedOrder }) => {
       const updatedFilters = { ...filters, ...value }
       const cb = getFiltersCallback(updatedFilters)
       const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
@@ -95,10 +122,22 @@ export const useDatasetsStore = create((set) => ({
         return accum
       }, {})
 
+      let updatedDisplayTime = displayTime
+      if (
+        (filters.experiment === 'historical') !==
+        (updatedFilters.experiment === 'historical')
+      ) {
+        updatedDisplayTime =
+          updatedFilters.experiment === 'historical'
+            ? DEFAULT_DISPLAY_TIMES.HISTORICAL
+            : DEFAULT_DISPLAY_TIMES.PROJECTED
+      }
+
       return {
         selectedOrder: selectedOrder.filter((n) => updatedDatasets[n].selected),
         datasets: updatedDatasets,
         filters: updatedFilters,
+        displayTime: updatedDisplayTime,
       }
     }),
 

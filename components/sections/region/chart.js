@@ -1,5 +1,5 @@
 import { Box, Flex } from 'theme-ui'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { format } from 'd3-format'
 
 import {
@@ -12,7 +12,6 @@ import {
   TickLabels,
 } from '@carbonplan/charts'
 import { getSelectedShortNames, useDatasetsStore } from '../../datasets'
-import { useTimeStore } from '../../time'
 
 const getArrayData = (arr) => {
   const { sum, min, max } = arr.reduce(
@@ -57,14 +56,30 @@ export const formatValue = (value) => {
 const ChartWrapper = ({ data }) => {
   const [active, setActive] = useState(null)
   const datasets = useDatasetsStore((state) => state.datasets)
-  const display = useTimeStore((state) => state.display)
-  const dateStrings = useTimeStore((state) => state.dateStrings)
-  const timeRange = useTimeStore((state) => state.range)
+  const display = useDatasetsStore((state) => state.displayTime)
+
+  const dateStrings = useDatasetsStore((state) => {
+    if (!state.datasets) {
+      return null
+    }
+    // todo: there should eventually only ever be one actively displayed dataset
+    const activeName = Object.keys(state.datasets).find(
+      (k) => state.datasets[k].selected
+    )
+    return state.datasets[activeName]?.dateStrings
+  })
+
+  const timeRange = useMemo(
+    () => dateStrings?.getDisplayRange(display),
+    [dateStrings, display]
+  )
 
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
   if (!dateStrings) {
     return 'Loading...'
   }
+
+  const displayTime = dateStrings.valuesToIndex(display, true)
 
   const range = [Infinity, -Infinity]
   const lines = data
@@ -76,8 +91,12 @@ const ChartWrapper = ({ data }) => {
         range[0] = Math.min(range[0], min)
         range[1] = Math.max(range[1], max)
 
-        let point = [Number(time), avg]
-        if (display === point[0]) {
+        const activeTime = dateStrings.valuesToIndex(
+          datasets[name].dateStrings.indexToValues(Number(time)),
+          true
+        )
+        let point = [activeTime, avg]
+        if (displayTime === point[0]) {
           circle = point
         }
         return point

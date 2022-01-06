@@ -2,7 +2,7 @@ import { Group, Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useTimeStore } from '../../time'
+import { useDatasetsStore } from '../../datasets'
 
 const sx = {
   label: {
@@ -21,7 +21,7 @@ const TimeSlider = ({
   showValue,
   debounce = false,
 }) => {
-  const setUpdatingTime = useTimeStore((state) => state.setUpdatingTime)
+  const setUpdatingTime = useDatasetsStore((state) => state.setUpdatingTime)
 
   const [sliding, setSliding] = useState(false)
   const [sliderValue, setSliderValue] = useState(value)
@@ -51,7 +51,6 @@ const TimeSlider = ({
 
   const handleMouseDown = useCallback(() => {
     setSliding(true)
-    console.log({ debounce })
     if (debounce) setUpdatingTime(true)
   }, [onChange, sliderValue, debounce])
 
@@ -95,30 +94,28 @@ const TimeSlider = ({
   )
 }
 
-const Sliders = () => {
-  const dateStrings = useTimeStore((state) => state.dateStrings)
+const YEAR_RANGES = {
+  HISTORICAL: [1950, 2014],
+  PROJECTED: [2015, 2100],
+}
 
-  const setDisplay = useTimeStore((state) => state.setDisplay)
-  const setRange = useTimeStore((state) => state.setRange)
-  const display = useTimeStore((state) => state.display)
-
-  const [{ year, month, day }, setValues] = useState(() =>
-    dateStrings.indexToValues(0)
-  )
+const Sliders = ({ dateStrings, historical = false }) => {
+  const display = useDatasetsStore((state) => state.displayTime)
+  const { year, month, day } = display
+  const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
 
   const ranges = useMemo(() => {
     return {
-      year: dateStrings.getYearRange(),
-      month: dateStrings.getMonthRange(display),
+      year: historical ? YEAR_RANGES.HISTORICAL : YEAR_RANGES.PROJECTED,
+      month: [1, 12],
       day: dateStrings.getDayRange(display),
     }
-  }, [display])
+  }, [historical, display, dateStrings])
 
   const onChange = (updates) => {
     const index = dateStrings.getNearestIndex({ year, month, day, ...updates })
-    setValues(dateStrings.indexToValues(index))
-    setDisplay(index)
-    setRange(dateStrings.getDisplayRange(index))
+
+    setDisplay(dateStrings.indexToValues(index))
   }
 
   return (
