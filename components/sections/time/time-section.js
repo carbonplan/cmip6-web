@@ -5,7 +5,7 @@ import Section from '../../section'
 
 const TimeSection = ({ sx }) => {
   const experiment = useDatasetsStore((state) => state.filters?.experiment)
-  const dateStrings = useDatasetsStore((state) => {
+  const active = useDatasetsStore((state) => {
     if (!state.datasets) {
       return null
     }
@@ -13,19 +13,26 @@ const TimeSection = ({ sx }) => {
     const activeName = Object.keys(state.datasets).find(
       (k) => state.datasets[k].selected
     )
-    return state.datasets[activeName]?.dateStrings
+    return state.datasets[activeName]
   })
+
+  let inner
+  if (!active) {
+    inner = 'Select a dataset to pan through time points'
+  } else if (!active.dateStrings) {
+    inner = 'Loading...'
+  } else {
+    inner = (
+      <Sliders
+        historical={experiment === 'historical'}
+        dateStrings={active.dateStrings}
+      />
+    )
+  }
 
   return (
     <Section sx={sx.heading} label='Time'>
-      {dateStrings ? (
-        <Sliders
-          historical={experiment === 'historical'}
-          dateStrings={dateStrings}
-        />
-      ) : (
-        'Loading...'
-      )}
+      {inner}{' '}
     </Section>
   )
 }
