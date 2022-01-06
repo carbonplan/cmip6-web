@@ -34,8 +34,9 @@ const DatasetRaster = ({ name, index }) => {
   }
 
   const time = dateStrings.valuesToIndex(display, true)
+
   if (typeof time !== 'number') {
-    // todo: validate that this isn't the "active" dataset
+    // todo: setDisplayTime to nearest index if *active* dataset
     return null
   }
 

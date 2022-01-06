@@ -79,7 +79,7 @@ const ChartWrapper = ({ data }) => {
     return 'Loading...'
   }
 
-  const displayTime = dateStrings.valuesToIndex(display)
+  const displayTime = dateStrings.valuesToIndex(display, true)
 
   const range = [Infinity, -Infinity]
   const lines = data
