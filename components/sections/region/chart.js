@@ -12,7 +12,6 @@ import {
   TickLabels,
 } from '@carbonplan/charts'
 import { getSelectedShortNames, useDatasetsStore } from '../../datasets'
-import { useTimeStore } from '../../time'
 
 const getArrayData = (arr) => {
   const { sum, min, max } = arr.reduce(
@@ -57,7 +56,7 @@ export const formatValue = (value) => {
 const ChartWrapper = ({ data }) => {
   const [active, setActive] = useState(null)
   const datasets = useDatasetsStore((state) => state.datasets)
-  const display = useTimeStore((state) => state.display)
+  const display = useDatasetsStore((state) => state.displayTime)
 
   const dateStrings = useDatasetsStore((state) => {
     if (!state.datasets) {

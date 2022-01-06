@@ -3,7 +3,6 @@ import { useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from './datasets'
-import { useTimeStore } from './time'
 import { useRegionStore } from './region'
 import { useMemo } from 'react'
 
@@ -14,7 +13,7 @@ const DatasetRaster = ({ name, index }) => {
   )
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)
-  const display = useTimeStore((state) => state.display, shallow)
+  const display = useDatasetsStore((state) => state.displayTime, shallow)
   const colormap = useThemedColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 

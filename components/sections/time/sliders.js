@@ -2,7 +2,7 @@ import { Group, Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useTimeStore } from '../../time'
+import { useDatasetsStore } from '../../datasets'
 
 const sx = {
   label: {
@@ -21,7 +21,7 @@ const TimeSlider = ({
   showValue,
   debounce = false,
 }) => {
-  const setUpdatingTime = useTimeStore((state) => state.setUpdatingTime)
+  const setUpdatingTime = useDatasetsStore((state) => state.setUpdatingTime)
 
   const [sliding, setSliding] = useState(false)
   const [sliderValue, setSliderValue] = useState(value)
@@ -101,9 +101,9 @@ const YEAR_RANGES = {
 }
 
 const Sliders = ({ dateStrings, historical = false }) => {
-  const display = useTimeStore((state) => state.display)
+  const display = useDatasetsStore((state) => state.displayTime)
   const { year, month, day } = display
-  const setDisplay = useTimeStore((state) => state.setDisplay)
+  const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
 
   const ranges = useMemo(() => {
     return {
