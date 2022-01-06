@@ -5,27 +5,19 @@ import Section from '../../section'
 
 const TimeSection = ({ sx }) => {
   const experiment = useDatasetsStore((state) => state.filters?.experiment)
-  const active = useDatasetsStore((state) => {
-    if (!state.datasets) {
-      return null
-    }
-    // todo: there should eventually only ever be one actively displayed dataset
-    const activeName = Object.keys(state.datasets).find(
-      (k) => state.datasets[k].selected
-    )
-    return state.datasets[activeName]
-  })
+  const active = useDatasetsStore((state) => state.active)
+  const datasets = useDatasetsStore((state) => state.datasets)
 
   let inner
-  if (!active) {
+  if (datasets && !active) {
     inner = 'Select a dataset to pan through time points'
-  } else if (!active.dateStrings) {
+  } else if (!datasets || !datasets[active].dateStrings) {
     inner = 'Loading...'
   } else {
     inner = (
       <Sliders
         historical={experiment === 'historical'}
-        dateStrings={active.dateStrings}
+        dateStrings={datasets[active].dateStrings}
       />
     )
   }

@@ -55,27 +55,22 @@ export const formatValue = (value) => {
 
 const ChartWrapper = ({ data }) => {
   const [active, setActive] = useState(null)
+  const activeDataset = useDatasetsStore((state) => state.active)
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useDatasetsStore((state) => state.displayTime)
-
-  const dateStrings = useDatasetsStore((state) => {
-    if (!state.datasets) {
-      return null
-    }
-    // todo: there should eventually only ever be one actively displayed dataset
-    const activeName = Object.keys(state.datasets).find(
-      (k) => state.datasets[k].selected
-    )
-    return state.datasets[activeName]?.dateStrings
-  })
+  const dateStrings = datasets && datasets[activeDataset]?.dateStrings
 
   const timeRange = useMemo(
     () => dateStrings?.getDisplayRange(display),
     [dateStrings, display]
   )
 
+  if (!activeDataset) {
+    return 'Select a dataset to view regional data'
+  }
+
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
-  if (!dateStrings) {
+  if (!datasets || !dateStrings) {
     return 'Loading...'
   }
 

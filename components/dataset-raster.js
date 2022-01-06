@@ -4,9 +4,10 @@ import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from './datasets'
 import { useRegionStore } from './region'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 const DatasetRaster = ({ name, index }) => {
+  const active = useDatasetsStore((state) => state.active === name)
   const { dateStrings, source, opacity, colormapName, clim } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
@@ -14,8 +15,19 @@ const DatasetRaster = ({ name, index }) => {
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const display = useDatasetsStore((state) => state.displayTime, shallow)
+  const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
   const colormap = useThemedColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
+
+  const time = dateStrings?.valuesToIndex(display, true)
+
+  useEffect(() => {
+    if (dateStrings && typeof time !== 'number' && active) {
+      const nearestIndex = dateStrings.getNearestIndex(display)
+      const nearestValue = dateStrings.indexToValues(nearestIndex)
+      setDisplayTime(nearestValue)
+    }
+  }, [dateStrings, active, time, display])
 
   const timeRange = useMemo(() => {
     if (!dateStrings) {
@@ -29,25 +41,18 @@ const DatasetRaster = ({ name, index }) => {
       .map((el, i) => range[0] + i)
   }, [dateStrings, display])
 
-  if (!dateStrings) {
-    return null
-  }
-
-  const time = dateStrings.valuesToIndex(display, true)
-
   if (typeof time !== 'number') {
-    // todo: setDisplayTime to nearest index if *active* dataset
     return null
   }
 
   return (
     <Raster
+      display={active}
       key={filters.variable}
       index={index}
       source={source}
       colormap={colormap}
       clim={clim}
-      display={true}
       opacity={opacity}
       mode={'texture'}
       variable={filters.variable}
