@@ -58,7 +58,7 @@ export const formatValue = (value) => {
 }
 
 const ChartWrapper = ({ data }) => {
-  const [active, setActive] = useState(null)
+  const [hovered, setHovered] = useState(null)
   const activeDataset = useDatasetsStore((state) => state.active)
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useDatasetsStore((state) => state.displayTime)
@@ -81,45 +81,56 @@ const ChartWrapper = ({ data }) => {
   const displayTime = dateStrings.valuesToIndex(display, true)
 
   const range = [Infinity, -Infinity]
-  const lines = data
+  const [activeLine, lines] = data
     .filter(([name, value]) => value)
-    .map(([name, value]) => {
-      let circle
-      const lineData = Object.keys(value).map((time) => {
-        const { avg, min, max } = getArrayData(value[time])
-        range[0] = Math.min(range[0], min)
-        range[1] = Math.max(range[1], max)
+    .reduce(
+      (accum, [name, value]) => {
+        let circle
+        const lineData = Object.keys(value).map((time) => {
+          const { avg, min, max } = getArrayData(value[time])
+          range[0] = Math.min(range[0], min)
+          range[1] = Math.max(range[1], max)
 
-        const activeTime = dateStrings.valuesToIndex(
-          datasets[name].dateStrings.indexToValues(Number(time)),
-          true
-        )
-        let point = [activeTime, avg]
-        if (displayTime === point[0]) {
-          circle = point
+          const activeTime = dateStrings.valuesToIndex(
+            datasets[name].dateStrings.indexToValues(Number(time)),
+            true
+          )
+          let point = [activeTime, avg]
+          if (displayTime === point[0]) {
+            circle = point
+          }
+          return point
+        })
+
+        const line = {
+          key: name,
+          circle,
+          color: 'text',
+          lineData,
         }
-        return point
-      })
 
-      return {
-        key: name,
-        circle,
-        color:
-          activeDataset === name
-            ? COLORMAP_COLORS[datasets[name].colormapName]
-            : 'text',
-        lineData,
-      }
-    })
+        if (activeDataset === name) {
+          accum[0] = {
+            ...line,
+            color: COLORMAP_COLORS[datasets[name].colormapName],
+          }
+        } else {
+          accum[1].push(line)
+        }
+
+        return accum
+      },
+      [{}, []]
+    )
 
   const loading = data.some(([name, value]) => !value)
-  const activeLine = lines.find(({ key }) => key === active)
+  const hoveredLine = lines.find(({ key }) => key === hovered)
   const shortNames = getSelectedShortNames(datasets)
   return (
     <Box>
       <Flex sx={{ gap: 3, minHeight: '40px', mb: 4, flexWrap: 'wrap' }}>
         {!loading &&
-          lines
+          [activeLine, ...lines]
             .filter((l) => l.circle)
             .map(({ key, circle, color }) => (
               <Box key={key} sx={{ color }}>
@@ -186,28 +197,28 @@ const ChartWrapper = ({ data }) => {
               })
             }
           />
-          {!loading && activeLine?.circle && (
-            <Label x={activeLine.circle[0]} y={activeLine.circle[1]}>
+          {!loading && hoveredLine?.circle && (
+            <Label x={hoveredLine.circle[0]} y={hoveredLine.circle[1]}>
               <Box
                 sx={{
-                  color: activeLine.color,
+                  color: hoveredLine.color,
                   textTransform: 'none',
                   mt: 1,
                   ml: 1,
                 }}
               >
-                {shortNames[activeLine.key]}
+                {shortNames[hoveredLine.key]}
               </Box>
             </Label>
           )}
           <Plot>
             {!loading &&
-              lines.map(({ key, circle, color, lineData }) => (
+              [...lines, activeLine].map(({ key, circle, color, lineData }) => (
                 <Box
                   as='g'
                   key={key}
-                  onMouseOver={() => setActive(key)}
-                  onMouseLeave={() => setActive(null)}
+                  onMouseOver={() => setHovered(key)}
+                  onMouseLeave={() => setHovered(null)}
                 >
                   <Line color={color} data={lineData} width={1.5} />
                   {circle && (
