@@ -90,20 +90,22 @@ const ChartWrapper = ({ data }) => {
     .reduce(
       (accum, [name, value]) => {
         let circle
-        const lineData = Object.keys(value).map((time) => {
-          const { avg, min, max } = getArrayData(value[time])
-          range[0] = Math.min(range[0], min)
-          range[1] = Math.max(range[1], max)
+        const lineData = Object.keys(value)
+          .map((time) => {
+            const { avg, min, max } = getArrayData(value[time])
+            range[0] = Math.min(range[0], min)
+            range[1] = Math.max(range[1], max)
 
-          const activeTime = dateStrings.valuesToIndex(
-            datasets[name].dateStrings.indexToValues(Number(time))
-          )
-          let point = [activeTime, avg]
-          if (displayTime === point[0]) {
-            circle = point
-          }
-          return point
-        })
+            const activeTime = dateStrings.valuesToIndex(
+              datasets[name].dateStrings.indexToValues(Number(time))
+            )
+            let point = [activeTime, avg]
+            if (displayTime === point[0]) {
+              circle = point
+            }
+            return point
+          })
+          .filter((p) => typeof p[0] === 'number')
 
         const line = {
           key: name,
