@@ -147,13 +147,25 @@ const Inner = ({ sx }) => {
         </Column>
       </Row>
       <Divider sx={{ my: 4 }} />
-      <Box sx={{ ...sx.label, mb: 3 }}>
-        Results <Badge sx={{ ml: 4 }}>{formatNumber(resultNames.length)}</Badge>{' '}
-        <Box as='span'>/</Box>{' '}
-        <Badge sx={{ color: 'secondary' }}>
-          {formatNumber(Object.keys(datasets).length)}
-        </Badge>
-      </Box>
+      <Row columns={4} sx={{ ...sx.label, mb: 3 }}>
+        <Column start={1} width={2}>
+          <Box>
+            Results{' '}
+            <Badge sx={{ ml: 4 }}>{formatNumber(resultNames.length)}</Badge>{' '}
+            <Box as='span'>/</Box>{' '}
+            <Badge sx={{ color: 'secondary' }}>
+              {formatNumber(Object.keys(datasets).length)}
+            </Badge>
+          </Box>
+        </Column>
+        <Column start={3} width={2} sx={{ textAlign: 'right' }}>
+          <Group direction='horizontal' spacing='sm'>
+            <Box>View</Box>
+            <Box>Load</Box>
+          </Group>
+        </Column>
+      </Row>
+      <Box sx={{ ...sx.label, mb: 3 }}></Box>
       <Group spacing={2}>
         {resultNames.map((name) => (
           <Dataset key={name} name={name} />

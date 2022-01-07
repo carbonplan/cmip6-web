@@ -58,6 +58,7 @@ const Dataset = ({ name }) => {
             width: 'inherit',
             display: 'inline-block',
             position: 'relative',
+            mr: '20px',
           }}
         >
           <Checkbox
