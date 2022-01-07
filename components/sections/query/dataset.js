@@ -1,7 +1,7 @@
 import { Box, Checkbox, Flex, Label } from 'theme-ui'
 import shallow from 'zustand/shallow'
 
-import { useDatasetsStore } from '../../datasets'
+import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
 import { useRegionStore } from '../../region'
 
 const sx = {
@@ -25,7 +25,7 @@ const sx = {
 const Dataset = ({ name }) => {
   const active = useDatasetsStore((state) => state.active === name)
   const setActive = useDatasetsStore((state) => state.setActive)
-  const { selected, color } = useDatasetsStore(
+  const { colormapName, selected } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
   )
@@ -33,11 +33,17 @@ const Dataset = ({ name }) => {
   const deselectDataset = useDatasetsStore((state) => state.deselectDataset)
   const setRegionData = useRegionStore((state) => state.setRegionData)
 
+  let color = 'secondary'
+  if (active) {
+    color = COLORMAP_COLORS[colormapName]
+  } else if (selected) {
+    color = 'text'
+  }
   return (
     <Flex sx={{ justifyContent: 'space-between' }}>
       <Box
         sx={{
-          color: selected ? color : 'text',
+          color,
           fontFamily: 'faux',
           letterSpacing: 'faux',
           fontSize: [1, 1, 1, 2],

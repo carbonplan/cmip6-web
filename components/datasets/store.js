@@ -22,7 +22,6 @@ const getInitialDatasets = (data) => {
       selected: false,
       opacity: 1,
       colormapName: null,
-      color: null,
       clim: null,
     }
     return accum
@@ -89,13 +88,10 @@ export const useDatasetsStore = create((set, get) => ({
   selectDataset: (name) =>
     set(({ datasets, filters, loadDateStrings }) => {
       const dataset = datasets[name]
-      const colors = Object.keys(datasets)
-        .map((k) => k !== name && datasets[k].color)
-        .filter(Boolean)
 
       const updatedDataset = {
         ...dataset,
-        ...getDatasetDisplay(dataset, colors, filters, true),
+        ...getDatasetDisplay(dataset, filters, true),
         selected: true,
       }
 
@@ -117,15 +113,7 @@ export const useDatasetsStore = create((set, get) => ({
         const selected = cb(dataset) && dataset.selected
         let displayUpdates = {}
         if (selected) {
-          const colors = Object.keys(accum)
-            .map((name) => accum[name].color)
-            .filter(Boolean)
-          displayUpdates = getDatasetDisplay(
-            dataset,
-            colors,
-            updatedFilters,
-            true
-          )
+          displayUpdates = getDatasetDisplay(dataset, updatedFilters, true)
         } else if (active === k) {
           updatedActive = null
         }
@@ -177,16 +165,13 @@ export const useDatasetsStore = create((set, get) => ({
       }
 
       const updatedDataset = { ...datasets[name], ...values }
-      const colors = Object.keys(datasets)
-        .map((k) => k !== name && datasets[k].color)
-        .filter(Boolean)
 
       return {
         datasets: {
           ...datasets,
           [name]: {
             ...updatedDataset,
-            ...getDatasetDisplay(updatedDataset, colors, filters),
+            ...getDatasetDisplay(updatedDataset, filters),
           },
         },
       }

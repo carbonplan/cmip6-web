@@ -11,7 +11,11 @@ import {
   Plot,
   TickLabels,
 } from '@carbonplan/charts'
-import { getSelectedShortNames, useDatasetsStore } from '../../datasets'
+import {
+  COLORMAP_COLORS,
+  getSelectedShortNames,
+  useDatasetsStore,
+} from '../../datasets'
 
 const getArrayData = (arr) => {
   const { sum, min, max } = arr.reduce(
@@ -100,7 +104,10 @@ const ChartWrapper = ({ data }) => {
       return {
         key: name,
         circle,
-        color: datasets[name].color,
+        color:
+          activeDataset === name
+            ? COLORMAP_COLORS[datasets[name].colormapName]
+            : 'text',
         lineData,
       }
     })
