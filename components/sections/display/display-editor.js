@@ -4,7 +4,6 @@ import { Colorbar, Group, Input, Select } from '@carbonplan/components'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
-import Section from '../../section'
 import { getSelectedShortNames, useDatasetsStore } from '../../datasets'
 
 const DisplayEditor = ({ name, sx }) => {
@@ -30,12 +29,10 @@ const DisplayEditor = ({ name, sx }) => {
     updateDatasetDisplay(name, { clim: setter(clim) })
   }
   return (
-    <Section
-      sx={{ ...sx.heading, textTransform: 'none' }}
-      label={shortName}
-      color={color}
-      expander='left'
-    >
+    <Group spacing={4}>
+      <Box sx={{ ...sx.heading, textTransform: 'none', color }}>
+        {shortName}
+      </Box>
       <Group spacing={4}>
         <Box sx={{ ...sx.label, mb: 2 }}>
           Colormap
@@ -99,7 +96,7 @@ const DisplayEditor = ({ name, sx }) => {
           />
         </Box>
       </Group>
-    </Section>
+    </Group>
   )
 }
 export default DisplayEditor
