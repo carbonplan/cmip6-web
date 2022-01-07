@@ -64,10 +64,14 @@ const ChartWrapper = ({ data }) => {
   const display = useDatasetsStore((state) => state.displayTime)
   const dateStrings = datasets && datasets[activeDataset]?.dateStrings
 
-  const timeRange = useMemo(
-    () => dateStrings?.getDisplayRange(display),
-    [dateStrings, display]
-  )
+  const timeRange = useMemo(() => {
+    if (!dateStrings) {
+      return null
+    }
+    const fullRange = dateStrings.getDisplayRange(display)
+
+    return [fullRange[0], fullRange[fullRange.length - 1]]
+  }, [dateStrings, display])
 
   if (!activeDataset) {
     return 'Select a dataset to view regional data'
@@ -78,7 +82,7 @@ const ChartWrapper = ({ data }) => {
     return 'Loading...'
   }
 
-  const displayTime = dateStrings.valuesToIndex(display, true)
+  const displayTime = dateStrings.valuesToIndex(display)
 
   const range = [Infinity, -Infinity]
   const [activeLine, lines] = data
@@ -92,8 +96,7 @@ const ChartWrapper = ({ data }) => {
           range[1] = Math.max(range[1], max)
 
           const activeTime = dateStrings.valuesToIndex(
-            datasets[name].dateStrings.indexToValues(Number(time)),
-            true
+            datasets[name].dateStrings.indexToValues(Number(time))
           )
           let point = [activeTime, avg]
           if (displayTime === point[0]) {

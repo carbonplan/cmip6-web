@@ -19,29 +19,32 @@ const DatasetRaster = ({ name, index }) => {
   const colormap = useThemedColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 
-  const time = dateStrings?.valuesToIndex(display, true)
+  const selectedTime = dateStrings?.valuesToIndex(display)
+  let time = selectedTime
+  if (typeof time !== 'number') {
+    time = dateStrings?.getNearestIndex(display)
+  }
 
   useEffect(() => {
-    if (dateStrings && typeof time !== 'number' && active) {
-      const nearestIndex = dateStrings.getNearestIndex(display)
-      const nearestValue = dateStrings.indexToValues(nearestIndex)
+    if (
+      active &&
+      dateStrings &&
+      typeof time === 'number' &&
+      typeof selectedTime !== 'number'
+    ) {
+      const nearestValue = dateStrings.indexToValues(time)
       setDisplayTime(nearestValue)
     }
-  }, [dateStrings, active, time, display])
+  }, [active, dateStrings, selectedTime, time])
 
   const timeRange = useMemo(() => {
     if (!dateStrings) {
-      return
+      return []
     }
-
-    const range = dateStrings.getDisplayRange(display)
-
-    return new Array(range[1] - range[0] + 1)
-      .fill(null)
-      .map((el, i) => range[0] + i)
+    return dateStrings.getDisplayRange(display)
   }, [dateStrings, display])
 
-  if (typeof time !== 'number') {
+  if (timeRange.length === 0) {
     return null
   }
 
