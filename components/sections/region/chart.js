@@ -1,7 +1,6 @@
 import { Box, Flex } from 'theme-ui'
 import React, { useMemo, useState } from 'react'
 import { format } from 'd3-format'
-
 import {
   Chart,
   Circle,
@@ -11,6 +10,8 @@ import {
   Plot,
   TickLabels,
 } from '@carbonplan/charts'
+import { RotatingArrow } from '@carbonplan/icons'
+import { Button } from '@carbonplan/components'
 import {
   COLORMAP_COLORS,
   getSelectedShortNames,
@@ -60,6 +61,7 @@ export const formatValue = (value) => {
 const ChartWrapper = ({ data }) => {
   const [hovered, setHovered] = useState(null)
   const activeDataset = useDatasetsStore((state) => state.active)
+  const setActive = useDatasetsStore((state) => state.setActive)
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useDatasetsStore((state) => state.displayTime)
   const dateStrings = datasets && datasets[activeDataset]?.dateStrings
@@ -85,72 +87,85 @@ const ChartWrapper = ({ data }) => {
   const displayTime = dateStrings.valuesToIndex(display)
 
   const range = [Infinity, -Infinity]
-  const [activeLine, lines] = data
+  const lines = data
     .filter(([name, value]) => value)
-    .reduce(
-      (accum, [name, value]) => {
-        let circle
-        const lineData = Object.keys(value)
-          .map((time) => {
-            const { avg, min, max } = getArrayData(value[time])
-            range[0] = Math.min(range[0], min)
-            range[1] = Math.max(range[1], max)
+    .map(([name, value]) => {
+      let circle
+      const lineData = Object.keys(value)
+        .map((time) => {
+          const { avg, min, max } = getArrayData(value[time])
+          range[0] = Math.min(range[0], min)
+          range[1] = Math.max(range[1], max)
 
-            const activeTime = dateStrings.valuesToIndex(
-              datasets[name].dateStrings.indexToValues(Number(time))
-            )
-            let point = [activeTime, avg]
-            if (displayTime === point[0]) {
-              circle = point
-            }
-            return point
-          })
-          .filter((p) => typeof p[0] === 'number')
-
-        const line = {
-          key: name,
-          circle,
-          color: 'text',
-          lineData,
-        }
-
-        if (activeDataset === name) {
-          accum[0] = {
-            ...line,
-            color: COLORMAP_COLORS[datasets[name].colormapName],
+          const activeTime = dateStrings.valuesToIndex(
+            datasets[name].dateStrings.indexToValues(Number(time))
+          )
+          let point = [activeTime, avg]
+          if (displayTime === point[0]) {
+            circle = point
           }
-        } else {
-          accum[1].push(line)
-        }
+          return point
+        })
+        .filter((p) => typeof p[0] === 'number')
 
-        return accum
-      },
-      [{}, []]
-    )
+      let color = 'secondary'
+      let width = 1.5
+
+      if (name === activeDataset) {
+        color = COLORMAP_COLORS[datasets[name].colormapName]
+        width = 2
+      } else if (name === hovered) {
+        color = 'primary'
+        width = 2
+      }
+      return {
+        key: name,
+        circle,
+        color,
+        width,
+        lineData,
+      }
+    }, [])
 
   const loading = data.some(([name, value]) => !value)
-  const hoveredLine = lines.find(({ key }) => key === hovered)
   const shortNames = getSelectedShortNames(datasets)
   return (
     <Box>
       <Flex sx={{ gap: 3, minHeight: '40px', mb: 4, flexWrap: 'wrap' }}>
         {!loading &&
-          [activeLine, ...lines]
+          lines
             .filter((l) => l.circle)
-            .map(({ key, circle, color }) => (
-              <Box key={key} sx={{ color }}>
+            .map(({ key, circle, color }) =>
+              key === activeDataset ? (
                 <Box
                   sx={{
-                    fontSize: 0,
-                    fontFamily: 'mono',
-                    letterSpacing: 'mono',
+                    color: color,
                   }}
                 >
-                  {shortNames[key]}
+                  <Box
+                    sx={{ fontSize: [2, 2, 2, 3], lineHeight: 1.05 }}
+                    size='xs'
+                  >
+                    {shortNames[key]}
+                  </Box>
+                  <Box sx={{ fontSize: [4] }}>{formatValue(circle[1])}</Box>
                 </Box>
-                <Box sx={{ fontSize: [4] }}>{formatValue(circle[1])}</Box>
-              </Box>
-            ))}
+              ) : (
+                <Box key={key} sx={{ color, transition: 'color 0.15s' }}>
+                  <Button
+                    size='xs'
+                    suffix={<RotatingArrow />}
+                    inverted
+                    onMouseOver={() => setHovered(key)}
+                    onMouseLeave={() => setHovered(null)}
+                    onClick={() => setActive(key)}
+                  >
+                    {shortNames[key]}
+                  </Button>
+                  <Box sx={{ fontSize: [4] }}>{formatValue(circle[1])}</Box>
+                </Box>
+              )
+            )}
       </Flex>
       <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
         {loading && (
@@ -202,40 +217,35 @@ const ChartWrapper = ({ data }) => {
               })
             }
           />
-          {!loading && hoveredLine?.circle && (
-            <Label x={hoveredLine.circle[0]} y={hoveredLine.circle[1]}>
-              <Box
-                sx={{
-                  color: hoveredLine.color,
-                  textTransform: 'none',
-                  mt: 1,
-                  ml: 1,
-                }}
-              >
-                {shortNames[hoveredLine.key]}
-              </Box>
-            </Label>
-          )}
           <Plot>
             {!loading &&
-              [...lines, activeLine].map(({ key, circle, color, lineData }) => (
-                <Box
-                  as='g'
-                  key={key}
-                  onMouseOver={() => setHovered(key)}
-                  onMouseLeave={() => setHovered(null)}
-                >
-                  <Line color={color} data={lineData} width={1.5} />
-                  {circle && (
-                    <Circle
-                      size={[22, 18, 16]}
-                      x={circle[0]}
-                      y={circle[1]}
-                      color={color}
-                    />
-                  )}
-                </Box>
-              ))}
+              lines
+                .sort((a, b) => {
+                  const [aWeight, bWeight] = [a, b].map(({ key }) => {
+                    if (key === hovered) {
+                      return 2
+                    } else if (key === activeDataset) {
+                      return 1
+                    } else {
+                      return 0
+                    }
+                  })
+
+                  return aWeight - bWeight
+                })
+                .map(({ key, circle, color, width, lineData }) => (
+                  <Box as='g' key={key}>
+                    <Line color={color} data={lineData} width={width} />
+                    {circle && (
+                      <Circle
+                        size={[22, 18, 16]}
+                        x={circle[0]}
+                        y={circle[1]}
+                        color={color}
+                      />
+                    )}
+                  </Box>
+                ))}
           </Plot>
         </Chart>
       </Box>
