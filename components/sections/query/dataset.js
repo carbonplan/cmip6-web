@@ -4,8 +4,8 @@ import { ArrowThin, Check, X } from '@carbonplan/icons'
 import shallow from 'zustand/shallow'
 
 import CustomCheckbox from './custom-checkbox'
-import EyeOpen from './icons/eye-open'
-import EyeClosed from './icons/eye-closed'
+import Eye from './icons/eye'
+import EyeFilled from './icons/eye-filled'
 import {
   COLORMAP_COLORS,
   DEFAULT_COLORMAPS,
@@ -105,8 +105,8 @@ const Dataset = ({ name, last }) => {
               }}
             >
               <CustomCheckbox
-                uncheckedIcon={EyeClosed}
-                checkedIcon={EyeOpen}
+                uncheckedIcon={Eye}
+                checkedIcon={EyeFilled}
                 checked={active}
                 onChange={(e) => {
                   if (e.target.checked && !active) {

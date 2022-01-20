@@ -1,6 +1,6 @@
 import { Box } from 'theme-ui'
 
-const EyeOpen = ({ ...props }) => {
+const Eye = ({ ...props }) => {
   const style = { vectorEffect: 'non-scaling-stroke' }
   return (
     <Box
@@ -14,11 +14,9 @@ const EyeOpen = ({ ...props }) => {
       {...props}
     >
       <path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'></path>
-      <circle fill='currentColor' cx='12' cy='12' r='3'></circle>
+      <circle cx='12' cy='12' r='3'></circle>
     </Box>
   )
 }
 
-//<circle cx='13' cy='13' r='12' style={style} />
-
-export default EyeOpen
+export default Eye
