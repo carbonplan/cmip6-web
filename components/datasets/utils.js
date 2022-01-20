@@ -7,7 +7,7 @@ export const getFiltersCallback = (filters) => {
     filters.method[d.method]
 }
 
-const DEFAULT_COLORMAPS = {
+export const DEFAULT_COLORMAPS = {
   tasmax: 'warm',
   tasmin: 'warm',
   pr: 'cool',
