@@ -1,30 +1,29 @@
 import { useState } from 'react'
 import { Box } from 'theme-ui'
 
-const sx = {
-  checkbox: {
+const sxCheckbox = {
+  stroke: 'secondary',
+  strokeWidth: '1.25',
+  width: '18px',
+  cursor: 'pointer',
+  transition: 'stroke 0.15s',
+  'input:not(:checked) ~ &': {
     stroke: 'secondary',
-    strokeWidth: '1.25',
-    width: '18px',
-    cursor: 'pointer',
-    transition: 'stroke 0.15s',
-    'input:not(:checked) ~ &': {
-      stroke: 'secondary',
-    },
-    '@media (hover: hover) and (pointer: fine)': {
-      'input:hover ~ &': { stroke: 'primary' },
-    },
-    'input:focus ~ &': {
-      bg: 'inherit',
-    },
-    'input:focus-visible ~ &': {
-      outline: 'dashed 1px rgb(110, 110, 110, 0.625)',
-      background: 'rgb(110, 110, 110, 0.625)',
-    },
+  },
+  '@media (hover: hover) and (pointer: fine)': {
+    'input:hover ~ &': { stroke: 'primary' },
+  },
+  'input:focus ~ &': {
+    bg: 'inherit',
+  },
+  'input:focus-visible ~ &': {
+    outline: 'dashed 1px rgb(110, 110, 110, 0.625)',
+    background: 'rgb(110, 110, 110, 0.625)',
   },
 }
 
 const CheckboxIcon = ({
+  sx,
   checkedIcon: CheckedIcon,
   uncheckedIcon: UncheckedIcon,
 }) => {
@@ -32,7 +31,8 @@ const CheckboxIcon = ({
     <>
       <CheckedIcon
         sx={{
-          ...sx.checkbox,
+          ...sxCheckbox,
+          ...sx,
           opacity: 0,
           'input:checked ~ &': {
             opacity: 1,
@@ -42,7 +42,8 @@ const CheckboxIcon = ({
       />
       <UncheckedIcon
         sx={{
-          ...sx.checkbox,
+          ...sxCheckbox,
+          ...sx,
           position: 'absolute',
           left: 0,
           opacity: 1,
@@ -57,6 +58,7 @@ const CheckboxIcon = ({
 }
 
 const CheckboxIconWithHover = ({
+  sx,
   checkedIcon: CheckedIcon,
   uncheckedIcon: UncheckedIcon,
   checkedHoverIcon: CheckedIconHover,
@@ -66,7 +68,8 @@ const CheckboxIconWithHover = ({
     <>
       <CheckedIconHover
         sx={{
-          ...sx.checkbox,
+          ...sxCheckbox,
+          ...sx,
           opacity: 0,
           transition: 'stroke 0s',
           'input:checked:hover ~ &': {
@@ -77,7 +80,8 @@ const CheckboxIconWithHover = ({
       />
       <CheckedIcon
         sx={{
-          ...sx.checkbox,
+          ...sxCheckbox,
+          ...sx,
           position: 'absolute',
           left: 0,
           opacity: 0,
@@ -92,7 +96,8 @@ const CheckboxIconWithHover = ({
       />
       <UncheckedIcon
         sx={{
-          ...sx.checkbox,
+          ...sxCheckbox,
+          ...sx,
           position: 'absolute',
           left: 0,
           opacity: 1,
@@ -132,6 +137,7 @@ const CustomCheckbox = ({
       {(checkedHoverIcon || uncheckedHoverIcon) && (
         <CheckboxIconWithHover
           {...props}
+          sx={sx}
           checkedHoverIcon={checkedHoverIcon}
           uncheckedHoverIcon={uncheckedHoverIcon}
           checkedIcon={checkedIcon}
@@ -142,6 +148,7 @@ const CustomCheckbox = ({
       {!checkedHoverIcon && !uncheckedHoverIcon && (
         <CheckboxIcon
           {...props}
+          sx={sx}
           checkedIcon={checkedIcon}
           uncheckedIcon={uncheckedIcon}
           aria-hidden='true'
