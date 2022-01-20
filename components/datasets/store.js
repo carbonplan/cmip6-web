@@ -110,14 +110,18 @@ export const useDatasetsStore = create((set, get) => ({
       let updatedActive = active
       const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
         const dataset = datasets[k]
-        const selected = cb(dataset) && dataset.selected
+        const visible = cb(dataset)
         let displayUpdates = {}
-        if (selected) {
+        if (visible) {
           displayUpdates = getDatasetDisplay(dataset, updatedFilters, true)
         } else if (active === k) {
           updatedActive = null
         }
-        accum[k] = { ...dataset, ...displayUpdates, selected }
+        accum[k] = {
+          ...dataset,
+          ...displayUpdates,
+          selected: visible && dataset.selected,
+        }
         return accum
       }, {})
 
