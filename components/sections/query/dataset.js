@@ -49,7 +49,7 @@ const Dataset = ({ name, last }) => {
       }}
     >
       <Column start={1} width={3}>
-        <Box
+        <Label
           sx={{
             color,
             cursor: 'pointer',
@@ -64,12 +64,10 @@ const Dataset = ({ name, last }) => {
               },
             },
           }}
-          onClick={(e) => {
-            setActive(name)
-          }}
+          htmlFor={name}
         >
           {name}
-        </Box>
+        </Label>
       </Column>
       <Column start={4} width={1}>
         <Box sx={{ mt: '-6px', mr: '2px', float: 'right' }}>
@@ -105,6 +103,7 @@ const Dataset = ({ name, last }) => {
               }}
             >
               <CustomCheckbox
+                id={name}
                 uncheckedIcon={Eye}
                 checkedIcon={EyeFilled}
                 checked={active}
