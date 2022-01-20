@@ -158,17 +158,11 @@ const Inner = ({ sx }) => {
             </Badge>
           </Box>
         </Column>
-        <Column start={3} width={2} sx={{ textAlign: 'right' }}>
-          <Group direction='horizontal' spacing='sm'>
-            <Box>View</Box>
-            <Box>Load</Box>
-          </Group>
-        </Column>
       </Row>
       <Box sx={{ ...sx.label, mb: 3 }}></Box>
-      <Group spacing={2}>
-        {resultNames.map((name) => (
-          <Dataset key={name} name={name} />
+      <Group spacing={0}>
+        {resultNames.map((name, i) => (
+          <Dataset key={name} name={name} last={i == resultNames.length - 1} />
         ))}
       </Group>
     </>
