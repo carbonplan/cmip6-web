@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
-import { Box, IconButton } from 'theme-ui'
-import { Row, Column } from '@carbonplan/components'
+import { Box } from 'theme-ui'
+import { Button, Row, Column } from '@carbonplan/components'
 import { ArrowThin } from '@carbonplan/icons'
 
 const ControlPanel = ({
@@ -12,7 +12,6 @@ const ControlPanel = ({
   width = 3,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded)
-  const [showTooltip, setShowTooltip] = useState(false)
 
   const handleToggleExpanded = useCallback(() => {
     if (!expanded) {
@@ -25,19 +24,41 @@ const ControlPanel = ({
     }
   }, [expanded, onClose])
 
+  const icon = (
+    <Box
+      sx={{
+        p: 1,
+        mr:
+          side === 'left'
+            ? ['29px', '29px', '29px', '24px']
+            : ['22px', '22px', '22px', '17px'],
+        pl: side === 'right' ? '7px' : null,
+      }}
+    >
+      <ArrowThin
+        id='arrow'
+        sx={{
+          strokeWidth: 2,
+          width: 24,
+          height: 24,
+          transform:
+            (expanded && side === 'left') || (!expanded && side === 'right')
+              ? 'scaleX(-1)'
+              : '',
+          mb: ['-6px', '-6px', '-6px', '-4px'],
+        }}
+      />
+    </Box>
+  )
+
   return (
     <>
-      <IconButton
-        aria-label='Toggle settings'
+      <Button
         onClick={handleToggleExpanded}
-        onMouseOver={() => {
-          if (!expanded) setShowTooltip(true)
-        }}
-        onMouseOut={() => setShowTooltip(false)}
-        role='checkbox'
+        prefix={side === 'left' ? icon : null}
+        suffix={side === 'right' ? icon : null}
+        size='sm'
         sx={{
-          width: 32,
-          height: 32,
           display: ['none', 'none', 'inline-block', 'inline-block'],
           cursor: 'pointer',
           color: 'primary',
@@ -52,33 +73,14 @@ const ControlPanel = ({
                 `calc(${width} * 100vw / 12 + 54px)`,
               ]
             : '12px',
-          bottom: '13px',
-          transform:
-            (expanded && side === 'left') || (!expanded && side === 'right')
-              ? 'scaleX(-1)'
-              : '',
+          bottom: ['20px', '20px', '20px', '18px'],
           zIndex: 1001,
+          pb: [2],
+          mb: [-2],
         }}
       >
-        <ArrowThin sx={{ strokeWidth: 2, width: 24, height: 24 }} />
-      </IconButton>
-      <Box
-        id='open-tooltip'
-        sx={{
-          display: ['none', 'none', 'inline-block', 'inline-block'],
-          color: 'primary',
-          position: 'absolute',
-          opacity: showTooltip ? 1 : 0,
-          transition: 'opacity 0.15s ease-out',
-          pointerEvents: 'none',
-          [side]: '54px',
-          bottom: ['18px', '18px', '18px', '14px'],
-          zIndex: 1001,
-          fontSize: [3, 3, 3, 4],
-        }}
-      >
-        {tooltip}
-      </Box>
+        {expanded ? null : tooltip}
+      </Button>
       <Row>
         <Column width={width} start={1}>
           <Box
