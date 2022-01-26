@@ -8,8 +8,8 @@ const DEFAULT_DISPLAY_TIMES = {
   HISTORICAL: { year: 1950, month: 1, day: 1 },
   PROJECTED: { year: 2015, month: 1, day: 1 },
 }
-const getInitialDatasets = (data) => {
-  return data.datasets.reduce((accum, dataset) => {
+const getInitialDatasets = (datasets) => {
+  return datasets.reduce((accum, dataset) => {
     accum[dataset.name] = {
       name: dataset.name,
       source: dataset.uri,
@@ -28,8 +28,8 @@ const getInitialDatasets = (data) => {
   }, {})
 }
 
-const getInitialFilters = (data) => {
-  return data.datasets.reduce(
+const getInitialFilters = (datasets) => {
+  return datasets.reduce(
     (accum, ds) => {
       accum.experiment[ds.experiment] = accum.experiment[ds.experiment] || false
       accum.gcm[ds.gcm] = true
@@ -60,15 +60,10 @@ export const useDatasetsStore = create((set, get) => ({
       set({ loading: get().loading.filter((v) => v !== key) })
     }
   },
-  fetchDatasets: async () => {
-    const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-8/catalog.json'
-    )
-    const data = await result.json()
-
+  populateDatasets: (catalog) => {
     set({
-      datasets: getInitialDatasets(data),
-      filters: getInitialFilters(data),
+      datasets: getInitialDatasets(catalog),
+      filters: getInitialFilters(catalog),
     })
   },
   setDisplayTime: (value) => set({ displayTime: value }),

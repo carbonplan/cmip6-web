@@ -207,18 +207,9 @@ const Inner = ({ sx }) => {
 }
 
 const QuerySection = ({ sx }) => {
-  const datasets = useDatasetsStore((state) => state.datasets)
-  const fetchDatasets = useDatasetsStore((state) => state.fetchDatasets)
-
-  useEffect(() => {
-    if (!datasets) {
-      fetchDatasets()
-    }
-  }, [])
-
   return (
     <Section sx={sx.heading} label='Datasets' defaultExpanded>
-      {datasets ? <Inner sx={sx} /> : 'Loading...'}
+      <Inner sx={sx} />
     </Section>
   )
 }

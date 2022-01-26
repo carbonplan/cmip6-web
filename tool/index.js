@@ -1,6 +1,6 @@
 import { Box, Container } from 'theme-ui'
 import { Group } from '@carbonplan/components'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Header from '../components/header'
 import ControlPanel from '../components/control-panel'
@@ -13,6 +13,7 @@ import {
 import Map from '../components/map'
 import ControlPanelDivider from '../components/control-panel-divider'
 import { useRegionStore } from '../components/region'
+import { useDatasetsStore } from '../components/datasets'
 
 const sx = {
   heading: {
@@ -34,9 +35,17 @@ const sx = {
   },
 }
 
-const Tool = () => {
+const Tool = ({ catalog }) => {
   const [loading, setLoading] = useState(false)
   const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
+  const datasets = useDatasetsStore((state) => state.datasets)
+  const populateDatasets = useDatasetsStore((state) => state.populateDatasets)
+
+  useEffect(() => {
+    if (!datasets) {
+      populateDatasets(catalog)
+    }
+  }, [])
 
   return (
     <>
