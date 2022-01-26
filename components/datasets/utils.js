@@ -2,7 +2,7 @@ export const getFiltersCallback = (filters) => {
   return (d) =>
     d.variables.some((v) => v === filters.variable) &&
     d.timescale === filters.timescale &&
-    d.experiment === filters.experiment &&
+    filters.experiment[d.experiment] &&
     filters.gcm[d.gcm] &&
     filters.method[d.method]
 }

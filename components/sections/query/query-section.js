@@ -49,12 +49,16 @@ const Inner = ({ sx }) => {
     }
   }, [filters.timescale])
 
-  const experimentFilter = useMemo(() => {
+  const historicalFilter = useMemo(() => {
     return {
-      [LABEL_MAP.historical]: filters.experiment === 'historical',
-      [LABEL_MAP.ssp245]: filters.experiment === 'ssp245',
-      [LABEL_MAP.ssp370]: filters.experiment === 'ssp370',
-      [LABEL_MAP.ssp585]: filters.experiment === 'ssp585',
+      [LABEL_MAP.historical]: filters.experiment.historical,
+    }
+  }, [filters.experiment])
+  const scenarioFilter = useMemo(() => {
+    return {
+      [LABEL_MAP.ssp245]: filters.experiment.ssp245,
+      [LABEL_MAP.ssp370]: filters.experiment.ssp370,
+      [LABEL_MAP.ssp585]: filters.experiment.ssp585,
     }
   }, [filters.experiment])
 
@@ -103,16 +107,49 @@ const Inner = ({ sx }) => {
         </Column>
         <Column start={2} width={3}>
           <Filter
-            values={experimentFilter}
+            values={historicalFilter}
             setValues={(obj) => {
-              const experiment = Object.keys(LABEL_MAP).find(
-                (k) => obj[LABEL_MAP[k]]
-              )
-              if (experiment !== filters.experiment) {
-                setFilters({ experiment })
+              const historical = obj[LABEL_MAP.historical]
+              const { historical: previousHistorical, ...previousScenarios } =
+                filters.experiment
+              const scenarios = historical
+                ? { ssp245: false, ssp370: false, ssp585: false }
+                : previousScenarios
+
+              setFilters({
+                experiment: {
+                  historical,
+                  ...scenarios,
+                },
+              })
+              clearRegionData()
+            }}
+            multiSelect
+          />
+        </Column>
+      </Row>
+      <Row columns={4}>
+        <Column start={2} width={3}>
+          <Filter
+            values={scenarioFilter}
+            setValues={(obj) => {
+              const scenarioSelected = Object.keys(obj).some((k) => obj[k])
+              const { historical: previousHistorical } = filters.experiment
+              const historical = scenarioSelected ? false : previousHistorical
+
+              setFilters({
+                experiment: {
+                  historical,
+                  ssp245: obj[LABEL_MAP.ssp245],
+                  ssp370: obj[LABEL_MAP.ssp370],
+                  ssp585: obj[LABEL_MAP.ssp585],
+                },
+              })
+              if (historical !== previousHistorical) {
                 clearRegionData()
               }
             }}
+            multiSelect
           />
         </Column>
       </Row>

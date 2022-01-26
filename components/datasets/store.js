@@ -31,6 +31,7 @@ const getInitialDatasets = (data) => {
 const getInitialFilters = (data) => {
   return data.datasets.reduce(
     (accum, ds) => {
+      accum.experiment[ds.experiment] = accum.experiment[ds.experiment] || false
       accum.gcm[ds.gcm] = true
       accum.method[ds.method] = true
       return accum
@@ -38,7 +39,7 @@ const getInitialFilters = (data) => {
     {
       variable: 'tasmax',
       timescale: 'day',
-      experiment: 'historical',
+      experiment: { historical: true },
       gcm: {},
       method: {},
     }
@@ -137,13 +138,11 @@ export const useDatasetsStore = create((set, get) => ({
 
       let updatedDisplayTime = displayTime
       if (
-        (filters.experiment === 'historical') !==
-        (updatedFilters.experiment === 'historical')
+        filters.experiment.historical !== updatedFilters.experiment.historical
       ) {
-        updatedDisplayTime =
-          updatedFilters.experiment === 'historical'
-            ? DEFAULT_DISPLAY_TIMES.HISTORICAL
-            : DEFAULT_DISPLAY_TIMES.PROJECTED
+        updatedDisplayTime = updatedFilters.experiment.historical
+          ? DEFAULT_DISPLAY_TIMES.HISTORICAL
+          : DEFAULT_DISPLAY_TIMES.PROJECTED
       }
 
       return {
