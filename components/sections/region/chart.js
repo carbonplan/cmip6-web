@@ -88,7 +88,7 @@ const ChartWrapper = ({ data }) => {
 
   const range = [Infinity, -Infinity]
   const lines = data
-    .filter(([name, value]) => value)
+    .filter(([name, value]) => value && datasets[name].selected)
     .map(([name, value]) => {
       let circle
       const lineData = Object.keys(value)
