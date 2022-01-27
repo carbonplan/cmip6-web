@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Filter } from '@carbonplan/components'
 
-const ALL = 'View all'
+const ALL = 'All'
 const EXPAND = 'Select GCMs'
 
 const ExpandableFilter = ({ values, setValues, ...props }) => {
@@ -14,6 +14,12 @@ const ExpandableFilter = ({ values, setValues, ...props }) => {
         values={{ [ALL]: true, [EXPAND]: false }}
         setValues={(obj) => {
           setCollapsed(!obj[EXPAND])
+          setValues(
+            options.reduce((a, k) => {
+              a[k] = false
+              return a
+            }, {})
+          )
         }}
         {...props}
       />
