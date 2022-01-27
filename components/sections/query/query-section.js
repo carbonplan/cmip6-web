@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
 
 import { getFiltersCallback, useDatasetsStore } from '../../datasets'
+import ExpandableFilter from './expandable-filter'
 import Section from '../../section'
 import Dataset from './dataset'
 import { useRegionStore } from '../../region'
@@ -92,7 +93,7 @@ const Inner = ({ sx }) => {
           GCMs
         </Column>
         <Column start={2} width={3}>
-          <Filter
+          <ExpandableFilter
             values={filters.gcm}
             setValues={(obj) => {
               setFilters({ gcm: obj })
