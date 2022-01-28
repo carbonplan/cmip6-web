@@ -138,6 +138,7 @@ const ChartWrapper = ({ data }) => {
             .map(({ key, circle, color }) =>
               key === activeDataset ? (
                 <Box
+                  key={key}
                   sx={{
                     color: color,
                   }}
