@@ -16,7 +16,7 @@ const TimeSection = ({ sx }) => {
   } else {
     inner = (
       <Sliders
-        historical={experiment === 'historical'}
+        historical={experiment.historical}
         dateStrings={datasets[active].dateStrings}
       />
     )
