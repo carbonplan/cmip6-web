@@ -1,5 +1,6 @@
 import { Box, Divider } from 'theme-ui'
 import { useEffect, useMemo } from 'react'
+import shallow from 'zustand/shallow'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
 
 import { getFiltersCallback, useDatasetsStore } from '../../datasets'
@@ -28,8 +29,38 @@ const LABEL_MAP = {
   ssp585: 'SSP5-8.5',
 }
 
-const Inner = ({ sx }) => {
-  const datasets = useDatasetsStore((state) => state.datasets)
+const Results = ({ sx }) => {
+  const total = useDatasetsStore((state) => Object.keys(state.datasets).length)
+  const results = useDatasetsStore(
+    (state) =>
+      Object.keys(state.datasets).filter((k) =>
+        getFiltersCallback(state.filters)(state.datasets[k])
+      ),
+    shallow
+  )
+
+  return (
+    <>
+      <Row columns={4} sx={{ ...sx.label, mb: 3 }}>
+        <Column start={1} width={2}>
+          <Box>
+            Results <Badge sx={{ ml: 4 }}>{formatNumber(results.length)}</Badge>{' '}
+            <Box as='span'>/</Box>{' '}
+            <Badge sx={{ color: 'secondary' }}>{formatNumber(total)}</Badge>
+          </Box>
+        </Column>
+      </Row>
+
+      <Group spacing={0}>
+        {results.map((name, i) => (
+          <Dataset key={name} name={name} last={i == results.length - 1} />
+        ))}
+      </Group>
+    </>
+  )
+}
+
+const Filters = ({ sx }) => {
   const filters = useDatasetsStore((state) => state.filters)
   const setFilters = useDatasetsStore((state) => state.setFilters)
   const clearRegionData = useRegionStore((state) => state.clearRegionData)
@@ -62,10 +93,6 @@ const Inner = ({ sx }) => {
       [LABEL_MAP.ssp585]: filters.experiment.ssp585,
     }
   }, [filters.experiment])
-
-  const resultNames = Object.keys(datasets).filter((k) =>
-    getFiltersCallback(filters)(datasets[k])
-  )
 
   return (
     <>
@@ -184,31 +211,12 @@ const Inner = ({ sx }) => {
           />
         </Column>
       </Row>
-      <Divider sx={{ my: 4 }} />
-      <Row columns={4} sx={{ ...sx.label, mb: 3 }}>
-        <Column start={1} width={2}>
-          <Box>
-            Results{' '}
-            <Badge sx={{ ml: 4 }}>{formatNumber(resultNames.length)}</Badge>{' '}
-            <Box as='span'>/</Box>{' '}
-            <Badge sx={{ color: 'secondary' }}>
-              {formatNumber(Object.keys(datasets).length)}
-            </Badge>
-          </Box>
-        </Column>
-      </Row>
-      <Box sx={{ ...sx.label, mb: 3 }}></Box>
-      <Group spacing={0}>
-        {resultNames.map((name, i) => (
-          <Dataset key={name} name={name} last={i == resultNames.length - 1} />
-        ))}
-      </Group>
     </>
   )
 }
 
 const QuerySection = ({ sx }) => {
-  const datasets = useDatasetsStore((state) => state.datasets)
+  const datasets = useDatasetsStore((state) => !!state.datasets)
   const fetchDatasets = useDatasetsStore((state) => state.fetchDatasets)
 
   useEffect(() => {
@@ -219,7 +227,15 @@ const QuerySection = ({ sx }) => {
 
   return (
     <Section sx={sx.heading} label='Datasets' defaultExpanded>
-      {datasets ? <Inner sx={sx} /> : 'Loading...'}
+      {datasets ? (
+        <>
+          <Filters sx={sx} />
+          <Divider sx={{ my: 4 }} />
+          <Results sx={sx} />
+        </>
+      ) : (
+        'Loading...'
+      )}
     </Section>
   )
 }
