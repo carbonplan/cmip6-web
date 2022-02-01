@@ -17,6 +17,7 @@ import {
   getSelectedShortNames,
   useDatasetsStore,
 } from '../../datasets'
+import { useDateStringsStore } from '../../date-strings'
 
 const getArrayData = (arr) => {
   const { sum, min, max } = arr.reduce(
@@ -63,28 +64,29 @@ const ChartWrapper = ({ data }) => {
   const activeDataset = useDatasetsStore((state) => state.active)
   const setActive = useDatasetsStore((state) => state.setActive)
   const datasets = useDatasetsStore((state) => state.datasets)
+  const dateStrings = useDateStringsStore((state) => state.dateStrings)
+  const activeDateStrings = dateStrings[activeDataset]
   const display = useDatasetsStore((state) => state.displayTime)
-  const dateStrings = datasets && datasets[activeDataset]?.dateStrings
 
   const timeRange = useMemo(() => {
-    if (!dateStrings) {
+    if (!activeDateStrings) {
       return null
     }
-    const fullRange = dateStrings.getDisplayRange(display)
+    const fullRange = activeDateStrings.getDisplayRange(display)
 
     return [fullRange[0], fullRange[fullRange.length - 1]]
-  }, [dateStrings, display])
+  }, [activeDateStrings, display])
 
   if (!activeDataset) {
     return 'Select a dataset to view regional data'
   }
 
-  // We cannot render domain before dateStrings have been loaded, so return generic loading text
-  if (!datasets || !dateStrings) {
+  // We cannot render domain before activeDateStrings have been loaded, so return generic loading text
+  if (!datasets || !activeDateStrings) {
     return 'Loading...'
   }
 
-  const displayTime = dateStrings.valuesToIndex(display)
+  const displayTime = activeDateStrings.valuesToIndex(display)
 
   const range = [Infinity, -Infinity]
   const lines = data
@@ -97,8 +99,8 @@ const ChartWrapper = ({ data }) => {
           range[0] = Math.min(range[0], min)
           range[1] = Math.max(range[1], max)
 
-          const activeTime = dateStrings.valuesToIndex(
-            datasets[name].dateStrings.indexToValues(Number(time))
+          const activeTime = activeDateStrings.valuesToIndex(
+            dateStrings[name].indexToValues(Number(time))
           )
           let point = [activeTime, avg]
           if (displayTime === point[0]) {
@@ -212,10 +214,12 @@ const ChartWrapper = ({ data }) => {
           <TickLabels
             bottom
             format={(d) =>
-              dateStrings.indexToDate(Math.round(d)).toLocaleString('default', {
-                month: 'numeric',
-                day: 'numeric',
-              })
+              activeDateStrings
+                .indexToDate(Math.round(d))
+                .toLocaleString('default', {
+                  month: 'numeric',
+                  day: 'numeric',
+                })
             }
           />
           <Plot>

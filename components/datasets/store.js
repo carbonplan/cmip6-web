@@ -1,7 +1,5 @@
 import create from 'zustand'
-import zarr from 'zarr-js'
 
-import DateStrings from './date-strings'
 import { getDatasetDisplay, getFiltersCallback } from './utils'
 
 const DEFAULT_DISPLAY_TIMES = {
@@ -18,7 +16,6 @@ const getInitialDatasets = (data) => {
       method: dataset.method,
       experiment: dataset.experiment,
       timescale: dataset.timescale,
-      dateStrings: null,
       selected: false,
       opacity: 1,
       colormapName: null,
@@ -52,14 +49,6 @@ export const useDatasetsStore = create((set, get) => ({
   filters: null,
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   updatingTime: false,
-  loading: [],
-  setLoading: () => {
-    const key = new Date().getTime()
-    set({ loading: [...get().loading, key] })
-    return function unsetLoading() {
-      set({ loading: get().loading.filter((v) => v !== key) })
-    }
-  },
   fetchDatasets: async () => {
     const result = await fetch(
       'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-8/catalog.json'
@@ -73,18 +62,6 @@ export const useDatasetsStore = create((set, get) => ({
   },
   setDisplayTime: (value) => set({ displayTime: value }),
   setUpdatingTime: (value) => set({ updatingTime: value }),
-  loadDateStrings: (name) => {
-    const unsetLoading = get().setLoading()
-    zarr().load(`${get().datasets[name].source}/0/date_str`, (err, array) => {
-      const dateStrings = new DateStrings(Array.from(array.data))
-      const { datasets } = get()
-      const dataset = datasets[name]
-      set({
-        datasets: { ...datasets, [name]: { ...dataset, dateStrings } },
-      })
-      unsetLoading()
-    })
-  },
   setActive: (name) =>
     set(({ datasets, selectDataset }) => {
       // ensure that `active` dataset is also `selected`
@@ -97,17 +74,13 @@ export const useDatasetsStore = create((set, get) => ({
       }
     }),
   selectDataset: (name) =>
-    set(({ datasets, filters, loadDateStrings }) => {
+    set(({ datasets, filters }) => {
       const dataset = datasets[name]
 
       const updatedDataset = {
         ...dataset,
         ...getDatasetDisplay(dataset, filters, true),
         selected: true,
-      }
-
-      if (!dataset.dateStrings) {
-        loadDateStrings(name)
       }
 
       return {

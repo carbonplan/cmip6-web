@@ -6,12 +6,15 @@ import {
   Header as HeaderComponent,
 } from '@carbonplan/components'
 import { useDatasetsStore } from './datasets'
+import { useDateStringsStore } from './date-strings'
 
 const Header = ({ loading }) => {
-  const manuallyLoading = useDatasetsStore((state) => state.loading.length > 0)
+  const loadingDateStrings = useDateStringsStore((state) =>
+    Object.keys(state.dateStrings).some((key) => !state.dateStrings[key])
+  )
   const updatingTime = useDatasetsStore((state) => state.updatingTime)
   let status = null
-  if (manuallyLoading || loading) {
+  if (loadingDateStrings || loading) {
     status = 'loading'
   } else if (updatingTime) {
     status = 'release to update'

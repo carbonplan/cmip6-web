@@ -3,6 +3,7 @@ import { Box, Flex } from 'theme-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useDatasetsStore } from '../../datasets'
+import { useDateStringsStore } from '../../date-strings'
 
 const sx = {
   label: {
@@ -99,10 +100,12 @@ const YEAR_RANGES = {
   PROJECTED: [2015, 2100],
 }
 
-const Sliders = ({ dateStrings, historical = false }) => {
+const Sliders = ({ historical = false }) => {
   const display = useDatasetsStore((state) => state.displayTime)
   const { year, month, day } = display
   const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
+  const active = useDatasetsStore((state) => state.active)
+  const dateStrings = useDateStringsStore((state) => state.dateStrings[active])
 
   const ranges = useMemo(() => {
     return {
