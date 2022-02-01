@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { useThemeUI } from 'theme-ui'
 import { Map, Line, RegionPicker } from '@carbonplan/maps'
+import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from './datasets'
 import { useRegionStore } from './region'
@@ -11,10 +11,12 @@ const bucket = 'https://storage.googleapis.com/carbonplan-share/'
 const MapWrapper = ({ children, setLoading }) => {
   const { theme } = useThemeUI()
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
-  const datasets = useDatasetsStore((state) => state.datasets)
-
-  const selectedDatasets = Object.keys(datasets || {}).filter(
-    (name) => datasets[name].selected
+  const selectedDatasets = useDatasetsStore(
+    (state) =>
+      Object.keys(state.datasets || {}).filter(
+        (name) => state.datasets[name].selected
+      ),
+    shallow
   )
 
   return (
