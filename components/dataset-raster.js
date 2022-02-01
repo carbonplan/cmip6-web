@@ -1,18 +1,19 @@
+import { useCallback, useEffect, useMemo } from 'react'
 import { Raster } from '@carbonplan/maps'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from './datasets'
 import { useRegionStore } from './region'
-import { useCallback, useEffect, useMemo } from 'react'
 import { useDateStringsStore } from './date-strings'
 
 const DatasetRaster = ({ name, index }) => {
   const active = useDatasetsStore((state) => state.active === name)
-  const { source, opacity, colormapName, clim } = useDatasetsStore(
+  const { source, opacity, colormapName, clim, loaded } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
   )
+  const setLoaded = useDatasetsStore((state) => state.setLoaded)
   const dateStrings = useDateStringsStore((state) => state.dateStrings[name])
   const loadDateStrings = useDateStringsStore(
     useCallback(
@@ -20,6 +21,7 @@ const DatasetRaster = ({ name, index }) => {
       [name, source]
     )
   )
+
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const display = useDatasetsStore((state) => state.displayTime, shallow)
@@ -51,6 +53,15 @@ const DatasetRaster = ({ name, index }) => {
     }
   }, [active, dateStrings, selectedTime, time])
 
+  const handleLoaded = useCallback(
+    (value) => {
+      if (!loaded && value) {
+        setLoaded(name)
+      }
+    },
+    [name, loaded]
+  )
+
   const timeRange = useMemo(() => {
     if (!dateStrings) {
       return []
@@ -64,6 +75,7 @@ const DatasetRaster = ({ name, index }) => {
 
   return (
     <Raster
+      setLoading={handleLoaded}
       display={active}
       key={filters.variable}
       index={index}
