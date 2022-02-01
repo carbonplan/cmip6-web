@@ -53,14 +53,6 @@ export const useDatasetsStore = create((set, get) => ({
   filters: null,
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   updatingTime: false,
-  loading: [],
-  setLoading: () => {
-    const key = new Date().getTime()
-    set({ loading: [...get().loading, key] })
-    return function unsetLoading() {
-      set({ loading: get().loading.filter((v) => v !== key) })
-    }
-  },
   fetchDatasets: async () => {
     const result = await fetch(
       'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-8/catalog.json'
@@ -75,7 +67,6 @@ export const useDatasetsStore = create((set, get) => ({
   setDisplayTime: (value) => set({ displayTime: value }),
   setUpdatingTime: (value) => set({ updatingTime: value }),
   loadDateStrings: (name) => {
-    const unsetLoading = get().setLoading()
     zarr().load(`${get().datasets[name].source}/0/date_str`, (err, array) => {
       const dateStrings = new DateStrings(Array.from(array.data))
       const { datasets } = get()
@@ -83,7 +74,6 @@ export const useDatasetsStore = create((set, get) => ({
       set({
         datasets: { ...datasets, [name]: { ...dataset, dateStrings } },
       })
-      unsetLoading()
     })
   },
   setActive: (name) =>
