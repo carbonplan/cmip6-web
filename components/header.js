@@ -8,10 +8,16 @@ import {
 import { useDatasetsStore } from './datasets'
 
 const Header = ({ loading }) => {
-  const manuallyLoading = useDatasetsStore((state) => state.loading.length > 0)
+  const initiallyLoading = useDatasetsStore(
+    (state) =>
+      !state.datasets ||
+      Object.keys(state.datasets).some(
+        (name) => state.datasets[name].selected && !state.datasets[name].loaded
+      )
+  )
   const updatingTime = useDatasetsStore((state) => state.updatingTime)
   let status = null
-  if (manuallyLoading || loading) {
+  if (initiallyLoading || loading) {
     status = 'loading'
   } else if (updatingTime) {
     status = 'release to update'

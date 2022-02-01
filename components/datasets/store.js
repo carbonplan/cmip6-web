@@ -20,6 +20,7 @@ const getInitialDatasets = (data) => {
       timescale: dataset.timescale,
       dateStrings: null,
       selected: false,
+      loaded: false,
       opacity: 1,
       colormapName: null,
       clim: null,
@@ -96,6 +97,17 @@ export const useDatasetsStore = create((set, get) => ({
         active: name,
       }
     }),
+  setLoaded: (name) =>
+    set(({ datasets }) => {
+      const updatedDataset = {
+        ...datasets[name],
+        loaded: true,
+      }
+
+      return {
+        datasets: { ...datasets, [name]: updatedDataset },
+      }
+    }),
   selectDataset: (name) =>
     set(({ datasets, filters, loadDateStrings }) => {
       const dataset = datasets[name]
@@ -159,6 +171,7 @@ export const useDatasetsStore = create((set, get) => ({
       const updatedDataset = {
         ...dataset,
         selected: false,
+        loaded: false,
       }
 
       return {

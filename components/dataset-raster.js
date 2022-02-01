@@ -4,14 +4,13 @@ import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from './datasets'
 import { useRegionStore } from './region'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 
 const DatasetRaster = ({ name, index }) => {
   const active = useDatasetsStore((state) => state.active === name)
-  const { dateStrings, source, opacity, colormapName, clim } = useDatasetsStore(
-    (state) => state.datasets[name],
-    shallow
-  )
+  const { dateStrings, source, opacity, colormapName, clim, loaded } =
+    useDatasetsStore((state) => state.datasets[name], shallow)
+  const setLoaded = useDatasetsStore((state) => state.setLoaded)
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const display = useDatasetsStore((state) => state.displayTime, shallow)
@@ -37,6 +36,15 @@ const DatasetRaster = ({ name, index }) => {
     }
   }, [active, dateStrings, selectedTime, time])
 
+  const handleLoaded = useCallback(
+    (value) => {
+      if (!loaded && value) {
+        setLoaded(name)
+      }
+    },
+    [name, loaded]
+  )
+
   const timeRange = useMemo(() => {
     if (!dateStrings) {
       return []
@@ -50,6 +58,7 @@ const DatasetRaster = ({ name, index }) => {
 
   return (
     <Raster
+      setLoading={handleLoaded}
       display={active}
       key={filters.variable}
       index={index}
