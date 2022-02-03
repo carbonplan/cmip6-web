@@ -1,4 +1,4 @@
-import { Box, Flex } from 'theme-ui'
+import { Box } from 'theme-ui'
 import { Column, Row } from '@carbonplan/components'
 
 import { useDatasetsStore } from '../../datasets'
@@ -30,23 +30,21 @@ const TimeSection = ({ sx }) => {
   return (
     <Box sx={{ my: [4] }}>
       <Section>
-        <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <Row columns={[4]}>
-            <Column start={1} width={1}>
-              <Box sx={{ ...sx.heading, mb: 0, whiteSpace: 'nowrap' }}>
-                {new Date(year, month - 1, day).toLocaleString('default', {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </Box>
-            </Column>
+        <Row columns={[4]}>
+          <Column start={1} width={1}>
+            <Box sx={{ ...sx.heading, mb: 0, whiteSpace: 'nowrap' }}>
+              {new Date(year, month - 1, day).toLocaleString('default', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              })}
+            </Box>
+          </Column>
 
-            <Column start={2} width={3}>
-              {inner}
-            </Column>
-          </Row>
-        </Flex>
+          <Column start={2} width={3}>
+            {inner}
+          </Column>
+        </Row>
       </Section>
     </Box>
   )
