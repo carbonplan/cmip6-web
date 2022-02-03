@@ -72,10 +72,7 @@ const TimeSlider = ({
         onMouseUp={handleMouseUp}
         onChange={handleChange}
       />
-      <Flex sx={{ justifyContent: 'space-between' }}>
-        <Box sx={sx.label}>
-          {formatLabel ? formatLabel(range[0]) : range[0]}
-        </Box>
+      <Flex sx={{ justifyContent: 'center' }}>
         <Box
           sx={{
             ...sx.label,
@@ -85,9 +82,6 @@ const TimeSlider = ({
           }}
         >
           {formattedValue}
-        </Box>
-        <Box sx={sx.label}>
-          {formatLabel ? formatLabel(range[1]) : range[1]}
         </Box>
       </Flex>
     </Box>
@@ -120,7 +114,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
   }
 
   return (
-    <Group>
+    <Group direction='horizontal'>
       {timescale === 'day' && (
         <TimeSlider
           value={day}

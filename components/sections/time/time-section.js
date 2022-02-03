@@ -1,4 +1,4 @@
-import { Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 
 import { useDatasetsStore } from '../../datasets'
 import Sliders from './sliders'
@@ -8,6 +8,7 @@ const TimeSection = ({ sx }) => {
   const experiment = useDatasetsStore((state) => state.filters?.experiment)
   const active = useDatasetsStore((state) => state.active)
   const datasets = useDatasetsStore((state) => state.datasets)
+  const { year, month, day } = useDatasetsStore((state) => state.displayTime)
 
   let inner
   if (datasets && !active) {
@@ -16,19 +17,29 @@ const TimeSection = ({ sx }) => {
     inner = 'Loading...'
   } else {
     inner = (
-      <Sliders
-        historical={experiment.historical}
-        dateStrings={datasets[active].dateStrings}
-      />
+      <Box sx={{ mb: -1 }}>
+        <Sliders
+          historical={experiment.historical}
+          dateStrings={datasets[active].dateStrings}
+        />
+      </Box>
     )
   }
 
   return (
     <Box sx={{ my: [4] }}>
       <Section>
-        <Box sx={sx.heading}>Time</Box>
+        <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box sx={{ ...sx.heading, mb: 0 }}>
+            {new Date(year, month - 1, day).toLocaleString('default', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            })}
+          </Box>
 
-        {inner}
+          {inner}
+        </Flex>
       </Section>
     </Box>
   )
