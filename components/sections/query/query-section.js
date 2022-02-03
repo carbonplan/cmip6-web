@@ -226,7 +226,9 @@ const QuerySection = ({ sx }) => {
   }, [])
 
   return (
-    <Section sx={sx.heading} label='Datasets' defaultExpanded>
+    <Section>
+      <Box sx={sx.heading}>Datasets</Box>
+
       {datasets ? (
         <>
           <Filters sx={sx} />

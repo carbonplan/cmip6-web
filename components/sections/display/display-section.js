@@ -8,7 +8,9 @@ const DisplaySection = ({ sx }) => {
   const active = useDatasetsStore((state) => state.active)
 
   return (
-    <Section sx={sx.heading} label='Display'>
+    <Section>
+      <Box sx={sx.heading}>Display</Box>
+
       {active ? (
         <DisplayEditor sx={sx} />
       ) : (

@@ -1,5 +1,6 @@
-import { useDatasetsStore } from '../../datasets'
+import { Box } from 'theme-ui'
 
+import { useDatasetsStore } from '../../datasets'
 import Sliders from './sliders'
 import Section from '../../section'
 
@@ -23,9 +24,13 @@ const TimeSection = ({ sx }) => {
   }
 
   return (
-    <Section sx={sx.heading} label='Time'>
-      {inner}{' '}
-    </Section>
+    <Box sx={{ my: [4] }}>
+      <Section>
+        <Box sx={sx.heading}>Time</Box>
+
+        {inner}
+      </Section>
+    </Box>
   )
 }
 
