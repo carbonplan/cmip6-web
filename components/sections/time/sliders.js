@@ -1,4 +1,4 @@
-import { Group, Slider } from '@carbonplan/components'
+import { DraggableInput, Group, Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -120,44 +120,58 @@ const Sliders = ({ dateStrings, historical = false }) => {
 
   return (
     <Group>
-      <TimeSlider
-        value={day}
-        range={ranges.day}
-        onChange={(value) => onChange({ day: value })}
-        formatLabel={(d) =>
-          new Date(year, month - 1, d).toLocaleString('default', {
-            month: 'short',
-            day: 'numeric',
-          })
-        }
-        formatValue={(d) =>
-          new Date(year, month - 1, d).toLocaleString('default', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          })
-        }
-        showValue
-      />
-      <TimeSlider
-        value={month}
-        range={ranges.month}
-        onChange={(value) => onChange({ month: value })}
-        formatLabel={(d) =>
-          new Date(year, d - 1, 1).toLocaleString('default', {
-            month: 'short',
-          })
-        }
-        debounce
-        showValue
-      />
-      <TimeSlider
-        value={year}
-        range={ranges.year}
-        onChange={(value) => onChange({ year: value })}
-        debounce
-        showValue
-      />
+      <Group direction='horizontal' spacing={2}>
+        <DraggableInput
+          value={month}
+          setValue={(value) => onChange({ month: value })}
+          min={ranges.month[0]}
+          max={ranges.month[1]}
+          format={(d) =>
+            new Date(year, d - 1, 1).toLocaleString('default', {
+              month: 'short',
+            })
+          }
+        />
+        <Box>
+          <DraggableInput
+            value={day}
+            setValue={(value) => onChange({ day: value })}
+            min={ranges.day[0]}
+            max={ranges.day[1]}
+            sx={{ display: 'inline-block' }}
+          />{' '}
+          ,
+        </Box>
+        <DraggableInput
+          value={year}
+          setValue={(value) => onChange({ year: value })}
+          min={ranges.year[0]}
+          max={ranges.year[1]}
+        />
+      </Group>
+
+      <Group direction='horizontal' spacing='sm'>
+        <DraggableInput
+          value={month}
+          setValue={(value) => onChange({ month: value })}
+          min={ranges.month[0]}
+          max={ranges.month[1]}
+        />
+        /
+        <DraggableInput
+          value={day}
+          setValue={(value) => onChange({ day: value })}
+          min={ranges.day[0]}
+          max={ranges.day[1]}
+        />
+        /
+        <DraggableInput
+          value={year}
+          setValue={(value) => onChange({ year: value })}
+          min={ranges.year[0]}
+          max={ranges.year[1]}
+        />
+      </Group>
     </Group>
   )
 }
