@@ -35,6 +35,7 @@ const RegionSection = ({ sx }) => {
       label='Regional data'
       onOpen={openRegionPicker}
       onClose={closeRegionPicker}
+      sticky
     >
       {content}
     </Section>
