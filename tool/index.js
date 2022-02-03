@@ -74,8 +74,6 @@ const Tool = () => {
 
                 <TimeSection sx={sx} />
 
-                <ControlPanelDivider />
-
                 <RegionSection sx={sx} />
 
                 <ControlPanelDivider sx={{ mb: [-4] }} />

@@ -1,8 +1,9 @@
 import { Box } from 'theme-ui'
 import { alpha } from '@theme-ui/color'
 import { useCallback, useState } from 'react'
-import { Expander } from '@carbonplan/components'
+import { Expander, Group } from '@carbonplan/components'
 import AnimateHeight from 'react-animate-height'
+import ControlPanelDivider from './control-panel-divider'
 
 const spacing = {
   py: [4],
@@ -16,6 +17,7 @@ export const Section = ({
   onClose,
   onOpen,
   sx,
+  sticky = false,
   defaultExpanded = false,
   color = 'primary',
   expander = 'right',
@@ -57,43 +59,53 @@ export const Section = ({
     content.reverse()
   }
 
+  const stickyMode = showSection && sticky
+
   return (
-    <Box
-      sx={{
-        ...spacing,
-        bg: 'transparent',
-        transition: 'background-color 0.15s',
-        '@media (hover: hover) and (pointer: fine)': {
-          '&:hover #section-expander': { stroke: color },
-          '&:hover': { bg: alpha('muted', 0.1) },
-        },
-      }}
-    >
+    <Group spacing={4}>
+      {sticky && !showSection && <ControlPanelDivider />}
       <Box
         sx={{
-          ...sx,
           ...spacing,
-          display: 'flex',
-          justifyContent: expander === 'right' ? 'space-between' : undefined,
-          cursor: 'pointer',
-          color,
+          position: stickyMode ? 'absolute' : 'inherit',
+          width: stickyMode ? '100%' : 'inherit',
+          bottom: stickyMode ? 0 : 'inherit',
+          bg: stickyMode ? 'background' : 'transparent',
+          transition: 'background-color 0.15s',
+          '@media (hover: hover) and (pointer: fine)': {
+            '&:hover #section-expander': { stroke: color },
+            // '&:hover': { bg: stickyMode ? 'inherit' : alpha('muted', 0.1) },
+          },
         }}
-        onClick={handleClick}
       >
-        {content}
-      </Box>
-
-      <AnimateHeight
-        duration={150}
-        height={showSection && children ? 'auto' : 0}
-        easing={'linear'}
-        style={{ pointerEvents: 'none' }}
-      >
-        <Box sx={{ pt: [3], pb: [1] }}>
-          <Box sx={{ pointerEvents: 'all' }}>{children || null}</Box>
+        {sticky && showSection && <ControlPanelDivider sx={{ pt: 0, pb: 4 }} />}
+        <Box
+          sx={{
+            ...sx,
+            ...spacing,
+            bg: stickyMode ? 'background' : 'transparent',
+            display: 'flex',
+            justifyContent: expander === 'right' ? 'space-between' : undefined,
+            cursor: 'pointer',
+            color,
+          }}
+          onClick={handleClick}
+        >
+          {content}
         </Box>
-      </AnimateHeight>
-    </Box>
+
+        <AnimateHeight
+          duration={150}
+          height={showSection && children ? 'auto' : 0}
+          easing={'linear'}
+          style={{ pointerEvents: 'none' }}
+        >
+          <Box sx={{ pt: [3], pb: [1] }}>
+            <Box sx={{ pointerEvents: 'all' }}>{children || null}</Box>
+          </Box>
+        </AnimateHeight>
+      </Box>
+    </Group>
   )
 }
 
