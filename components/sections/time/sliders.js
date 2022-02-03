@@ -62,7 +62,7 @@ const TimeSlider = ({
   }
 
   return (
-    <Box>
+    <Box sx={{ flex: 1 }}>
       <Slider
         value={sliderValue}
         min={range[0]}
@@ -114,7 +114,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
   }
 
   return (
-    <Group direction='horizontal'>
+    <Flex sx={{ gap: 2 }}>
       {timescale === 'day' && (
         <TimeSlider
           value={day}
@@ -157,7 +157,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
         debounce={timescale !== 'year'}
         showValue
       />
-    </Group>
+    </Flex>
   )
 }
 

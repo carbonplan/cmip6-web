@@ -1,4 +1,5 @@
 import { Box, Flex } from 'theme-ui'
+import { Column, Row } from '@carbonplan/components'
 
 import { useDatasetsStore } from '../../datasets'
 import Sliders from './sliders'
@@ -30,15 +31,21 @@ const TimeSection = ({ sx }) => {
     <Box sx={{ my: [4] }}>
       <Section>
         <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <Box sx={{ ...sx.heading, mb: 0 }}>
-            {new Date(year, month - 1, day).toLocaleString('default', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </Box>
+          <Row columns={[4]}>
+            <Column start={1} width={1}>
+              <Box sx={{ ...sx.heading, mb: 0, whiteSpace: 'nowrap' }}>
+                {new Date(year, month - 1, day).toLocaleString('default', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </Box>
+            </Column>
 
-          {inner}
+            <Column start={2} width={3}>
+              {inner}
+            </Column>
+          </Row>
         </Flex>
       </Section>
     </Box>
