@@ -1,4 +1,4 @@
-import { Box, Container } from 'theme-ui'
+import { Box, Container, Flex } from 'theme-ui'
 import { Group } from '@carbonplan/components'
 import { useState } from 'react'
 
@@ -60,24 +60,52 @@ const Tool = () => {
               width={4}
               onClose={closeRegionPicker}
             >
-              <Group spacing={4}>
-                <Box sx={sx.description}>
-                  This explorer lets you browse a catalog of climate data. Use
-                  the panels below to select datasets, variables, and times.
+              <Flex
+                sx={{
+                  flexDirection: 'column',
+                  height: 'calc(100vh - 56px)',
+                }}
+              >
+                <Box
+                  sx={{
+                    flex: '1 1 100%',
+                    display: 'flex',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      py: [4],
+                      flex: '0 0 auto',
+                      overflowY: 'scroll',
+                      overflowX: 'hidden',
+                      width: '100%',
+                    }}
+                  >
+                    <Group spacing={4}>
+                      <Box sx={sx.description}>
+                        This explorer lets you browse a catalog of climate data.
+                        Use the panels below to select datasets, variables, and
+                        times.
+                      </Box>
+
+                      <ControlPanelDivider />
+
+                      <QuerySection sx={sx} />
+
+                      <ControlPanelDivider />
+
+                      <TimeSection sx={sx} />
+                    </Group>
+                  </Box>
                 </Box>
 
-                <ControlPanelDivider />
+                <Box sx={{ flex: '0 0 auto' }}>
+                  <ControlPanelDivider sx={{ my: 0 }} />
 
-                <QuerySection sx={sx} />
-
-                <ControlPanelDivider />
-
-                <TimeSection sx={sx} />
-
-                <RegionSection sx={sx} />
-
-                <ControlPanelDivider sx={{ mb: [-4] }} />
-              </Group>
+                  <RegionSection sx={sx} />
+                </Box>
+              </Flex>
             </ControlPanel>
 
             <ControlPanel tooltip='Adjust display' side='right' width={2}>

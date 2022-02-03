@@ -124,8 +124,6 @@ const ControlPanel = ({
             <Box
               sx={{
                 px: [4, 5, 5, 6],
-                pb: [4],
-                pt: [4],
                 pointerEvents: 'all',
                 bg: 'background',
                 overflowY: 'scroll',
