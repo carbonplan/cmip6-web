@@ -17,7 +17,7 @@ const TimeSection = ({ sx }) => {
     inner = 'Loading...'
   } else {
     inner = (
-      <Box sx={{ mb: -1 }}>
+      <Box sx={{ mb: -2 }}>
         <Sliders
           historical={experiment.historical}
           dateStrings={datasets[active].dateStrings}
