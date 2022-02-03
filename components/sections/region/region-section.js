@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-
+import { Box } from 'theme-ui'
 import { useRegionStore } from '../../region'
 import { useDatasetsStore } from '../../datasets'
 import Section from '../../section'
@@ -30,15 +30,16 @@ const RegionSection = ({ sx }) => {
   }
 
   return (
-    <Section
-      sx={sx.heading}
-      label='Regional data'
-      onOpen={openRegionPicker}
-      onClose={closeRegionPicker}
-      sticky
-    >
-      {content}
-    </Section>
+    <Box sx={{ my: [4] }}>
+      <Section
+        sx={sx.heading}
+        label='Regional data'
+        onOpen={openRegionPicker}
+        onClose={closeRegionPicker}
+      >
+        {content}
+      </Section>
+    </Box>
   )
 }
 
