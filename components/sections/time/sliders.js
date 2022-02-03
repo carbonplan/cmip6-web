@@ -89,7 +89,7 @@ const TimeSlider = ({
 }
 
 const YEAR_RANGES = {
-  HISTORICAL: [1950, 2014],
+  HISTORICAL: [1981, 2010],
   PROJECTED: [2015, 2100],
 }
 

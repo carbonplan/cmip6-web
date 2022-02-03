@@ -52,12 +52,26 @@ export const useDatasetsStore = create((set, get) => ({
   filters: null,
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   updatingTime: false,
-  fetchDatasets: async () => {
-    const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-8/catalog.json'
-    )
-    const data = await result.json()
-
+  fetchDatasets: () => {
+    const data = {
+      version: '1.0.0',
+      history: 'Updated by jhamman on 12/22/2021',
+      title: "CarbonPlan's CMIP6 downscaled data archive",
+      description:
+        'This catalog represents the complete web-optimized archive for CarbonPlan\u2019s CMIP6 downscaled data archive. See https://github.com/carbonplan/cmip6-downscaling for more details.',
+      datasets: [
+        {
+          name: 'daily test',
+          gcm: 'MIROC6',
+          experiment: 'historical',
+          member: 'r1i1p1f1',
+          timescale: 'day',
+          method: 'BCSD',
+          variables: ['tasmax'],
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_daily/MIROC6/ssp370/tasmax/30.0_50.0_-130.0_-110.0/1981_2010/1981_2010/.pyr',
+        },
+      ],
+    }
     set({
       datasets: getInitialDatasets(data),
       filters: getInitialFilters(data),
