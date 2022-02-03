@@ -20,6 +20,7 @@ const sx = {
     letterSpacing: 'smallcaps',
     textTransform: 'uppercase',
     fontSize: [2, 2, 2, 3],
+    mb: [3],
   },
   description: {
     fontSize: [1, 1, 1, 2],
@@ -95,10 +96,6 @@ const Tool = () => {
 
                       <ControlPanelDivider />
 
-                      <TimeSection sx={sx} />
-
-                      <ControlPanelDivider />
-
                       <DisplaySection sx={sx} />
                     </Group>
                   </Box>
@@ -106,6 +103,9 @@ const Tool = () => {
 
                 <Box sx={{ flex: '0 0 auto' }}>
                   <ControlPanelDivider sx={{ my: 0 }} />
+                  <TimeSection sx={sx} />
+
+                  <ControlPanelDivider />
 
                   <RegionSection sx={sx} />
                 </Box>

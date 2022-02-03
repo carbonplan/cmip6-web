@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { Box } from 'theme-ui'
 import { useRegionStore } from '../../region'
 import { useDatasetsStore } from '../../datasets'
-import Section from '../../section'
+import CollapsibleSection from '../../collapsible-section'
 import Chart from './chart'
 
 const RegionSection = ({ sx }) => {
@@ -31,14 +31,15 @@ const RegionSection = ({ sx }) => {
 
   return (
     <Box sx={{ my: [4] }}>
-      <Section
-        sx={sx.heading}
+      <CollapsibleSection
+        sxLabel={sx.heading}
         label='Regional data'
         onOpen={openRegionPicker}
         onClose={closeRegionPicker}
+        collapsible
       >
         {content}
-      </Section>
+      </CollapsibleSection>
     </Box>
   )
 }
