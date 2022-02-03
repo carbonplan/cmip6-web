@@ -101,6 +101,7 @@ const YEAR_RANGES = {
 
 const Sliders = ({ dateStrings, historical = false }) => {
   const display = useDatasetsStore((state) => state.displayTime)
+  const timescale = useDatasetsStore((state) => state.filters.timescale)
   const { year, month, day } = display
   const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
 
@@ -108,9 +109,9 @@ const Sliders = ({ dateStrings, historical = false }) => {
     return {
       year: historical ? YEAR_RANGES.HISTORICAL : YEAR_RANGES.PROJECTED,
       month: [1, 12],
-      day: dateStrings.getDayRange(display),
+      day: timescale === 'day' ? dateStrings.getDayRange(display) : [],
     }
-  }, [historical, display, dateStrings])
+  }, [historical, display, dateStrings, timescale])
 
   const onChange = (updates) => {
     const index = dateStrings.getNearestIndex({ year, month, day, ...updates })
@@ -120,42 +121,46 @@ const Sliders = ({ dateStrings, historical = false }) => {
 
   return (
     <Group>
-      <TimeSlider
-        value={day}
-        range={ranges.day}
-        onChange={(value) => onChange({ day: value })}
-        formatLabel={(d) =>
-          new Date(year, month - 1, d).toLocaleString('default', {
-            month: 'short',
-            day: 'numeric',
-          })
-        }
-        formatValue={(d) =>
-          new Date(year, month - 1, d).toLocaleString('default', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          })
-        }
-        showValue
-      />
-      <TimeSlider
-        value={month}
-        range={ranges.month}
-        onChange={(value) => onChange({ month: value })}
-        formatLabel={(d) =>
-          new Date(year, d - 1, 1).toLocaleString('default', {
-            month: 'short',
-          })
-        }
-        debounce
-        showValue
-      />
+      {timescale === 'day' && (
+        <TimeSlider
+          value={day}
+          range={ranges.day}
+          onChange={(value) => onChange({ day: value })}
+          formatLabel={(d) =>
+            new Date(year, month - 1, d).toLocaleString('default', {
+              month: 'short',
+              day: 'numeric',
+            })
+          }
+          formatValue={(d) =>
+            new Date(year, month - 1, d).toLocaleString('default', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            })
+          }
+          showValue
+        />
+      )}
+      {['day', 'month'].includes(timescale) && (
+        <TimeSlider
+          value={month}
+          range={ranges.month}
+          onChange={(value) => onChange({ month: value })}
+          formatLabel={(d) =>
+            new Date(year, d - 1, 1).toLocaleString('default', {
+              month: 'short',
+            })
+          }
+          debounce={timescale === 'day'}
+          showValue
+        />
+      )}
       <TimeSlider
         value={year}
         range={ranges.year}
         onChange={(value) => onChange({ year: value })}
-        debounce
+        debounce={timescale !== 'year'}
         showValue
       />
     </Group>

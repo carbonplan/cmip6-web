@@ -1,11 +1,19 @@
-import { timeDay } from 'd3-time'
+import { timeDay, timeMonth, timeYear } from 'd3-time'
 
 const INEXACT = 'INEXACT'
 const ALLOW_EMPTY = 'ALLOW_EMPTY'
+
+const TIME_COUNTS = {
+  day: timeDay.count,
+  month: timeMonth.count,
+  year: timeYear.count,
+}
 class DateStrings {
-  constructor(dateStrings) {
+  constructor(dateStrings, timescale) {
     this.dateStrings = dateStrings
+    this.timescale = timescale
     this.length = dateStrings.length
+    this.timeCount = TIME_COUNTS[this.timescale]
   }
 
   indexToValues(index) {
@@ -38,7 +46,7 @@ class DateStrings {
       }
     }
 
-    let diff = Math.min(timeDay.count(first, date), this.length - 1)
+    let diff = Math.min(this.timeCount(first, date), this.length - 1)
     let attemptCount = 0
 
     while (attemptCount < 5) {
@@ -51,7 +59,7 @@ class DateStrings {
         return diff
       }
       const lastAttempt = new Date(values.year, values.month - 1, values.day)
-      diff = diff + timeDay.count(lastAttempt, date)
+      diff = diff + this.timeCount(lastAttempt, date)
       attemptCount++
     }
 
@@ -72,10 +80,25 @@ class DateStrings {
   }
 
   getDisplayRange({ year, month }) {
-    return Array(31)
-      .fill(null)
-      .map((_, i) => this.valuesToIndex({ year, month, day: i + 1 }))
-      .filter((index) => typeof index === 'number')
+    switch (this.timescale) {
+      case 'day':
+        return Array(31)
+          .fill(null)
+          .map((_, i) => this.valuesToIndex({ year, month, day: i + 1 }))
+          .filter((index) => typeof index === 'number')
+      case 'month':
+        return Array(12)
+          .fill(null)
+          .map((_, i) => this.valuesToIndex({ year, month: i + 1, day: 1 }))
+          .filter((index) => typeof index === 'number')
+      case 'year':
+        // TODO: reconsider whether we should use entire range by default
+        return this.dateStrings.map((_, i) => i)
+      default:
+        throw new Error(
+          `Unexpected timescale: ${this.timescale}. Expected one of 'day', 'month', 'year`
+        )
+    }
   }
 
   getDayRange({ year, month }) {
