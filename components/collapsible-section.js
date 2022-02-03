@@ -58,7 +58,7 @@ export const CollapsibleSection = ({
       <Box
         sx={{
           ...sxLabel,
-          my: 0,
+          ...(showSection ? {} : { mb: 0 }),
           display: 'flex',
           justifyContent: expander === 'right' ? 'space-between' : undefined,
           cursor: 'pointer',

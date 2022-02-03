@@ -10,8 +10,6 @@ import {
   Plot,
   TickLabels,
 } from '@carbonplan/charts'
-import { RotatingArrow } from '@carbonplan/icons'
-import { Button } from '@carbonplan/components'
 import {
   COLORMAP_COLORS,
   getSelectedShortNames,
@@ -132,125 +130,85 @@ const ChartWrapper = ({ data }) => {
     }, [])
 
   const loading = data.some(([name, value]) => !value)
-  const shortNames = getSelectedShortNames(datasets)
   return (
-    <Box>
-      <Flex sx={{ gap: 3, minHeight: '40px', mb: 4, flexWrap: 'wrap' }}>
-        {!loading &&
-          lines
-            .filter((l) => l.circle)
-            .map(({ key, circle, color }) =>
-              key === activeDataset ? (
-                <Box
-                  key={key}
-                  sx={{
-                    color: color,
-                  }}
-                >
-                  <Box
-                    sx={{ fontSize: [2, 2, 2, 3], lineHeight: 1.05 }}
-                    size='xs'
-                  >
-                    {shortNames[key]}
-                  </Box>
-                  <Box sx={{ fontSize: [4] }}>{formatValue(circle[1])}</Box>
-                </Box>
-              ) : (
-                <Box key={key} sx={{ color, transition: 'color 0.15s' }}>
-                  <Button
-                    size='xs'
-                    suffix={<RotatingArrow />}
-                    inverted
-                    onMouseOver={() => setHovered(key)}
-                    onMouseLeave={() => setHovered(null)}
-                    onClick={() => setActive(key)}
-                  >
-                    {shortNames[key]}
-                  </Button>
-                  <Box sx={{ fontSize: [4] }}>{formatValue(circle[1])}</Box>
-                </Box>
-              )
-            )}
-      </Flex>
-      <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
-        {loading && (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '30%',
-              left: 0,
-              right: 0,
-              zIndex: 1,
-              width: '95px',
-              mx: 'auto',
-              fontFamily: 'mono',
-              letterSpacing: 'mono',
-              textTransform: 'uppercase',
-            }}
-          >
-            Loading...
-          </Box>
-        )}
-        <Chart
-          x={timeRange}
-          y={range}
-          padding={{ left: 0, right: 0, top: 0, bottom: 50 }}
+    <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
+      {loading && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '30%',
+            left: 0,
+            right: 0,
+            zIndex: 1,
+            width: '95px',
+            mx: 'auto',
+            fontFamily: 'mono',
+            letterSpacing: 'mono',
+            textTransform: 'uppercase',
+          }}
         >
-          <Grid horizontal />
-          <Grid vertical values={timescale === 'day' ? undefined : ticks} />
-          <TickLabels
-            left
-            count={4}
-            format={formatValue}
-            sx={{ right: 0, transform: 'translate(100%, -100%)' }}
-          />
-          <TickLabels
-            right
-            count={4}
-            format={formatValue}
-            sx={{
-              left: 0,
-              width: 'fit-content',
-              transform: 'translate(-100%, -100%)',
-            }}
-          />
-          <TickLabels
-            bottom
-            values={timescale === 'day' ? undefined : ticks}
-            format={(d) => dateStrings.formatTick(Math.round(d))}
-          />
-          <Plot>
-            {!loading &&
-              lines
-                .sort((a, b) => {
-                  const [aWeight, bWeight] = [a, b].map(({ key }) => {
-                    if (key === hovered) {
-                      return 2
-                    } else if (key === activeDataset) {
-                      return 1
-                    } else {
-                      return 0
-                    }
-                  })
-
-                  return aWeight - bWeight
+          Loading...
+        </Box>
+      )}
+      <Chart
+        x={timeRange}
+        y={range}
+        padding={{ left: 0, right: 0, top: 0, bottom: 50 }}
+      >
+        <Grid horizontal />
+        <Grid vertical values={timescale === 'day' ? undefined : ticks} />
+        <TickLabels
+          left
+          count={4}
+          format={formatValue}
+          sx={{ right: 0, transform: 'translate(100%, -100%)' }}
+        />
+        <TickLabels
+          right
+          count={4}
+          format={formatValue}
+          sx={{
+            left: 0,
+            width: 'fit-content',
+            transform: 'translate(-100%, -100%)',
+          }}
+        />
+        <TickLabels
+          bottom
+          values={timescale === 'day' ? undefined : ticks}
+          format={(d) => dateStrings.formatTick(Math.round(d))}
+        />
+        <Plot>
+          {!loading &&
+            lines
+              .sort((a, b) => {
+                const [aWeight, bWeight] = [a, b].map(({ key }) => {
+                  if (key === hovered) {
+                    return 2
+                  } else if (key === activeDataset) {
+                    return 1
+                  } else {
+                    return 0
+                  }
                 })
-                .map(({ key, circle, color, width, lineData }) => (
-                  <Box as='g' key={key}>
-                    <Line color={color} data={lineData} width={width} />
-                    {circle && (
-                      <Circle
-                        size={[22, 18, 16]}
-                        x={circle[0]}
-                        y={circle[1]}
-                        color={color}
-                      />
-                    )}
-                  </Box>
-                ))}
-          </Plot>
-        </Chart>
-      </Box>
+
+                return aWeight - bWeight
+              })
+              .map(({ key, circle, color, width, lineData }) => (
+                <Box as='g' key={key}>
+                  <Line color={color} data={lineData} width={width} />
+                  {circle && (
+                    <Circle
+                      size={[22, 18, 16]}
+                      x={circle[0]}
+                      y={circle[1]}
+                      color={color}
+                    />
+                  )}
+                </Box>
+              ))}
+        </Plot>
+      </Chart>
     </Box>
   )
 }
