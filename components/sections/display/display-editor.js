@@ -4,13 +4,10 @@ import { Colorbar, Group, Input, Select } from '@carbonplan/components'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
-import {
-  COLORMAP_COLORS,
-  getSelectedShortNames,
-  useDatasetsStore,
-} from '../../datasets'
+import { getSelectedShortNames, useDatasetsStore } from '../../datasets'
 
-const DisplayEditor = ({ name, sx }) => {
+const DisplayEditor = ({ sx }) => {
+  const name = useDatasetsStore((state) => state.active)
   const datasets = useDatasetsStore((state) => state.datasets)
   const updateDatasetDisplay = useDatasetsStore(
     (state) => state.updateDatasetDisplay
@@ -33,15 +30,6 @@ const DisplayEditor = ({ name, sx }) => {
   }
   return (
     <Group spacing={4}>
-      <Box
-        sx={{
-          ...sx.heading,
-          textTransform: 'none',
-          color: COLORMAP_COLORS[colormapName],
-        }}
-      >
-        {shortName}
-      </Box>
       <Group spacing={4}>
         <Box sx={{ ...sx.label, mb: 2 }}>
           Colormap
