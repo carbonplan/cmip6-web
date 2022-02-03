@@ -5,7 +5,7 @@ import DateStrings from './date-strings'
 import { getDatasetDisplay, getFiltersCallback } from './utils'
 
 const DEFAULT_DISPLAY_TIMES = {
-  HISTORICAL: { year: 1950, month: 1, day: 1 },
+  HISTORICAL: { year: 1981, month: 1, day: 1 },
   PROJECTED: { year: 2015, month: 1, day: 1 },
 }
 const getInitialDatasets = (data) => {
@@ -69,6 +69,26 @@ export const useDatasetsStore = create((set, get) => ({
           method: 'BCSD',
           variables: ['tasmax'],
           uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_daily/MIROC6/ssp370/tasmax/30.0_50.0_-130.0_-110.0/1981_2010/1981_2010/.pyr',
+        },
+        {
+          name: 'monthly test',
+          gcm: 'MIROC6',
+          experiment: 'historical',
+          member: 'r1i1p1f1',
+          timescale: 'month',
+          method: 'BCSD',
+          variables: ['tasmax'],
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_monthly/MIROC6/ssp370/tasmax/30.0_50.0_-130.0_-110.0/1981_2010/1981_2010/.pyr',
+        },
+        {
+          name: 'yearly test',
+          gcm: 'MIROC6',
+          experiment: 'historical',
+          member: 'r1i1p1f1',
+          timescale: 'year',
+          method: 'BCSD',
+          variables: ['tasmax'],
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_annual/MIROC6/ssp370/tasmax/30.0_50.0_-130.0_-110.0/1981_2010/1981_2010/.pyr',
         },
       ],
     }
