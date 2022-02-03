@@ -96,6 +96,10 @@ const Tool = () => {
                       <ControlPanelDivider />
 
                       <TimeSection sx={sx} />
+
+                      <ControlPanelDivider />
+
+                      <DisplaySection sx={sx} />
                     </Group>
                   </Box>
                 </Box>
@@ -106,14 +110,6 @@ const Tool = () => {
                   <RegionSection sx={sx} />
                 </Box>
               </Flex>
-            </ControlPanel>
-
-            <ControlPanel tooltip='Adjust display' side='right' width={2}>
-              <Group spacing={4}>
-                <DisplaySection sx={sx} />
-
-                <ControlPanelDivider sx={{ mb: [-4] }} />
-              </Group>
             </ControlPanel>
           </Container>
         </Map>
