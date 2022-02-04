@@ -68,7 +68,7 @@ export const useDatasetsStore = create((set, get) => ({
           timescale: 'day',
           method: 'BCSD',
           variables: ['tasmax'],
-          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_daily/MIROC6/ssp370/tasmax/30.0_50.0_-130.0_-110.0/1981_2010/1981_2010/.pyr',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_daily/MIROC6/ssp370/tasmax/40.0_50.0_-125.0_-115.0/1981_2010/1981_2099/.pyr',
         },
         {
           name: 'monthly test',
@@ -78,7 +78,7 @@ export const useDatasetsStore = create((set, get) => ({
           timescale: 'month',
           method: 'BCSD',
           variables: ['tasmax'],
-          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_monthly/MIROC6/ssp370/tasmax/30.0_50.0_-130.0_-110.0/1981_2010/1981_2010/.pyr',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_monthly/MIROC6/ssp370/tasmax/40.0_50.0_-125.0_-115.0/1981_2010/1981_2099/.pyr',
         },
         {
           name: 'yearly test',
@@ -88,7 +88,7 @@ export const useDatasetsStore = create((set, get) => ({
           timescale: 'year',
           method: 'BCSD',
           variables: ['tasmax'],
-          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_annual/MIROC6/ssp370/tasmax/30.0_50.0_-130.0_-110.0/1981_2010/1981_2010/.pyr',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_annual/MIROC6/ssp370/tasmax/40.0_50.0_-125.0_-115.0/1981_2010/1981_2099/.pyr',
         },
       ],
     }
