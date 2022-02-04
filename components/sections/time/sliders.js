@@ -114,9 +114,9 @@ const Sliders = ({ dateStrings, historical = false }) => {
   }, [historical, display, dateStrings, timescale])
 
   const onChange = (updates) => {
-    const index = dateStrings.getNearestIndex({ year, month, day, ...updates })
+    const index = dateStrings.getNearestTime({ year, month, day, ...updates })
 
-    setDisplay(dateStrings.indexToValues(index))
+    setDisplay(dateStrings.timeToValues(index))
   }
 
   return (

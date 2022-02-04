@@ -66,17 +66,32 @@ export const useDatasetsStore = create((set, get) => ({
   },
   setDisplayTime: (value) => set({ displayTime: value }),
   setUpdatingTime: (value) => set({ updatingTime: value }),
-  loadDateStrings: (name) => {
-    zarr().load(`${get().datasets[name].source}/0/date_str`, (err, array) => {
-      const dateStrings = new DateStrings(
-        Array.from(array.data),
-        get().datasets[name].timescale
-      )
-      const { datasets } = get()
-      const dataset = datasets[name]
-      set({
-        datasets: { ...datasets, [name]: { ...dataset, dateStrings } },
-      })
+  loadDateStrings: async (name) => {
+    const [date_str, time] = await Promise.all([
+      new Promise((resolve) =>
+        zarr().load(
+          `${get().datasets[name].source}/0/date_str`,
+          (err, array) => {
+            resolve(Array.from(array.data))
+          }
+        )
+      ),
+      new Promise((resolve) =>
+        zarr().load(`${get().datasets[name].source}/0/time`, (err, array) => {
+          resolve(Array.from(array.data))
+        })
+      ),
+    ])
+
+    const dateStrings = new DateStrings(
+      date_str,
+      time,
+      get().datasets[name].timescale
+    )
+    const { datasets } = get()
+    const dataset = datasets[name]
+    set({
+      datasets: { ...datasets, [name]: { ...dataset, dateStrings } },
     })
   },
   setActive: (name) =>

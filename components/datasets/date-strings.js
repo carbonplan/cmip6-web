@@ -9,31 +9,32 @@ const TIME_COUNTS = {
   year: timeYear.count,
 }
 class DateStrings {
-  constructor(dateStrings, timescale) {
+  constructor(dateStrings, time, timescale) {
     this.dateStrings = dateStrings
+    this.time = time
     this.timescale = timescale
     this.length = dateStrings.length
     this.timeCount = TIME_COUNTS[this.timescale]
   }
 
-  indexToValues(index) {
+  _indexToValues(index) {
     const date = this.dateStrings[index]
     const [year, rawMonth, day] = date.split('-').map(Number)
 
     return { year, month: rawMonth, day }
   }
 
-  indexToDate(index) {
+  _indexToDate(index) {
     const date = this.dateStrings[index]
     const [year, rawMonth, day] = date.split('-').map(Number)
 
     return new Date(year, rawMonth - 1, day)
   }
 
-  valuesToIndex({ year, month, day }, mode = ALLOW_EMPTY) {
+  _valuesToIndex({ year, month, day }, mode = ALLOW_EMPTY) {
     let date = new Date(year, month - 1, day)
-    const first = this.indexToDate(0)
-    const last = this.indexToDate(this.length - 1)
+    const first = this._indexToDate(0)
+    const last = this._indexToDate(this.length - 1)
 
     if (date < first || date > last) {
       switch (mode) {
@@ -50,7 +51,7 @@ class DateStrings {
     let attemptCount = 0
 
     while (attemptCount < 5) {
-      const values = this.indexToValues(diff)
+      const values = this._indexToValues(diff)
       if (
         year === values.year &&
         month === values.month &&
@@ -75,8 +76,24 @@ class DateStrings {
     }
   }
 
-  getNearestIndex({ year, month, day }) {
-    return this.valuesToIndex({ year, month, day }, INEXACT)
+  timeToValues(time) {
+    const index = this.time.indexOf(time)
+    return this._indexToValues(index)
+  }
+
+  timeToDate(time) {
+    const initialTime = this._indexToDate(0)
+    const offset = time - this.time[0]
+    return timeDay.offset(initialTime, offset)
+  }
+
+  valuesToTime(...args) {
+    const index = this._valuesToIndex(...args)
+    return this.time[index]
+  }
+
+  getNearestTime({ year, month, day }) {
+    return this.valuesToTime({ year, month, day }, INEXACT)
   }
 
   getDisplayRange({ year, month }) {
@@ -84,16 +101,16 @@ class DateStrings {
       case 'day':
         return Array(31)
           .fill(null)
-          .map((_, i) => this.valuesToIndex({ year, month, day: i + 1 }))
+          .map((_, i) => this.valuesToTime({ year, month, day: i + 1 }))
           .filter((index) => typeof index === 'number')
       case 'month':
         return Array(12)
           .fill(null)
-          .map((_, i) => this.valuesToIndex({ year, month: i + 1, day: 1 }))
+          .map((_, i) => this.valuesToTime({ year, month: i + 1, day: 1 }))
           .filter((index) => typeof index === 'number')
       case 'year':
-        // TODO: reconsider whether we should use entire range by default
-        return this.dateStrings.map((_, i) => i)
+        // TODO: reconsider whether we should use entire span of time by default
+        return this.time
       default:
         throw new Error(
           `Unexpected timescale: ${this.timescale}. Expected one of 'day', 'month', 'year`
@@ -102,11 +119,11 @@ class DateStrings {
   }
 
   getDayRange({ year, month }) {
-    const indices = this.getDisplayRange({ year, month })
-    const start = indices[0]
-    const end = indices[indices.length - 1]
+    const times = this.getDisplayRange({ year, month })
+    const start = times[0]
+    const end = times[times.length - 1]
 
-    return [this.indexToValues(start).day, this.indexToValues(end).day]
+    return [this._indexToValues(start).day, this._indexToValues(end).day]
   }
 }
 export default DateStrings

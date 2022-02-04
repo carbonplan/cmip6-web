@@ -18,10 +18,10 @@ const DatasetRaster = ({ name, index }) => {
   const colormap = useThemedColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 
-  const selectedTime = dateStrings?.valuesToIndex(display)
+  const selectedTime = dateStrings?.valuesToTime(display)
   let time = selectedTime
   if (typeof time !== 'number') {
-    time = dateStrings?.getNearestIndex(display)
+    time = dateStrings?.getNearestTime(display)
   }
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const DatasetRaster = ({ name, index }) => {
       typeof time === 'number' &&
       typeof selectedTime !== 'number'
     ) {
-      const nearestValue = dateStrings.indexToValues(time)
+      const nearestValue = dateStrings.timeToValues(time)
       setDisplayTime(nearestValue)
     }
   }, [active, dateStrings, selectedTime, time])
