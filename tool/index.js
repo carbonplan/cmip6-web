@@ -1,5 +1,5 @@
 import { Box, Container, Flex } from 'theme-ui'
-import { Group } from '@carbonplan/components'
+import { Column, Group, Row } from '@carbonplan/components'
 import { useState } from 'react'
 
 import Header from '../components/header'
@@ -65,43 +65,47 @@ const Tool = () => {
                 sx={{
                   flexDirection: 'column',
                   height: 'calc(100vh - 56px)',
+                  mx: [-4, -5, -5, -6],
                 }}
               >
-                <Box
+                <Row
+                  columns={4}
                   sx={{
                     flex: '1 1 100%',
-                    display: 'flex',
                     overflow: 'hidden',
                   }}
                 >
-                  <Box
-                    sx={{
-                      py: [4],
-                      flex: '0 0 auto',
-                      overflowY: 'scroll',
-                      overflowX: 'hidden',
-                      width: '100%',
-                    }}
+                  <Column
+                    width={4}
+                    start={1}
+                    sx={{ flex: '0 0 auto', overflow: 'scroll' }}
                   >
-                    <Group spacing={4}>
-                      <Box sx={sx.description}>
-                        This explorer lets you browse a catalog of climate data.
-                        Use the panels below to select datasets, variables, and
-                        times.
-                      </Box>
+                    <Box
+                      sx={{
+                        py: [4],
+                        px: [4, 5, 5, 6],
+                      }}
+                    >
+                      <Group spacing={4}>
+                        <Box sx={sx.description}>
+                          This explorer lets you browse a catalog of climate
+                          data. Use the panels below to select datasets,
+                          variables, and times.
+                        </Box>
 
-                      <ControlPanelDivider />
+                        <ControlPanelDivider />
 
-                      <QuerySection sx={sx} />
+                        <QuerySection sx={sx} />
 
-                      <ControlPanelDivider />
+                        <ControlPanelDivider />
 
-                      <DisplaySection sx={sx} />
-                    </Group>
-                  </Box>
-                </Box>
+                        <DisplaySection sx={sx} />
+                      </Group>
+                    </Box>
+                  </Column>
+                </Row>
 
-                <Box sx={{ flex: '0 0 auto' }}>
+                <Box sx={{ flex: '0 0 auto', px: [4, 5, 5, 6] }}>
                   <ControlPanelDivider sx={{ my: 0 }} />
                   <TimeSection sx={sx} />
 
