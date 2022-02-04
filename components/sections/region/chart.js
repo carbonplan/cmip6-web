@@ -65,14 +65,18 @@ const ChartWrapper = ({ data }) => {
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useDatasetsStore((state) => state.displayTime)
   const dateStrings = datasets && datasets[activeDataset]?.dateStrings
+  const timescale = datasets && datasets[activeDataset]?.timescale
 
-  const timeRange = useMemo(() => {
+  const { timeRange, ticks } = useMemo(() => {
     if (!dateStrings) {
-      return null
+      return {}
     }
     const fullRange = dateStrings.getDisplayRange(display)
 
-    return [fullRange[0], fullRange[fullRange.length - 1]]
+    return {
+      timeRange: [fullRange[0], fullRange[fullRange.length - 1]],
+      ticks: fullRange,
+    }
   }, [dateStrings, display])
 
   if (!activeDataset) {
@@ -192,7 +196,8 @@ const ChartWrapper = ({ data }) => {
           y={range}
           padding={{ left: 0, right: 0, top: 0, bottom: 50 }}
         >
-          <Grid horizontal vertical />
+          <Grid horizontal />
+          <Grid vertical values={timescale === 'day' ? undefined : ticks} />
           <TickLabels
             left
             count={4}
@@ -211,12 +216,8 @@ const ChartWrapper = ({ data }) => {
           />
           <TickLabels
             bottom
-            format={(d) =>
-              dateStrings.timeToDate(Math.round(d)).toLocaleString('default', {
-                month: 'numeric',
-                day: 'numeric',
-              })
-            }
+            values={timescale === 'day' ? undefined : ticks}
+            format={(d) => dateStrings.formatTick(Math.round(d))}
           />
           <Plot>
             {!loading &&

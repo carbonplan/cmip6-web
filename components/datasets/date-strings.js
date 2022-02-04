@@ -76,15 +76,35 @@ class DateStrings {
     }
   }
 
+  formatTick(time) {
+    const initialTime = this._indexToDate(0)
+    const offset = time - this.time[0]
+
+    const date = timeDay.offset(initialTime, offset)
+    switch (this.timescale) {
+      case 'day':
+        return date.toLocaleString('default', {
+          month: 'numeric',
+          day: 'numeric',
+        })
+      case 'month':
+        return date.toLocaleString('default', {
+          month: 'short',
+        })
+      case 'year':
+        return date.toLocaleString('default', {
+          year: 'numeric',
+        })
+      default:
+        throw new Error(
+          `Unexpected timescale: ${this.timescale}. Expected one of 'day', 'month', 'year`
+        )
+    }
+  }
+
   timeToValues(time) {
     const index = this.time.indexOf(time)
     return this._indexToValues(index)
-  }
-
-  timeToDate(time) {
-    const initialTime = this._indexToDate(0)
-    const offset = time - this.time[0]
-    return timeDay.offset(initialTime, offset)
   }
 
   valuesToTime(...args) {
@@ -109,8 +129,13 @@ class DateStrings {
           .map((_, i) => this.valuesToTime({ year, month: i + 1, day: 1 }))
           .filter((index) => typeof index === 'number')
       case 'year':
-        // TODO: reconsider whether we should use entire span of time by default
-        return this.time
+        const { year } = this._indexToValues(0)
+        const step = Math.floor(this.time.length / 10)
+        return Array(10)
+          .fill(null)
+          .map((_, i) =>
+            this.valuesToTime({ year: year + step * i, month: 1, day: 1 })
+          )
       default:
         throw new Error(
           `Unexpected timescale: ${this.timescale}. Expected one of 'day', 'month', 'year`
