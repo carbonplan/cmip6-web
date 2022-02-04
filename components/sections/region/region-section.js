@@ -26,7 +26,9 @@ const RegionSection = ({ sx }) => {
   if (variableData.length > 0) {
     content = <Chart data={variableData} />
   } else {
-    content = 'Select a dataset to view regional data'
+    content = (
+      <Box sx={sx.description}>Select a dataset to view regional data</Box>
+    )
   }
 
   return (

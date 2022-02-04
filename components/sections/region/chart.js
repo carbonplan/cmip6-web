@@ -131,7 +131,13 @@ const ChartWrapper = ({ data }) => {
 
   const loading = data.some(([name, value]) => !value)
   return (
-    <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
+    <Box
+      sx={{
+        width: '100%',
+        height: ['200px', '200px', '150px', '200px'],
+        position: 'relative',
+      }}
+    >
       {loading && (
         <Box
           sx={{
