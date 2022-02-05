@@ -75,7 +75,7 @@ const ChartWrapper = ({ data }) => {
 
     return {
       timeRange: [fullRange[0], fullRange[fullRange.length - 1]],
-      ticks: fullRange,
+      ticks: dateStrings.getTicks(display),
     }
   }, [dateStrings, display])
 

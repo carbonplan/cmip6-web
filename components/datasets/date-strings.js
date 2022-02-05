@@ -116,6 +116,34 @@ class DateStrings {
     return this.valuesToTime({ year, month, day }, INEXACT)
   }
 
+  getTicks({ year }) {
+    switch (this.timescale) {
+      case 'day':
+        return null
+      case 'month':
+        return Array(12)
+          .fill(null)
+          .map((_, i) => this.valuesToTime({ year, month: i + 1, day: 1 }))
+          .filter((index) => typeof index === 'number')
+      case 'year':
+        const { year: initialYear } = this._indexToValues(0)
+        const step = Math.floor(this.time.length / 10)
+        return Array(11)
+          .fill(null)
+          .map((_, i) =>
+            this.valuesToTime({
+              year: initialYear + step * i,
+              month: 1,
+              day: 1,
+            })
+          )
+      default:
+        throw new Error(
+          `Unexpected timescale: ${this.timescale}. Expected one of 'day', 'month', 'year`
+        )
+    }
+  }
+
   getDisplayRange({ year, month }) {
     switch (this.timescale) {
       case 'day':
@@ -124,18 +152,9 @@ class DateStrings {
           .map((_, i) => this.valuesToTime({ year, month, day: i + 1 }))
           .filter((index) => typeof index === 'number')
       case 'month':
-        return Array(12)
-          .fill(null)
-          .map((_, i) => this.valuesToTime({ year, month: i + 1, day: 1 }))
-          .filter((index) => typeof index === 'number')
+        return this.getTicks({ year })
       case 'year':
-        const { year } = this._indexToValues(0)
-        const step = Math.floor(this.time.length / 10)
-        return Array(10)
-          .fill(null)
-          .map((_, i) =>
-            this.valuesToTime({ year: year + step * i, month: 1, day: 1 })
-          )
+        return this.time
       default:
         throw new Error(
           `Unexpected timescale: ${this.timescale}. Expected one of 'day', 'month', 'year`
