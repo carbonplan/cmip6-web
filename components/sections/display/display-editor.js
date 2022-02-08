@@ -1,29 +1,20 @@
 import { Box } from 'theme-ui'
-import { useMemo, useState } from 'react'
 import { Colorbar, Column, Row, Select } from '@carbonplan/components'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
-import { getSelectedShortNames, useDatasetsStore } from '../../datasets'
+import { useDatasetsStore } from '../../datasets'
 
 const DisplayEditor = ({ sx }) => {
   const name = useDatasetsStore((state) => state.active)
-  const datasets = useDatasetsStore((state) => state.datasets)
   const updateDatasetDisplay = useDatasetsStore(
     (state) => state.updateDatasetDisplay
   )
-  const {
-    colormapName,
-    clim,
-    opacity: initialOpacity,
-  } = useDatasetsStore((state) => state.datasets[name], shallow)
-  const colormap = useThemedColormap(colormapName)
-  const [opacity, setOpacity] = useState(initialOpacity)
-
-  const shortName = useMemo(
-    () => getSelectedShortNames(datasets)[name],
-    [name, datasets]
+  const { colormapName, clim } = useDatasetsStore(
+    (state) => state.datasets[name],
+    shallow
   )
+  const colormap = useThemedColormap(colormapName)
 
   const setClim = (setter) => {
     updateDatasetDisplay(name, { clim: setter(clim) })

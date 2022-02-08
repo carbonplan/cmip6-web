@@ -8,8 +8,10 @@ import { useCallback, useEffect, useMemo } from 'react'
 
 const DatasetRaster = ({ name, index }) => {
   const active = useDatasetsStore((state) => state.active === name)
-  const { dateStrings, source, opacity, colormapName, clim, loaded } =
-    useDatasetsStore((state) => state.datasets[name], shallow)
+  const { dateStrings, source, colormapName, clim, loaded } = useDatasetsStore(
+    (state) => state.datasets[name],
+    shallow
+  )
   const setLoaded = useDatasetsStore((state) => state.setLoaded)
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)
@@ -65,7 +67,6 @@ const DatasetRaster = ({ name, index }) => {
       source={source}
       colormap={colormap}
       clim={clim}
-      opacity={opacity}
       mode={'texture'}
       variable={filters.variable}
       selector={{ time }}
