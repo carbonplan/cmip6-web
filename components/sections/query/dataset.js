@@ -14,6 +14,12 @@ import { useRegionStore } from '../../region'
 import CustomCheckbox from '../../custom-checkbox'
 
 const Dataset = ({ name, last }) => {
+  const anyActive = useDatasetsStore((state) => !!state.active)
+  const othersSelected = useDatasetsStore((state) =>
+    Object.keys(state.datasets).some(
+      (key) => key !== name && state.datasets[key].selected
+    )
+  )
   const active = useDatasetsStore((state) => state.active === name)
   const setActive = useDatasetsStore((state) => state.setActive)
   const { colormapName, selected } = useDatasetsStore(
@@ -25,6 +31,7 @@ const Dataset = ({ name, last }) => {
   const deselectDataset = useDatasetsStore((state) => state.deselectDataset)
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const openRegionPicker = useRegionStore((state) => state.openRegionPicker)
+  const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
 
   let color = 'secondary'
   if (active) {
@@ -85,10 +92,11 @@ const Dataset = ({ name, last }) => {
                 onChange={(e) => {
                   if (e.target.checked) {
                     selectDataset(name)
-                    console.log('openingRegionPicker')
+                    if (!anyActive) setActive(name)
                     openRegionPicker()
                   } else {
                     deselectDataset(name)
+                    if (!othersSelected) closeRegionPicker()
                     setRegionData(name, null)
                   }
                 }}
