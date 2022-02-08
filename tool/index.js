@@ -70,48 +70,50 @@ const Tool = () => {
                   mx: [-4, -5, -5, -6],
                 }}
               >
-                <Row
-                  columns={4}
+                <Section
+                  hoverable
                   sx={{
-                    flex: '1 1 100%',
+                    flex: '1 1 auto',
                     overflow: 'hidden',
+                    mx: [0],
+                    my: [0],
+                    py: [0],
                   }}
                 >
-                  <Column
-                    width={4}
-                    start={1}
-                    sx={{ flex: '0 0 auto', overflow: 'scroll' }}
+                  <Row
+                    columns={4}
+                    sx={{
+                      flex: '0 0 auto',
+                      height: '100%',
+                      overflow: 'scroll',
+                      py: [4],
+                      px: [4, 5, 5, 6],
+                      mx: [-4, -5, -5, -6],
+                    }}
                   >
-                    <Box
-                      sx={{
-                        py: [4],
-                        px: [4, 5, 5, 6],
-                      }}
-                    >
-                      <Section hoverable>
-                        <Group spacing={4}>
-                          <Box sx={sx.description}>
-                            This explorer lets you browse a catalog of climate
-                            data. Use the panels below to select datasets,
-                            variables, and times.
-                          </Box>
+                    <Column width={4} start={1}>
+                      <Group spacing={4}>
+                        <Box sx={sx.description}>
+                          This explorer lets you browse a catalog of climate
+                          data. Use the panels below to select datasets,
+                          variables, and times.
+                        </Box>
 
-                          <Divider sx={{ my: 4 }} />
+                        <Divider sx={{ my: 4 }} />
 
-                          <QuerySection sx={sx} />
+                        <QuerySection sx={sx} />
 
-                          <Divider sx={{ my: 4 }} />
+                        <Divider sx={{ my: 4 }} />
 
-                          <DisplaySection sx={sx} />
+                        <DisplaySection sx={sx} />
 
-                          <Divider sx={{ my: 4 }} />
+                        <Divider sx={{ my: 4 }} />
 
-                          <AboutSection sx={sx} />
-                        </Group>
-                      </Section>
-                    </Box>
-                  </Column>
-                </Row>
+                        <AboutSection sx={sx} />
+                      </Group>
+                    </Column>
+                  </Row>
+                </Section>
 
                 <Box sx={{ flex: '0 0 auto', px: [4, 5, 5, 6] }}>
                   <ControlPanelDivider sx={{ my: 0 }} />
