@@ -114,7 +114,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
   }
 
   return (
-    <Flex sx={{ gap: 2 }}>
+    <Flex sx={{ gap: [2, 2, 2, 3] }}>
       {timescale === 'day' && (
         <TimeSlider
           value={day}
