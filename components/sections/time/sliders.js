@@ -1,4 +1,4 @@
-import { Group, Slider } from '@carbonplan/components'
+import { Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -62,7 +62,7 @@ const TimeSlider = ({
   }
 
   return (
-    <Box>
+    <Box sx={{ flex: 1 }}>
       <Slider
         value={sliderValue}
         min={range[0]}
@@ -72,10 +72,7 @@ const TimeSlider = ({
         onMouseUp={handleMouseUp}
         onChange={handleChange}
       />
-      <Flex sx={{ justifyContent: 'space-between' }}>
-        <Box sx={sx.label}>
-          {formatLabel ? formatLabel(range[0]) : range[0]}
-        </Box>
+      <Flex sx={{ justifyContent: 'center' }}>
         <Box
           sx={{
             ...sx.label,
@@ -85,9 +82,6 @@ const TimeSlider = ({
           }}
         >
           {formattedValue}
-        </Box>
-        <Box sx={sx.label}>
-          {formatLabel ? formatLabel(range[1]) : range[1]}
         </Box>
       </Flex>
     </Box>
@@ -120,7 +114,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
   }
 
   return (
-    <Group>
+    <Flex sx={{ gap: [2, 2, 2, 3] }}>
       {timescale === 'day' && (
         <TimeSlider
           value={day}
@@ -128,15 +122,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
           onChange={(value) => onChange({ day: value })}
           formatLabel={(d) =>
             new Date(year, month - 1, d).toLocaleString('default', {
-              month: 'short',
               day: 'numeric',
-            })
-          }
-          formatValue={(d) =>
-            new Date(year, month - 1, d).toLocaleString('default', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
             })
           }
           showValue
@@ -163,7 +149,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
         debounce={timescale !== 'year'}
         showValue
       />
-    </Group>
+    </Flex>
   )
 }
 

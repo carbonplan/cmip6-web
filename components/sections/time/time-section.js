@@ -1,7 +1,7 @@
-import { useDatasetsStore } from '../../datasets'
+import { Box } from 'theme-ui'
 
+import { useDatasetsStore } from '../../datasets'
 import Sliders from './sliders'
-import Section from '../../section'
 
 const TimeSection = ({ sx }) => {
   const experiment = useDatasetsStore((state) => state.filters?.experiment)
@@ -15,17 +15,22 @@ const TimeSection = ({ sx }) => {
     inner = 'Loading...'
   } else {
     inner = (
-      <Sliders
-        historical={experiment.historical}
-        dateStrings={datasets[active].dateStrings}
-      />
+      <Box sx={{ mb: [-3, -3, -3, -2] }}>
+        <Sliders
+          historical={experiment.historical}
+          dateStrings={datasets[active].dateStrings}
+        />
+      </Box>
     )
   }
 
   return (
-    <Section sx={sx.heading} label='Time'>
-      {inner}{' '}
-    </Section>
+    <Box sx={{ my: [4] }}>
+      <Box sx={{ ...sx.heading, display: ['none', 'none', 'none', 'inherit'] }}>
+        Time
+      </Box>
+      {inner}
+    </Box>
   )
 }
 

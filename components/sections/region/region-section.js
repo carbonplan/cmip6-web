@@ -1,13 +1,18 @@
+import AnimateHeight from 'react-animate-height'
 import { useMemo } from 'react'
+import { Box } from 'theme-ui'
+import { Search, X } from '@carbonplan/icons'
 
 import { useRegionStore } from '../../region'
 import { useDatasetsStore } from '../../datasets'
-import Section from '../../section'
+import CustomCheckbox from '../../custom-checkbox'
 import Chart from './chart'
 
 const RegionSection = ({ sx }) => {
-  const openRegionPicker = useRegionStore((state) => state.openRegionPicker)
-  const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
+  const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
+  const handleClick = useRegionStore((state) =>
+    state.showRegionPicker ? state.closeRegionPicker : state.openRegionPicker
+  )
   const regionData = useRegionStore((state) => state.regionData)
   const variable = useDatasetsStore((state) => state.filters?.variable)
 
@@ -26,18 +31,48 @@ const RegionSection = ({ sx }) => {
   if (variableData.length > 0) {
     content = <Chart data={variableData} />
   } else {
-    content = 'Select a dataset to view regional data'
+    content = (
+      <Box sx={sx.description}>Select a dataset to view regional data</Box>
+    )
   }
 
   return (
-    <Section
-      sx={sx.heading}
-      label='Regional data'
-      onOpen={openRegionPicker}
-      onClose={closeRegionPicker}
-    >
-      {content}
-    </Section>
+    <Box sx={{ my: [4] }}>
+      <Box
+        sx={{
+          ...sx.heading,
+          ...(showRegionPicker ? {} : { mb: 0 }),
+          display: 'flex',
+          justifyContent: 'space-between',
+          cursor: 'pointer',
+        }}
+        onClick={handleClick}
+      >
+        <Box key='label' as='span'>
+          Regional data
+        </Box>
+        <Box sx={{ position: 'relative' }}>
+          <CustomCheckbox
+            uncheckedIcon={Search}
+            checkedIcon={X}
+            checkedHoverIcon={X}
+            checked={showRegionPicker}
+            onChange={handleClick}
+          />
+        </Box>
+      </Box>
+
+      <AnimateHeight
+        duration={150}
+        height={showRegionPicker ? 'auto' : 0}
+        easing={'linear'}
+        style={{ pointerEvents: 'none' }}
+      >
+        <Box sx={{ pt: [3], pb: [1] }}>
+          <Box sx={{ pointerEvents: 'all' }}>{content}</Box>
+        </Box>
+      </AnimateHeight>
+    </Box>
   )
 }
 

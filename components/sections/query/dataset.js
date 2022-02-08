@@ -1,9 +1,8 @@
-import { Box, Checkbox, Flex, Label } from 'theme-ui'
+import { Box, Label } from 'theme-ui'
 import { Row, Column } from '@carbonplan/components'
-import { ArrowThin, Check, X } from '@carbonplan/icons'
+import { Check, Search, X } from '@carbonplan/icons'
 import shallow from 'zustand/shallow'
 
-import CustomCheckbox from './custom-checkbox'
 import Eye from './icons/eye'
 import EyeFilled from './icons/eye-filled'
 import {
@@ -12,12 +11,15 @@ import {
   useDatasetsStore,
 } from '../../datasets'
 import { useRegionStore } from '../../region'
-
-const ArrowThinDown = ({ sx, props }) => {
-  return <ArrowThin sx={{ transform: 'rotate(90deg)', ...sx }} {...props} />
-}
+import CustomCheckbox from '../../custom-checkbox'
 
 const Dataset = ({ name, last }) => {
+  const anyActive = useDatasetsStore((state) => !!state.active)
+  const othersSelected = useDatasetsStore((state) =>
+    Object.keys(state.datasets).some(
+      (key) => key !== name && state.datasets[key].selected
+    )
+  )
   const active = useDatasetsStore((state) => state.active === name)
   const setActive = useDatasetsStore((state) => state.setActive)
   const { colormapName, selected } = useDatasetsStore(
@@ -28,6 +30,8 @@ const Dataset = ({ name, last }) => {
   const selectDataset = useDatasetsStore((state) => state.selectDataset)
   const deselectDataset = useDatasetsStore((state) => state.deselectDataset)
   const setRegionData = useRegionStore((state) => state.setRegionData)
+  const openRegionPicker = useRegionStore((state) => state.openRegionPicker)
+  const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
 
   let color = 'secondary'
   if (active) {
@@ -81,15 +85,18 @@ const Dataset = ({ name, last }) => {
               }}
             >
               <CustomCheckbox
-                uncheckedIcon={ArrowThinDown}
+                uncheckedIcon={Search}
                 checkedIcon={Check}
                 checkedHoverIcon={X}
                 checked={selected}
                 onChange={(e) => {
                   if (e.target.checked) {
                     selectDataset(name)
+                    if (!anyActive) setActive(name)
+                    openRegionPicker()
                   } else {
                     deselectDataset(name)
+                    if (!othersSelected) closeRegionPicker()
                     setRegionData(name, null)
                   }
                 }}

@@ -1,22 +1,8 @@
-import { Box, Flex } from 'theme-ui'
+import { Box } from 'theme-ui'
 import React, { useMemo, useState } from 'react'
 import { format } from 'd3-format'
-import {
-  Chart,
-  Circle,
-  Grid,
-  Label,
-  Line,
-  Plot,
-  TickLabels,
-} from '@carbonplan/charts'
-import { RotatingArrow } from '@carbonplan/icons'
-import { Button } from '@carbonplan/components'
-import {
-  COLORMAP_COLORS,
-  getSelectedShortNames,
-  useDatasetsStore,
-} from '../../datasets'
+import { Chart, Circle, Grid, Line, Plot, TickLabels } from '@carbonplan/charts'
+import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
 
 const getArrayData = (arr) => {
   const { sum, min, max } = arr.reduce(
@@ -61,11 +47,21 @@ export const formatValue = (value) => {
 const ChartWrapper = ({ data }) => {
   const [hovered, setHovered] = useState(null)
   const activeDataset = useDatasetsStore((state) => state.active)
-  const setActive = useDatasetsStore((state) => state.setActive)
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useDatasetsStore((state) => state.displayTime)
-  const dateStrings = datasets && datasets[activeDataset]?.dateStrings
-  const timescale = datasets && datasets[activeDataset]?.timescale
+
+  // By default, use active dataset as primary dataset (reference for dateStrings and timescale)
+  let primaryDataset = datasets[activeDataset]
+  if (!primaryDataset) {
+    // But fallback to first selected dataset if none is active
+    const selectedName = Object.keys(datasets).find(
+      (key) => datasets[key].selected
+    )
+    primaryDataset = datasets[selectedName]
+  }
+
+  const dateStrings = primaryDataset?.dateStrings
+  const timescale = primaryDataset?.timescale
 
   const { timeRange, ticks } = useMemo(() => {
     if (!dateStrings) {
@@ -79,7 +75,7 @@ const ChartWrapper = ({ data }) => {
     }
   }, [dateStrings, display])
 
-  if (!activeDataset) {
+  if (!primaryDataset) {
     return 'Select a dataset to view regional data'
   }
 
@@ -90,6 +86,7 @@ const ChartWrapper = ({ data }) => {
 
   const displayTime = dateStrings.valuesToTime(display)
 
+  let label
   const range = [Infinity, -Infinity]
   const lines = data
     .filter(([name, value]) => value && datasets[name].selected)
@@ -115,11 +112,12 @@ const ChartWrapper = ({ data }) => {
       let color = 'secondary'
       let width = 1.5
 
-      if (name === activeDataset) {
-        color = COLORMAP_COLORS[datasets[name].colormapName]
-        width = 2
-      } else if (name === hovered) {
+      if (name === hovered) {
+        label = circle
         color = 'primary'
+        width = 2
+      } else if (name === activeDataset) {
+        color = COLORMAP_COLORS[datasets[name].colormapName]
         width = 2
       }
       return {
@@ -132,125 +130,114 @@ const ChartWrapper = ({ data }) => {
     }, [])
 
   const loading = data.some(([name, value]) => !value)
-  const shortNames = getSelectedShortNames(datasets)
   return (
-    <Box>
-      <Flex sx={{ gap: 3, minHeight: '40px', mb: 4, flexWrap: 'wrap' }}>
-        {!loading &&
-          lines
-            .filter((l) => l.circle)
-            .map(({ key, circle, color }) =>
-              key === activeDataset ? (
-                <Box
-                  key={key}
-                  sx={{
-                    color: color,
-                  }}
-                >
-                  <Box
-                    sx={{ fontSize: [2, 2, 2, 3], lineHeight: 1.05 }}
-                    size='xs'
-                  >
-                    {shortNames[key]}
-                  </Box>
-                  <Box sx={{ fontSize: [4] }}>{formatValue(circle[1])}</Box>
-                </Box>
-              ) : (
-                <Box key={key} sx={{ color, transition: 'color 0.15s' }}>
-                  <Button
-                    size='xs'
-                    suffix={<RotatingArrow />}
-                    inverted
-                    onMouseOver={() => setHovered(key)}
-                    onMouseLeave={() => setHovered(null)}
-                    onClick={() => setActive(key)}
-                  >
-                    {shortNames[key]}
-                  </Button>
-                  <Box sx={{ fontSize: [4] }}>{formatValue(circle[1])}</Box>
-                </Box>
-              )
-            )}
-      </Flex>
-      <Box sx={{ width: '100%', height: '200px', position: 'relative' }}>
-        {loading && (
+    <Box
+      sx={{
+        width: '100%',
+        height: ['200px', '200px', '150px', '200px'],
+        position: 'relative',
+      }}
+    >
+      {loading && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '30%',
+            left: 0,
+            right: 0,
+            zIndex: 1,
+            width: '95px',
+            mx: 'auto',
+            fontFamily: 'mono',
+            letterSpacing: 'mono',
+            textTransform: 'uppercase',
+          }}
+        >
+          Loading...
+        </Box>
+      )}
+      <Chart
+        x={timeRange}
+        y={range}
+        padding={{ left: 0, right: 0, top: 0, bottom: 50 }}
+      >
+        <Grid horizontal />
+        <Grid vertical values={timescale === 'day' ? undefined : ticks} />
+        <TickLabels
+          left
+          count={4}
+          format={formatValue}
+          sx={{ right: 0, transform: 'translate(100%, -100%)' }}
+        />
+        <TickLabels
+          right
+          count={4}
+          format={formatValue}
+          sx={{
+            left: 0,
+            width: 'fit-content',
+            transform: 'translate(-100%, -100%)',
+          }}
+        />
+        <TickLabels
+          bottom
+          values={timescale === 'day' ? undefined : ticks}
+          format={(d) => dateStrings.formatTick(Math.round(d))}
+        />
+        {label && (
           <Box
             sx={{
               position: 'absolute',
-              top: '30%',
               left: 0,
-              right: 0,
-              zIndex: 1,
-              width: '95px',
-              mx: 'auto',
-              fontFamily: 'mono',
-              letterSpacing: 'mono',
-              textTransform: 'uppercase',
+              top: 0,
+              mt: -4,
             }}
           >
-            Loading...
+            <Box
+              sx={{
+                fontFamily: 'mono',
+                letterSpacing: 'mono',
+                textTransform: 'uppercase',
+                fontSize: [1, 1, 1, 2],
+                color: 'primary',
+              }}
+            >
+              ({dateStrings.formatTick(displayTime)}, {formatValue(label[1])}K)
+            </Box>
           </Box>
         )}
-        <Chart
-          x={timeRange}
-          y={range}
-          padding={{ left: 0, right: 0, top: 0, bottom: 50 }}
-        >
-          <Grid horizontal />
-          <Grid vertical values={timescale === 'day' ? undefined : ticks} />
-          <TickLabels
-            left
-            count={4}
-            format={formatValue}
-            sx={{ right: 0, transform: 'translate(100%, -100%)' }}
-          />
-          <TickLabels
-            right
-            count={4}
-            format={formatValue}
-            sx={{
-              left: 0,
-              width: 'fit-content',
-              transform: 'translate(-100%, -100%)',
-            }}
-          />
-          <TickLabels
-            bottom
-            values={timescale === 'day' ? undefined : ticks}
-            format={(d) => dateStrings.formatTick(Math.round(d))}
-          />
-          <Plot>
-            {!loading &&
-              lines
-                .sort((a, b) => {
-                  const [aWeight, bWeight] = [a, b].map(({ key }) => {
-                    if (key === hovered) {
-                      return 2
-                    } else if (key === activeDataset) {
-                      return 1
-                    } else {
-                      return 0
-                    }
-                  })
 
-                  return aWeight - bWeight
+        <Plot>
+          {!loading &&
+            lines
+              .sort((a, b) => {
+                const [aWeight, bWeight] = [a, b].map(({ key }) => {
+                  if (key === hovered) {
+                    return 2
+                  } else if (key === activeDataset) {
+                    return 1
+                  } else {
+                    return 0
+                  }
                 })
-                .map(({ key, circle, color, width, lineData }) => (
-                  <Box as='g' key={key}>
-                    <Line color={color} data={lineData} width={width} />
-                    {circle && (
-                      <Circle
-                        size={[22, 18, 16]}
-                        x={circle[0]}
-                        y={circle[1]}
-                        color={color}
-                      />
-                    )}
-                  </Box>
-                ))}
-          </Plot>
-        </Chart>
-      </Box>
+
+                return aWeight - bWeight
+              })
+              .map(({ key, circle, color, width, lineData }) => (
+                <Box
+                  as='g'
+                  key={key}
+                  onMouseEnter={() => setHovered(key)}
+                  onMouseLeave={() => setHovered(null)}
+                >
+                  <Line color={color} data={lineData} width={width} />
+                  {circle && (
+                    <Circle x={circle[0]} y={circle[1]} color={color} />
+                  )}
+                </Box>
+              ))}
+        </Plot>
+      </Chart>
     </Box>
   )
 }

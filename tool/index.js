@@ -1,10 +1,12 @@
-import { Box, Container } from 'theme-ui'
-import { Group } from '@carbonplan/components'
+import { Box, Container, Divider, Flex } from 'theme-ui'
+import { alpha } from '@theme-ui/color'
+import { Column, Group, Row } from '@carbonplan/components'
 import { useState } from 'react'
 
 import Header from '../components/header'
 import ControlPanel from '../components/control-panel'
 import {
+  AboutSection,
   DisplaySection,
   QuerySection,
   RegionSection,
@@ -20,6 +22,7 @@ const sx = {
     letterSpacing: 'smallcaps',
     textTransform: 'uppercase',
     fontSize: [2, 2, 2, 3],
+    mb: [3],
   },
   description: {
     fontSize: [1, 1, 1, 2],
@@ -60,34 +63,70 @@ const Tool = () => {
               width={4}
               onClose={closeRegionPicker}
             >
-              <Group spacing={4}>
-                <Box sx={sx.description}>
-                  This explorer lets you browse a catalog of climate data. Use
-                  the panels below to select datasets, variables, and times.
+              <Flex
+                sx={{
+                  flexDirection: 'column',
+                  height: 'calc(100vh - 56px)',
+                  mx: [-4, -5, -5, -6],
+                }}
+              >
+                <Box
+                  sx={{
+                    flex: '1 1 auto',
+                    overflow: 'hidden',
+                    bg: 'transparent',
+                    px: [4, 5, 5, 6],
+                    transition: 'background-color 0.15s',
+                    '@media (hover: hover) and (pointer: fine)': {
+                      '&:hover': { bg: alpha('muted', 0.25) },
+                    },
+                  }}
+                >
+                  <Row
+                    columns={4}
+                    sx={{
+                      flex: '0 0 auto',
+                      height: '100%',
+                      overflow: 'scroll',
+                      py: [4],
+                      px: [4, 5, 5, 6],
+                      mx: [-4, -5, -5, -6],
+                    }}
+                  >
+                    <Column width={4} start={1}>
+                      <Group spacing={4}>
+                        <Box sx={sx.description}>
+                          This explorer lets you browse a catalog of climate
+                          data. Use the panels below to select datasets,
+                          variables, and times.
+                        </Box>
+
+                        <Divider sx={{ my: 4 }} />
+
+                        <QuerySection sx={sx} />
+
+                        <Divider sx={{ my: 4 }} />
+
+                        <DisplaySection sx={sx} />
+
+                        <Divider sx={{ my: 4 }} />
+
+                        <AboutSection sx={sx} />
+                      </Group>
+                    </Column>
+                  </Row>
                 </Box>
 
-                <ControlPanelDivider />
+                <Box sx={{ flex: '0 0 auto', px: [4, 5, 5, 6] }}>
+                  <ControlPanelDivider sx={{ my: 0 }} />
 
-                <QuerySection sx={sx} />
+                  <RegionSection sx={sx} />
 
-                <ControlPanelDivider />
+                  <ControlPanelDivider />
 
-                <TimeSection sx={sx} />
-
-                <ControlPanelDivider />
-
-                <RegionSection sx={sx} />
-
-                <ControlPanelDivider sx={{ mb: [-4] }} />
-              </Group>
-            </ControlPanel>
-
-            <ControlPanel tooltip='Adjust display' side='right' width={2}>
-              <Group spacing={4}>
-                <DisplaySection sx={sx} />
-
-                <ControlPanelDivider sx={{ mb: [-4] }} />
-              </Group>
+                  <TimeSection sx={sx} />
+                </Box>
+              </Flex>
             </ControlPanel>
           </Container>
         </Map>
