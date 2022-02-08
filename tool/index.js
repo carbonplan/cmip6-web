@@ -1,4 +1,4 @@
-import { Box, Container, Flex } from 'theme-ui'
+import { Box, Container, Divider, Flex } from 'theme-ui'
 import { Column, Group, Row } from '@carbonplan/components'
 import { useState } from 'react'
 
@@ -11,6 +11,7 @@ import {
   TimeSection,
 } from '../components/sections'
 import Map from '../components/map'
+import Section from '../components/section'
 import ControlPanelDivider from '../components/control-panel-divider'
 import { useRegionStore } from '../components/region'
 
@@ -86,21 +87,23 @@ const Tool = () => {
                         px: [4, 5, 5, 6],
                       }}
                     >
-                      <Group spacing={4}>
-                        <Box sx={sx.description}>
-                          This explorer lets you browse a catalog of climate
-                          data. Use the panels below to select datasets,
-                          variables, and times.
-                        </Box>
+                      <Section hoverable>
+                        <Group spacing={4}>
+                          <Box sx={sx.description}>
+                            This explorer lets you browse a catalog of climate
+                            data. Use the panels below to select datasets,
+                            variables, and times.
+                          </Box>
 
-                        <ControlPanelDivider />
+                          <Divider sx={{ my: 4 }} />
 
-                        <QuerySection sx={sx} />
+                          <QuerySection sx={sx} />
 
-                        <ControlPanelDivider />
+                          <Divider sx={{ my: 4 }} />
 
-                        <DisplaySection sx={sx} />
-                      </Group>
+                          <DisplaySection sx={sx} />
+                        </Group>
+                      </Section>
                     </Box>
                   </Column>
                 </Row>

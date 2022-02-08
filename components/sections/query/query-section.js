@@ -5,7 +5,6 @@ import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
 
 import { getFiltersCallback, useDatasetsStore } from '../../datasets'
 import ExpandableFilter from './expandable-filter'
-import Section from '../../section'
 import Dataset from './dataset'
 import { useRegionStore } from '../../region'
 
@@ -226,7 +225,7 @@ const QuerySection = ({ sx }) => {
   }, [])
 
   return (
-    <Section>
+    <Box>
       <Box sx={sx.heading}>Datasets</Box>
 
       {datasets ? (
@@ -238,7 +237,7 @@ const QuerySection = ({ sx }) => {
       ) : (
         'Loading...'
       )}
-    </Section>
+    </Box>
   )
 }
 
