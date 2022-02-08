@@ -59,11 +59,21 @@ export const formatValue = (value) => {
 const ChartWrapper = ({ data }) => {
   const [hovered, setHovered] = useState(null)
   const activeDataset = useDatasetsStore((state) => state.active)
-  const setActive = useDatasetsStore((state) => state.setActive)
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useDatasetsStore((state) => state.displayTime)
-  const dateStrings = datasets && datasets[activeDataset]?.dateStrings
-  const timescale = datasets && datasets[activeDataset]?.timescale
+
+  // By default, use active dataset as primary dataset (reference for dateStrings and timescale)
+  let primaryDataset = datasets[activeDataset]
+  if (!primaryDataset) {
+    // But fallback to first selected dataset if none is active
+    const selectedName = Object.keys(datasets).find(
+      (key) => datasets[key].selected
+    )
+    primaryDataset = datasets[selectedName]
+  }
+
+  const dateStrings = primaryDataset?.dateStrings
+  const timescale = primaryDataset?.timescale
 
   const { timeRange, ticks } = useMemo(() => {
     if (!dateStrings) {
@@ -77,7 +87,7 @@ const ChartWrapper = ({ data }) => {
     }
   }, [dateStrings, display])
 
-  if (!activeDataset) {
+  if (!primaryDataset) {
     return 'Select a dataset to view regional data'
   }
 
