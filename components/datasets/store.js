@@ -21,7 +21,6 @@ const getInitialDatasets = (data) => {
       dateStrings: null,
       selected: false,
       loaded: false,
-      opacity: 1,
       colormapName: null,
       clim: null,
     }
@@ -190,11 +189,11 @@ export const useDatasetsStore = create((set, get) => ({
   updateDatasetDisplay: (name, values) =>
     set(({ datasets, filters }) => {
       const invalidKey = Object.keys(values).find(
-        (k) => !['colormapName', 'clim', 'opacity'].includes(k)
+        (k) => !['colormapName', 'clim'].includes(k)
       )
       if (invalidKey) {
         throw new Error(
-          `Unexpected display update. Invalid key: ${invalidKey}, must be one of 'colormapName', 'clim', 'opacity'`
+          `Unexpected display update. Invalid key: ${invalidKey}, must be one of 'colormapName', 'clim'`
         )
       }
 
