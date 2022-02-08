@@ -1,20 +1,8 @@
-import { Box, Flex } from 'theme-ui'
+import { Box } from 'theme-ui'
 import React, { useMemo, useState } from 'react'
 import { format } from 'd3-format'
-import {
-  Chart,
-  Circle,
-  Grid,
-  Label,
-  Line,
-  Plot,
-  TickLabels,
-} from '@carbonplan/charts'
-import {
-  COLORMAP_COLORS,
-  getSelectedShortNames,
-  useDatasetsStore,
-} from '../../datasets'
+import { Chart, Circle, Grid, Line, Plot, TickLabels } from '@carbonplan/charts'
+import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
 
 const getArrayData = (arr) => {
   const { sum, min, max } = arr.reduce(
@@ -98,6 +86,7 @@ const ChartWrapper = ({ data }) => {
 
   const displayTime = dateStrings.valuesToTime(display)
 
+  let label
   const range = [Infinity, -Infinity]
   const lines = data
     .filter(([name, value]) => value && datasets[name].selected)
@@ -123,11 +112,12 @@ const ChartWrapper = ({ data }) => {
       let color = 'secondary'
       let width = 1.5
 
-      if (name === activeDataset) {
-        color = COLORMAP_COLORS[datasets[name].colormapName]
-        width = 2
-      } else if (name === hovered) {
+      if (name === hovered) {
+        label = circle
         color = 'primary'
+        width = 2
+      } else if (name === activeDataset) {
+        color = COLORMAP_COLORS[datasets[name].colormapName]
         width = 2
       }
       return {
@@ -194,6 +184,29 @@ const ChartWrapper = ({ data }) => {
           values={timescale === 'day' ? undefined : ticks}
           format={(d) => dateStrings.formatTick(Math.round(d))}
         />
+        {label && (
+          <Box
+            sx={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              mt: -4,
+            }}
+          >
+            <Box
+              sx={{
+                fontFamily: 'mono',
+                letterSpacing: 'mono',
+                textTransform: 'uppercase',
+                fontSize: [1, 1, 1, 2],
+                color: 'primary',
+              }}
+            >
+              ({dateStrings.formatTick(displayTime)}, {formatValue(label[1])}K)
+            </Box>
+          </Box>
+        )}
+
         <Plot>
           {!loading &&
             lines
@@ -211,15 +224,15 @@ const ChartWrapper = ({ data }) => {
                 return aWeight - bWeight
               })
               .map(({ key, circle, color, width, lineData }) => (
-                <Box as='g' key={key}>
+                <Box
+                  as='g'
+                  key={key}
+                  onMouseEnter={() => setHovered(key)}
+                  onMouseLeave={() => setHovered(null)}
+                >
                   <Line color={color} data={lineData} width={width} />
                   {circle && (
-                    <Circle
-                      size={[22, 18, 16]}
-                      x={circle[0]}
-                      y={circle[1]}
-                      color={color}
-                    />
+                    <Circle x={circle[0]} y={circle[1]} color={color} />
                   )}
                 </Box>
               ))}

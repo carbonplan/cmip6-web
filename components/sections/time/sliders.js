@@ -1,4 +1,4 @@
-import { Group, Slider } from '@carbonplan/components'
+import { Slider } from '@carbonplan/components'
 import { Box, Flex } from 'theme-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
