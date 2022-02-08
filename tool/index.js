@@ -5,6 +5,7 @@ import { useState } from 'react'
 import Header from '../components/header'
 import ControlPanel from '../components/control-panel'
 import {
+  AboutSection,
   DisplaySection,
   QuerySection,
   RegionSection,
@@ -102,6 +103,10 @@ const Tool = () => {
                           <Divider sx={{ my: 4 }} />
 
                           <DisplaySection sx={sx} />
+
+                          <Divider sx={{ my: 4 }} />
+
+                          <AboutSection sx={sx} />
                         </Group>
                       </Section>
                     </Box>
