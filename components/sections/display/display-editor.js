@@ -1,6 +1,6 @@
 import { Box } from 'theme-ui'
 import { useMemo, useState } from 'react'
-import { Colorbar, Group, Input, Select } from '@carbonplan/components'
+import { Colorbar, Column, Row, Select } from '@carbonplan/components'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
@@ -29,8 +29,8 @@ const DisplayEditor = ({ sx }) => {
     updateDatasetDisplay(name, { clim: setter(clim) })
   }
   return (
-    <Group spacing={4}>
-      <Group spacing={4}>
+    <Row columns={4}>
+      <Column start={1} width={2}>
         <Box sx={{ ...sx.label, mb: 2 }}>
           Colormap
           <Select
@@ -58,7 +58,9 @@ const DisplayEditor = ({ sx }) => {
             ))}
           </Select>
         </Box>
+      </Column>
 
+      <Column start={3} width={2}>
         <Box>
           <Box sx={{ ...sx.label, mb: 1 }}>Color range</Box>
           <Colorbar
@@ -71,29 +73,8 @@ const DisplayEditor = ({ sx }) => {
             sxClim={{ fontSize: [1, 1, 1, 2], pt: [1], pb: ['2px'] }}
           />
         </Box>
-
-        <Box sx={{ ...sx.label, mb: 2 }}>
-          Opacity
-          <Input
-            size='xs'
-            sx={{
-              width: '100%',
-              fontSize: [1, 1, 1, 2],
-              fontFamily: 'mono',
-              letterSpacing: 'mono',
-              pb: ['2px', '2px', '2px', '4px'],
-            }}
-            value={opacity}
-            onChange={(e) => setOpacity(e.target.value)}
-            onBlur={() => {
-              const validated = Math.min(Math.max(Number(opacity), 0), 1)
-              setOpacity(validated)
-              updateDatasetDisplay(name, { opacity: validated })
-            }}
-          />
-        </Box>
-      </Group>
-    </Group>
+      </Column>
+    </Row>
   )
 }
 export default DisplayEditor
