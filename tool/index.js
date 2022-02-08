@@ -78,7 +78,7 @@ const Tool = () => {
                     px: [4, 5, 5, 6],
                     transition: 'background-color 0.15s',
                     '@media (hover: hover) and (pointer: fine)': {
-                      '&:hover': { bg: alpha('muted', 0.1) },
+                      '&:hover': { bg: alpha('muted', 0.25) },
                     },
                   }}
                 >
