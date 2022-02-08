@@ -122,15 +122,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
           onChange={(value) => onChange({ day: value })}
           formatLabel={(d) =>
             new Date(year, month - 1, d).toLocaleString('default', {
-              month: 'short',
               day: 'numeric',
-            })
-          }
-          formatValue={(d) =>
-            new Date(year, month - 1, d).toLocaleString('default', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
             })
           }
           showValue
