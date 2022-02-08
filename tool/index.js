@@ -1,4 +1,5 @@
 import { Box, Container, Divider, Flex } from 'theme-ui'
+import { alpha } from '@theme-ui/color'
 import { Column, Group, Row } from '@carbonplan/components'
 import { useState } from 'react'
 
@@ -12,7 +13,6 @@ import {
   TimeSection,
 } from '../components/sections'
 import Map from '../components/map'
-import Section from '../components/section'
 import ControlPanelDivider from '../components/control-panel-divider'
 import { useRegionStore } from '../components/region'
 
@@ -70,14 +70,16 @@ const Tool = () => {
                   mx: [-4, -5, -5, -6],
                 }}
               >
-                <Section
-                  hoverable
+                <Box
                   sx={{
                     flex: '1 1 auto',
                     overflow: 'hidden',
-                    mx: [0],
-                    my: [0],
-                    py: [0],
+                    bg: 'transparent',
+                    px: [4, 5, 5, 6],
+                    transition: 'background-color 0.15s',
+                    '@media (hover: hover) and (pointer: fine)': {
+                      '&:hover': { bg: alpha('muted', 0.1) },
+                    },
                   }}
                 >
                   <Row
@@ -113,7 +115,7 @@ const Tool = () => {
                       </Group>
                     </Column>
                   </Row>
-                </Section>
+                </Box>
 
                 <Box sx={{ flex: '0 0 auto', px: [4, 5, 5, 6] }}>
                   <ControlPanelDivider sx={{ my: 0 }} />
