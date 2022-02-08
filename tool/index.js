@@ -110,11 +110,12 @@ const Tool = () => {
 
                 <Box sx={{ flex: '0 0 auto', px: [4, 5, 5, 6] }}>
                   <ControlPanelDivider sx={{ my: 0 }} />
-                  <TimeSection sx={sx} />
+
+                  <RegionSection sx={sx} />
 
                   <ControlPanelDivider />
 
-                  <RegionSection sx={sx} />
+                  <TimeSection sx={sx} />
                 </Box>
               </Flex>
             </ControlPanel>
