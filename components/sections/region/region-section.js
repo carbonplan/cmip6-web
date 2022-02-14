@@ -1,6 +1,7 @@
 import AnimateHeight from 'react-animate-height'
 import { useMemo } from 'react'
 import { Box } from 'theme-ui'
+import { alpha } from '@theme-ui/color'
 import { Search, X } from '@carbonplan/icons'
 
 import { useRegionStore } from '../../region'
@@ -30,45 +31,55 @@ const RegionSection = ({ sx }) => {
   let content
   if (variableData.length > 0) {
     content = <Chart data={variableData} />
-  } else {
+  } else if (showRegionPicker) {
     content = (
       <Box sx={sx.description}>Select a dataset to view regional data</Box>
     )
   }
 
   return (
-    <Box sx={{ my: [4] }}>
+    <Box
+      sx={{
+        px: [4, 5, 5, 6],
+        pt: ['20px'],
+        pb: [3],
+        cursor: 'pointer',
+        pointerEvents: variableData.length > 0 ? 'all' : 'none',
+        transition: 'background-color 0.15s',
+        '@media (hover: hover) and (pointer: fine)': {
+          '&:hover': { bg: alpha('muted', 0.25) },
+        },
+      }}
+      onClick={handleClick}
+    >
       <Box
         sx={{
           ...sx.heading,
-          ...(showRegionPicker ? {} : { mb: 0 }),
+          mb: [1],
           display: 'flex',
-          justifyContent: 'space-between',
           cursor: 'pointer',
+
+          color: variableData.length > 0 ? 'primary' : 'secondary',
         }}
-        onClick={handleClick}
       >
         <Box key='label' as='span'>
           Regional data
         </Box>
-        <Box sx={{ position: 'relative' }}>
-          <CustomCheckbox
-            uncheckedIcon={Search}
-            checkedIcon={X}
-            checkedHoverIcon={X}
-            checked={showRegionPicker}
-            onChange={handleClick}
-          />
+        <Box sx={{ position: 'relative', ml: [2], mt: '-1px' }}>
+          {!showRegionPicker && (
+            <Search sx={{ strokeWidth: 2, width: '18px' }} />
+          )}
+          {showRegionPicker && <X sx={{ strokeWidth: 2, width: '18px' }} />}
         </Box>
       </Box>
 
       <AnimateHeight
         duration={150}
-        height={showRegionPicker ? 'auto' : 0}
+        height={showRegionPicker && variableData.length > 0 ? 'auto' : 0}
         easing={'linear'}
         style={{ pointerEvents: 'none' }}
       >
-        <Box sx={{ pt: [3], pb: [1] }}>
+        <Box sx={{ pt: [0], pb: [2] }}>
           <Box sx={{ pointerEvents: 'all' }}>{content}</Box>
         </Box>
       </AnimateHeight>

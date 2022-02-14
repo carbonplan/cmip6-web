@@ -1,4 +1,4 @@
-import { Box } from 'theme-ui'
+import { Box, Spinner } from 'theme-ui'
 import React, { useMemo, useState } from 'react'
 import { format } from 'd3-format'
 import { Chart, Circle, Grid, Line, Plot, TickLabels } from '@carbonplan/charts'
@@ -134,51 +134,37 @@ const ChartWrapper = ({ data }) => {
     <Box
       sx={{
         width: '100%',
-        height: ['200px', '200px', '150px', '200px'],
+        height: ['200px', '200px', '125px', '200px'],
         position: 'relative',
       }}
     >
-      {loading && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '30%',
-            left: 0,
-            right: 0,
-            zIndex: 1,
-            width: '95px',
-            mx: 'auto',
-            fontFamily: 'mono',
-            letterSpacing: 'mono',
-            textTransform: 'uppercase',
-          }}
-        >
-          Loading...
-        </Box>
-      )}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '25%',
+          left: '35px',
+          right: 0,
+          zIndex: 1,
+          width: '32px',
+          mx: 'auto',
+          fontFamily: 'mono',
+          letterSpacing: 'mono',
+          textTransform: 'uppercase',
+          color: 'secondary',
+          display: loading ? 'inherit' : 'none',
+        }}
+      >
+        <Spinner duration={750} size={32} />
+      </Box>
+
       <Chart
         x={timeRange}
         y={range}
-        padding={{ left: 0, right: 0, top: 0, bottom: 50 }}
+        padding={{ left: 35, right: 0, top: 0, bottom: 25 }}
       >
         <Grid horizontal />
         <Grid vertical values={timescale === 'day' ? undefined : ticks} />
-        <TickLabels
-          left
-          count={4}
-          format={formatValue}
-          sx={{ right: 0, transform: 'translate(100%, -100%)' }}
-        />
-        <TickLabels
-          right
-          count={4}
-          format={formatValue}
-          sx={{
-            left: 0,
-            width: 'fit-content',
-            transform: 'translate(-100%, -100%)',
-          }}
-        />
+        <TickLabels left count={4} format={formatValue} />
         <TickLabels
           bottom
           values={timescale === 'day' ? undefined : ticks}
@@ -188,9 +174,9 @@ const ChartWrapper = ({ data }) => {
           <Box
             sx={{
               position: 'absolute',
-              left: 0,
+              right: 0,
               top: 0,
-              mt: -4,
+              mt: 0,
             }}
           >
             <Box
@@ -199,7 +185,7 @@ const ChartWrapper = ({ data }) => {
                 letterSpacing: 'mono',
                 textTransform: 'uppercase',
                 fontSize: [1, 1, 1, 2],
-                color: 'primary',
+                color: 'secondary',
               }}
             >
               ({dateStrings.formatTick(displayTime)}, {formatValue(label[1])}K)
@@ -232,7 +218,12 @@ const ChartWrapper = ({ data }) => {
                 >
                   <Line color={color} data={lineData} width={width} />
                   {circle && (
-                    <Circle x={circle[0]} y={circle[1]} color={color} />
+                    <Circle
+                      x={circle[0]}
+                      y={circle[1]}
+                      color={color}
+                      size={15}
+                    />
                   )}
                 </Box>
               ))}

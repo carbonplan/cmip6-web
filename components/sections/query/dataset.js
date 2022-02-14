@@ -74,7 +74,7 @@ const Dataset = ({ name, last }) => {
         </Label>
       </Column>
       <Column start={4} width={1}>
-        <Box sx={{ mt: '-6px', mr: '2px', float: 'right' }}>
+        <Box sx={{ mt: '-8px', mr: '2px', float: 'right' }}>
           <Box sx={{ position: 'relative', top: '4px' }}>
             <Label
               sx={{
