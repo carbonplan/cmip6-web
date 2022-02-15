@@ -1,6 +1,7 @@
 import AnimateHeight from 'react-animate-height'
 import { useMemo } from 'react'
 import { Box } from 'theme-ui'
+import { alpha } from '@theme-ui/color'
 import { Search, X } from '@carbonplan/icons'
 
 import { useRegionStore } from '../../region'
@@ -15,6 +16,7 @@ const RegionSection = ({ sx }) => {
   )
   const regionData = useRegionStore((state) => state.regionData)
   const variable = useDatasetsStore((state) => state.filters?.variable)
+  const datasets = useDatasetsStore((state) => state.datasets)
 
   const variableData = useMemo(
     () =>
@@ -29,46 +31,59 @@ const RegionSection = ({ sx }) => {
 
   let content
   if (variableData.length > 0) {
+    // render a chart if we have data
     content = <Chart data={variableData} />
   } else {
-    content = (
-      <Box sx={sx.description}>Select a dataset to view regional data</Box>
-    )
+    // render an empty box with the chart height for a smooth closing animation
+    content = <Box sx={{ height: ['200px', '200px', '125px', '200px'] }} />
   }
 
+  const isActive =
+    datasets && Object.keys(datasets).some((d) => datasets[d].selected)
+
   return (
-    <Box sx={{ my: [4] }}>
+    <Box
+      sx={{
+        px: [4, 5, 5, 6],
+        pt: ['20px'],
+        pb: [3],
+        cursor: 'pointer',
+        pointerEvents: isActive ? 'all' : 'none',
+        transition: 'background-color 0.15s',
+        '@media (hover: hover) and (pointer: fine)': {
+          '&:hover': { bg: alpha('muted', 0.25) },
+        },
+      }}
+      onClick={handleClick}
+    >
       <Box
         sx={{
           ...sx.heading,
-          ...(showRegionPicker ? {} : { mb: 0 }),
+          mb: [1],
           display: 'flex',
-          justifyContent: 'space-between',
           cursor: 'pointer',
+          transition: 'color 0.15s',
+          opacity: isActive ? 1 : 0.3,
         }}
-        onClick={handleClick}
       >
         <Box key='label' as='span'>
           Regional data
         </Box>
-        <Box sx={{ position: 'relative' }}>
-          <CustomCheckbox
-            uncheckedIcon={Search}
-            checkedIcon={X}
-            checkedHoverIcon={X}
-            checked={showRegionPicker}
-            onChange={handleClick}
-          />
+        <Box sx={{ position: 'relative', ml: [2], mt: '-1px' }}>
+          {!showRegionPicker && (
+            <Search sx={{ strokeWidth: 2, width: '18px' }} />
+          )}
+          {showRegionPicker && <X sx={{ strokeWidth: 2, width: '18px' }} />}
         </Box>
       </Box>
 
       <AnimateHeight
         duration={150}
-        height={showRegionPicker ? 'auto' : 0}
+        height={showRegionPicker && variableData.length > 0 ? 'auto' : 0}
         easing={'linear'}
         style={{ pointerEvents: 'none' }}
       >
-        <Box sx={{ pt: [3], pb: [1] }}>
+        <Box sx={{ pt: [1], pb: [2] }}>
           <Box sx={{ pointerEvents: 'all' }}>{content}</Box>
         </Box>
       </AnimateHeight>

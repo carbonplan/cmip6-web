@@ -44,8 +44,8 @@ const Dataset = ({ name, last }) => {
     <Row
       columns={[4]}
       sx={{
-        pt: '5px',
-        mb: 0,
+        pt: '4px',
+        mb: '1px',
         borderTop: ({ colors }) => `solid 1px ${colors.hinted}`,
         borderBottom: last
           ? ({ colors }) => `solid 1px ${colors.hinted}`
@@ -74,7 +74,7 @@ const Dataset = ({ name, last }) => {
         </Label>
       </Column>
       <Column start={4} width={1}>
-        <Box sx={{ mt: '-6px', mr: '2px', float: 'right' }}>
+        <Box sx={{ mt: '-8px', mr: '2px', float: 'right' }}>
           <Box sx={{ position: 'relative', top: '4px' }}>
             <Label
               sx={{

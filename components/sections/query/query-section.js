@@ -1,4 +1,4 @@
-import { Box, Divider } from 'theme-ui'
+import { Box, Divider, Spinner } from 'theme-ui'
 import { useEffect, useMemo } from 'react'
 import shallow from 'zustand/shallow'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
@@ -235,7 +235,7 @@ const QuerySection = ({ sx }) => {
           <Results sx={sx} />
         </>
       ) : (
-        'Loading...'
+        <Spinner sx={{ color: 'secondary' }} duration={750} size={28} />
       )}
     </Box>
   )

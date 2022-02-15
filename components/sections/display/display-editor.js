@@ -53,15 +53,14 @@ const DisplayEditor = ({ sx }) => {
 
       <Column start={3} width={2}>
         <Box>
-          <Box sx={{ ...sx.label, mb: 1 }}>Color range</Box>
+          <Box sx={{ ...sx.label, mb: '5px' }}>Color range</Box>
           <Colorbar
             colormap={colormap}
             clim={clim}
             setClim={setClim}
             horizontal
-            bottom
             width={'100%'}
-            sxClim={{ fontSize: [1, 1, 1, 2], pt: [1], pb: ['2px'] }}
+            sxClim={{ fontSize: [1, 1, 1, 2], mt: ['-1px'], pb: ['2px'] }}
           />
         </Box>
       </Column>

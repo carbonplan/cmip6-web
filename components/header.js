@@ -1,4 +1,4 @@
-import { Box, Container } from 'theme-ui'
+import { Box, Container, Spinner } from 'theme-ui'
 import {
   Meta,
   Guide,
@@ -16,12 +16,6 @@ const Header = ({ loading }) => {
       )
   )
   const updatingTime = useDatasetsStore((state) => state.updatingTime)
-  let status = null
-  if (initiallyLoading || loading) {
-    status = 'loading'
-  } else if (updatingTime) {
-    status = 'release to update'
-  }
 
   return (
     <>
@@ -41,9 +35,63 @@ const Header = ({ loading }) => {
             menuItems={[
               <Dimmer key='dimmer' sx={{ mt: '-2px', color: 'primary' }} />,
             ]}
-            status={status}
           />
         </Container>
+      </Box>
+      <Box
+        sx={{
+          pointerEvents: 'none',
+          position: 'absolute',
+          left: [
+            `calc(3 * 100vw / 6 - 12px)`,
+            `calc(3 * 100vw / 8 + 2px)`,
+            `calc(4 * 100vw / 12 + 37px)`,
+            `calc(4 * 100vw / 12 + 54px)`,
+          ],
+          top: '16px',
+          width: '24px',
+          opacity: (initiallyLoading || loading) && !updatingTime ? 1 : 0,
+          transition: 'opacity 0.05s',
+          zIndex: 1001,
+        }}
+      >
+        <Spinner duration={750} size={32} />
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          pointerEvents: 'none',
+          width: '100%',
+          left: '0px',
+          top: '0px',
+          height: 'calc(100vh)',
+          opacity: updatingTime ? 0.5 : 0,
+          transition: 'opacity 0.15s',
+          bg: 'background',
+          zIndex: 1000,
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          pointerEvents: 'none',
+          left: [
+            `calc(3 * 100vw / 6 - 12px)`,
+            `calc(3 * 100vw / 8 + 2px)`,
+            `calc(4 * 100vw / 12 + 42px)`,
+            `calc(4 * 100vw / 12 + 54px)`,
+          ],
+          top: '22px',
+          opacity: updatingTime ? 0.5 : 0,
+          transition: 'opacity 0.15s',
+          zIndex: 1000,
+          fontFamily: 'mono',
+          letterSpacing: 'mono',
+          textTransform: 'uppercase',
+          fontSize: [1, 1, 1, 2],
+        }}
+      >
+        Release to update
       </Box>
     </>
   )
