@@ -42,9 +42,6 @@ const TimeSection = ({ sx }) => {
         pb: [4],
       }}
     >
-      <Box sx={{ ...sx.heading, display: ['none', 'none', 'none', 'none'] }}>
-        Time
-      </Box>
       {inner}
     </Box>
   )

@@ -36,18 +36,15 @@ const TimeSlider = ({ label }) => {
   )
 }
 
-const YEAR_RANGES = {
-  HISTORICAL: [1950, 2014],
-  PROJECTED: [2015, 2100],
-}
-
-const SlidersDisabled = ({ dateStrings, historical = false }) => {
-  //const timescale = useDatasetsStore((state) => state.filters.timescale)
+const SlidersDisabled = () => {
+  const timescale = useDatasetsStore((state) => state.filters?.timescale)
 
   return (
     <Flex sx={{ gap: [2, 2, 2, 3] }}>
-      <TimeSlider label={'day'} />
-      <TimeSlider label={'month'} />
+      {(timescale === 'day' || !timescale) && <TimeSlider label={'day'} />}
+      {(['day', 'month'].includes(timescale) || !timescale) && (
+        <TimeSlider label={'month'} />
+      )}
       <TimeSlider label={'year'} />
     </Flex>
   )
