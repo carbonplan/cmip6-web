@@ -41,7 +41,7 @@ const Header = ({ loading }) => {
       <Box
         sx={{
           pointerEvents: 'none',
-          position: 'relative',
+          position: 'absolute',
           left: [
             `calc(3 * 100vw / 6 - 12px)`,
             `calc(3 * 100vw / 8 + 2px)`,
@@ -73,15 +73,15 @@ const Header = ({ loading }) => {
       />
       <Box
         sx={{
-          position: 'relative',
+          position: 'absolute',
           pointerEvents: 'none',
           left: [
             `calc(3 * 100vw / 6 - 12px)`,
             `calc(3 * 100vw / 8 + 2px)`,
-            `calc(4 * 100vw / 12 + 37px)`,
+            `calc(4 * 100vw / 12 + 42px)`,
             `calc(4 * 100vw / 12 + 54px)`,
           ],
-          top: '-16px',
+          top: '22px',
           opacity: updatingTime ? 0.5 : 0,
           transition: 'opacity 0.15s',
           zIndex: 1000,
