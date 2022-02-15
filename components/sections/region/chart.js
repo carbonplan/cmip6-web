@@ -137,6 +137,9 @@ const ChartWrapper = ({ data }) => {
         height: ['200px', '200px', '125px', '200px'],
         position: 'relative',
       }}
+      onClick={(e) => {
+        e.stopPropagation()
+      }}
     >
       <Box
         sx={{
@@ -145,16 +148,13 @@ const ChartWrapper = ({ data }) => {
           left: '35px',
           right: 0,
           zIndex: 1,
-          width: '32px',
+          width: '28px',
           mx: 'auto',
-          fontFamily: 'mono',
-          letterSpacing: 'mono',
-          textTransform: 'uppercase',
-          color: 'secondary',
-          display: loading ? 'inherit' : 'none',
+          opacity: loading ? 1 : 0,
+          transition: 'opacity 0.05s',
         }}
       >
-        <Spinner duration={750} size={32} />
+        <Spinner sx={{ color: 'secondary' }} duration={750} size={28} />
       </Box>
 
       <Chart

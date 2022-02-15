@@ -42,10 +42,15 @@ const Header = ({ loading }) => {
         sx={{
           pointerEvents: 'none',
           position: 'relative',
-          left: '520px',
+          left: [
+            `calc(3 * 100vw / 6 - 12px)`,
+            `calc(3 * 100vw / 8 + 2px)`,
+            `calc(4 * 100vw / 12 + 37px)`,
+            `calc(4 * 100vw / 12 + 54px)`,
+          ],
           top: '16px',
           width: '24px',
-          opacity: initiallyLoading || loading ? 1 : 0,
+          opacity: (initiallyLoading || loading) && !updatingTime ? 1 : 0,
           transition: 'opacity 0.05s',
           zIndex: 1001,
         }}
@@ -70,7 +75,12 @@ const Header = ({ loading }) => {
         sx={{
           position: 'relative',
           pointerEvents: 'none',
-          left: '520px',
+          left: [
+            `calc(3 * 100vw / 6 - 12px)`,
+            `calc(3 * 100vw / 8 + 2px)`,
+            `calc(4 * 100vw / 12 + 37px)`,
+            `calc(4 * 100vw / 12 + 54px)`,
+          ],
           top: '-16px',
           opacity: updatingTime ? 0.5 : 0,
           transition: 'opacity 0.15s',

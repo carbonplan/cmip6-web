@@ -16,6 +16,7 @@ const RegionSection = ({ sx }) => {
   )
   const regionData = useRegionStore((state) => state.regionData)
   const variable = useDatasetsStore((state) => state.filters?.variable)
+  const datasets = useDatasetsStore((state) => state.datasets)
 
   const variableData = useMemo(
     () =>
@@ -30,12 +31,15 @@ const RegionSection = ({ sx }) => {
 
   let content
   if (variableData.length > 0) {
+    // render a chart if we have data
     content = <Chart data={variableData} />
-  } else if (showRegionPicker) {
-    content = (
-      <Box sx={sx.description}>Select a dataset to view regional data</Box>
-    )
+  } else {
+    // render an empty box with the chart height for a smooth closing animation
+    content = <Box sx={{ height: ['200px', '200px', '125px', '200px'] }} />
   }
+
+  const isActive =
+    datasets && Object.keys(datasets).some((d) => datasets[d].selected)
 
   return (
     <Box
@@ -44,7 +48,7 @@ const RegionSection = ({ sx }) => {
         pt: ['20px'],
         pb: [3],
         cursor: 'pointer',
-        pointerEvents: variableData.length > 0 ? 'all' : 'none',
+        pointerEvents: isActive ? 'all' : 'none',
         transition: 'background-color 0.15s',
         '@media (hover: hover) and (pointer: fine)': {
           '&:hover': { bg: alpha('muted', 0.25) },
@@ -58,8 +62,8 @@ const RegionSection = ({ sx }) => {
           mb: [1],
           display: 'flex',
           cursor: 'pointer',
-
-          color: variableData.length > 0 ? 'primary' : 'secondary',
+          transition: 'color 0.15s',
+          opacity: isActive ? 1 : 0.3,
         }}
       >
         <Box key='label' as='span'>
@@ -79,7 +83,7 @@ const RegionSection = ({ sx }) => {
         easing={'linear'}
         style={{ pointerEvents: 'none' }}
       >
-        <Box sx={{ pt: [0], pb: [2] }}>
+        <Box sx={{ pt: [1], pb: [2] }}>
           <Box sx={{ pointerEvents: 'all' }}>{content}</Box>
         </Box>
       </AnimateHeight>
