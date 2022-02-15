@@ -44,6 +44,26 @@ export const formatValue = (value) => {
   )
 }
 
+const LoadingSpinner = ({ opacity = 1 }) => {
+  return (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: '25%',
+        left: '35px',
+        right: 0,
+        zIndex: 1,
+        width: '28px',
+        mx: 'auto',
+        opacity: opacity,
+        transition: 'opacity 0.05s',
+      }}
+    >
+      <Spinner sx={{ color: 'secondary' }} duration={750} size={28} />
+    </Box>
+  )
+}
+
 const ChartWrapper = ({ data }) => {
   const [hovered, setHovered] = useState(null)
   const activeDataset = useDatasetsStore((state) => state.active)
@@ -75,13 +95,19 @@ const ChartWrapper = ({ data }) => {
     }
   }, [dateStrings, display])
 
-  if (!primaryDataset) {
-    return 'Select a dataset to view regional data'
-  }
-
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
   if (!datasets || !dateStrings) {
-    return 'Loading...'
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: ['200px', '200px', '125px', '200px'],
+          position: 'relative',
+        }}
+      >
+        <LoadingSpinner />
+      </Box>
+    )
   }
 
   const displayTime = dateStrings.valuesToTime(display)
@@ -141,22 +167,7 @@ const ChartWrapper = ({ data }) => {
         e.stopPropagation()
       }}
     >
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '25%',
-          left: '35px',
-          right: 0,
-          zIndex: 1,
-          width: '28px',
-          mx: 'auto',
-          opacity: loading ? 1 : 0,
-          transition: 'opacity 0.05s',
-        }}
-      >
-        <Spinner sx={{ color: 'secondary' }} duration={750} size={28} />
-      </Box>
-
+      <LoadingSpinner opacity={loading ? 1 : 0} />
       <Chart
         x={timeRange}
         y={range}
