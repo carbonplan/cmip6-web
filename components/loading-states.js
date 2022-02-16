@@ -1,5 +1,5 @@
 import { Box, Spinner } from 'theme-ui'
-import { SidePanelAttachment } from '@carbonplan/layouts'
+import { SidebarAttachment } from '@carbonplan/layouts'
 import { useDatasetsStore } from './datasets'
 
 const LoadingStates = ({ expanded, loading }) => {
@@ -14,7 +14,7 @@ const LoadingStates = ({ expanded, loading }) => {
 
   return (
     <>
-      <SidePanelAttachment
+      <SidebarAttachment
         expanded={expanded}
         side='left'
         width={4}
@@ -28,9 +28,9 @@ const LoadingStates = ({ expanded, loading }) => {
         }}
       >
         <Spinner duration={750} size={32} />
-      </SidePanelAttachment>
+      </SidebarAttachment>
 
-      <SidePanelAttachment
+      <SidebarAttachment
         expanded={expanded}
         side='left'
         width={4}
@@ -45,7 +45,7 @@ const LoadingStates = ({ expanded, loading }) => {
         }}
       >
         Release to update
-      </SidePanelAttachment>
+      </SidebarAttachment>
 
       <Box
         sx={{

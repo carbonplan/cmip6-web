@@ -1,5 +1,5 @@
 import { Box } from 'theme-ui'
-import { SidePanelFooter } from '@carbonplan/layouts'
+import { SidebarFooter } from '@carbonplan/layouts'
 
 import { useDatasetsStore } from '../../datasets'
 import Sliders from './sliders'
@@ -31,14 +31,14 @@ const TimeSection = ({ sx }) => {
   }
 
   return (
-    <SidePanelFooter
+    <SidebarFooter
       sx={{
         pointerEvents: !disabled ? 'all' : 'none',
         pt: [3],
       }}
     >
       {inner}
-    </SidePanelFooter>
+    </SidebarFooter>
   )
 }
 

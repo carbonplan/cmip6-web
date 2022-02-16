@@ -1,6 +1,6 @@
 import { Box, Container, Divider } from 'theme-ui'
 import { Group } from '@carbonplan/components'
-import { SidePanel } from '@carbonplan/layouts'
+import { Sidebar } from '@carbonplan/layouts'
 import { useState } from 'react'
 
 import Header from '../components/header'
@@ -56,7 +56,7 @@ const Tool = () => {
       >
         <Map setLoading={setLoading}>
           <Container>
-            <SidePanel
+            <Sidebar
               expanded={expanded}
               setExpanded={setExpanded}
               tooltip='Data browser'
@@ -88,7 +88,7 @@ const Tool = () => {
 
                 <AboutSection sx={sx} />
               </Group>
-            </SidePanel>
+            </Sidebar>
 
             <LoadingStates loading={loading} expanded={expanded} />
           </Container>

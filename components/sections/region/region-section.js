@@ -2,7 +2,7 @@ import AnimateHeight from 'react-animate-height'
 import { useMemo } from 'react'
 import { Box } from 'theme-ui'
 import { Search, X } from '@carbonplan/icons'
-import { SidePanelFooter } from '@carbonplan/layouts'
+import { SidebarFooter } from '@carbonplan/layouts'
 import { useRegionStore } from '../../region'
 import { useDatasetsStore } from '../../datasets'
 import Chart from './chart'
@@ -40,7 +40,7 @@ const RegionSection = ({ sx }) => {
     datasets && Object.keys(datasets).some((d) => datasets[d].selected)
 
   return (
-    <SidePanelFooter
+    <SidebarFooter
       sx={{ pointerEvents: isActive ? 'all' : 'none', pt: ['20px'], pb: [3] }}
       onClick={handleClick}
     >
@@ -75,7 +75,7 @@ const RegionSection = ({ sx }) => {
           <Box sx={{ pointerEvents: 'all' }}>{content}</Box>
         </Box>
       </AnimateHeight>
-    </SidePanelFooter>
+    </SidebarFooter>
   )
 }
 
