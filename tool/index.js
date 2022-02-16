@@ -1,9 +1,9 @@
-import { Box, Container, Divider, Flex } from 'theme-ui'
-import { Column, Group, Row } from '@carbonplan/components'
+import { Box, Container, Divider } from 'theme-ui'
+import { Group } from '@carbonplan/components'
+import { Sidebar } from '@carbonplan/layouts'
 import { useState } from 'react'
 
 import Header from '../components/header'
-import ControlPanel from '../components/control-panel'
 import {
   AboutSection,
   DisplaySection,
@@ -12,8 +12,8 @@ import {
   TimeSection,
 } from '../components/sections'
 import Map from '../components/map'
-import ControlPanelDivider from '../components/control-panel-divider'
 import { useRegionStore } from '../components/region'
+import LoadingStates from '../components/loading-states'
 
 const sx = {
   heading: {
@@ -37,12 +37,13 @@ const sx = {
 }
 
 const Tool = () => {
+  const [expanded, setExpanded] = useState(true)
   const [loading, setLoading] = useState(false)
   const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
 
   return (
     <>
-      <Header loading={loading} />
+      <Header />
       <Box
         sx={{
           position: 'absolute',
@@ -55,78 +56,41 @@ const Tool = () => {
       >
         <Map setLoading={setLoading}>
           <Container>
-            <ControlPanel
+            <Sidebar
+              expanded={expanded}
+              setExpanded={setExpanded}
               tooltip='Data browser'
               side='left'
-              defaultExpanded
               width={4}
               onClose={closeRegionPicker}
-            >
-              <Flex
-                sx={{
-                  flexDirection: 'column',
-                  height: 'calc(100vh - 56px)',
-                  mx: [-4, -5, -5, -6],
-                }}
-              >
-                <Box
-                  sx={{
-                    flex: '1 1 auto',
-                    overflow: 'hidden',
-                    bg: 'transparent',
-                    px: [4, 5, 5, 6],
-                  }}
-                >
-                  <Row
-                    columns={4}
-                    sx={{
-                      flex: '0 0 auto',
-                      height: '100%',
-                      overflow: 'scroll',
-                      py: [4],
-                      px: [4, 5, 5, 6],
-                      mx: [-4, -5, -5, -6],
-                    }}
-                  >
-                    <Column width={4} start={1}>
-                      <Group spacing={4}>
-                        <Box sx={sx.description}>
-                          This explorer lets you browse a catalog of climate
-                          data. Use the panels below to select datasets,
-                          variables, and times.
-                        </Box>
-
-                        <Divider sx={{ my: 4 }} />
-
-                        <QuerySection sx={sx} />
-
-                        <Divider sx={{ my: 4 }} />
-
-                        <DisplaySection sx={sx} />
-
-                        <Divider sx={{ my: 4 }} />
-
-                        <AboutSection sx={sx} />
-                      </Group>
-                    </Column>
-                  </Row>
-                </Box>
-
-                <Box
-                  sx={{
-                    flex: '0 0 auto',
-                  }}
-                >
-                  <ControlPanelDivider sx={{ my: 0 }} />
-
+              footer={
+                <>
                   <RegionSection sx={sx} />
-
-                  <ControlPanelDivider sx={{ my: 0 }} />
-
                   <TimeSection sx={sx} />
+                </>
+              }
+            >
+              <Group spacing={4}>
+                <Box sx={sx.description}>
+                  This explorer lets you browse a catalog of climate data. Use
+                  the panels below to select datasets, variables, and times.
                 </Box>
-              </Flex>
-            </ControlPanel>
+
+                <Divider sx={{ my: 4 }} />
+
+                <QuerySection sx={sx} />
+
+                <Divider sx={{ my: 4 }} />
+
+                <DisplaySection sx={sx} />
+
+                <Divider sx={{ my: 4 }} />
+
+                <AboutSection sx={sx} />
+              </Group>
+            </Sidebar>
+
+            <LoadingStates loading={loading} expanded={expanded} />
           </Container>
         </Map>
       </Box>

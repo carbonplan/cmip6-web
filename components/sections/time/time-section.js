@@ -1,5 +1,6 @@
 import { Box } from 'theme-ui'
-import { alpha } from '@theme-ui/color'
+import { SidebarFooter } from '@carbonplan/layouts'
+
 import { useDatasetsStore } from '../../datasets'
 import Sliders from './sliders'
 import SlidersDisabled from './sliders-disabled'
@@ -30,20 +31,14 @@ const TimeSection = ({ sx }) => {
   }
 
   return (
-    <Box
+    <SidebarFooter
       sx={{
-        px: [4, 5, 5, 6],
-        transition: 'background-color 0.15s',
-        cursor: disabled ? 'default' : 'pointer',
-        '@media (hover: hover) and (pointer: fine)': {
-          '&:hover': { bg: disabled ? 'transparent' : alpha('muted', 0.25) },
-        },
+        pointerEvents: !disabled ? 'all' : 'none',
         pt: [3],
-        pb: [4],
       }}
     >
       {inner}
-    </Box>
+    </SidebarFooter>
   )
 }
 

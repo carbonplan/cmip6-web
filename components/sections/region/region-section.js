@@ -1,12 +1,10 @@
 import AnimateHeight from 'react-animate-height'
 import { useMemo } from 'react'
 import { Box } from 'theme-ui'
-import { alpha } from '@theme-ui/color'
 import { Search, X } from '@carbonplan/icons'
-
+import { SidebarFooter } from '@carbonplan/layouts'
 import { useRegionStore } from '../../region'
 import { useDatasetsStore } from '../../datasets'
-import CustomCheckbox from '../../custom-checkbox'
 import Chart from './chart'
 
 const RegionSection = ({ sx }) => {
@@ -42,18 +40,8 @@ const RegionSection = ({ sx }) => {
     datasets && Object.keys(datasets).some((d) => datasets[d].selected)
 
   return (
-    <Box
-      sx={{
-        px: [4, 5, 5, 6],
-        pt: ['20px'],
-        pb: [3],
-        cursor: 'pointer',
-        pointerEvents: isActive ? 'all' : 'none',
-        transition: 'background-color 0.15s',
-        '@media (hover: hover) and (pointer: fine)': {
-          '&:hover': { bg: alpha('muted', 0.25) },
-        },
-      }}
+    <SidebarFooter
+      sx={{ pointerEvents: isActive ? 'all' : 'none', pt: ['20px'], pb: [3] }}
       onClick={handleClick}
     >
       <Box
@@ -87,7 +75,7 @@ const RegionSection = ({ sx }) => {
           <Box sx={{ pointerEvents: 'all' }}>{content}</Box>
         </Box>
       </AnimateHeight>
-    </Box>
+    </SidebarFooter>
   )
 }
 
