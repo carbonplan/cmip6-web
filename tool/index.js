@@ -13,6 +13,7 @@ import {
 } from '../components/sections'
 import Map from '../components/map'
 import { useRegionStore } from '../components/region'
+import LoadingStates from '../components/loading-states'
 
 const sx = {
   heading: {
@@ -42,7 +43,7 @@ const Tool = () => {
 
   return (
     <>
-      <Header loading={loading} />
+      <Header />
       <Box
         sx={{
           position: 'absolute',
@@ -88,6 +89,8 @@ const Tool = () => {
                 <AboutSection sx={sx} />
               </Group>
             </SidePanel>
+
+            <LoadingStates loading={loading} expanded={expanded} />
           </Container>
         </Map>
       </Box>
