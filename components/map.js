@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useThemeUI } from 'theme-ui'
 import { Map, Line, RegionPicker } from '@carbonplan/maps'
 
@@ -18,7 +17,7 @@ const MapWrapper = ({ children, setLoading }) => {
   )
 
   return (
-    <Map zoom={0} center={[0, 0]} debug={false} setLoading={setLoading}>
+    <Map zoom={0} center={[0, 0]} debug={false} setLoading={setLoading} debug>
       <Line
         color={theme.rawColors.primary}
         source={bucket + 'maps-demo/land'}
