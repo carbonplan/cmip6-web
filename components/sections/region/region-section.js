@@ -1,5 +1,5 @@
 import AnimateHeight from 'react-animate-height'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Box } from 'theme-ui'
 import { Search, X } from '@carbonplan/icons'
 import { SidebarFooter } from '@carbonplan/layouts'
@@ -9,9 +9,8 @@ import Chart from './chart'
 
 const RegionSection = ({ sx }) => {
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
-  const handleClick = useRegionStore((state) =>
-    state.showRegionPicker ? state.closeRegionPicker : state.openRegionPicker
-  )
+  const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
+  const openRegionPicker = useRegionStore((state) => state.openRegionPicker)
   const regionData = useRegionStore((state) => state.regionData)
   const variable = useDatasetsStore((state) => state.filters?.variable)
   const datasets = useDatasetsStore((state) => state.datasets)
@@ -27,6 +26,15 @@ const RegionSection = ({ sx }) => {
     [regionData, variable]
   )
 
+  const isActive =
+    datasets && Object.keys(datasets).some((d) => datasets[d].selected)
+
+  useEffect(() => {
+    if (!isActive) {
+      closeRegionPicker()
+    }
+  }, [isActive, closeRegionPicker])
+
   let content
   if (variableData.length > 0) {
     // render a chart if we have data
@@ -36,13 +44,10 @@ const RegionSection = ({ sx }) => {
     content = <Box sx={{ height: ['200px', '200px', '125px', '200px'] }} />
   }
 
-  const isActive =
-    datasets && Object.keys(datasets).some((d) => datasets[d].selected)
-
   return (
     <SidebarFooter
       sx={{ pointerEvents: isActive ? 'all' : 'none', pt: ['20px'], pb: [3] }}
-      onClick={handleClick}
+      onClick={showRegionPicker ? closeRegionPicker : openRegionPicker}
     >
       <Box
         sx={{
