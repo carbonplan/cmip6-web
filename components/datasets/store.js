@@ -6,7 +6,7 @@ import { getDatasetDisplay, getFiltersCallback } from './utils'
 
 const DEFAULT_DISPLAY_TIMES = {
   HISTORICAL: { year: 1981, month: 1, day: 1 },
-  PROJECTED: { year: 2015, month: 1, day: 1 },
+  PROJECTED: { year: 2020, month: 1, day: 1 },
 }
 const getInitialDatasets = (data) => {
   return data.datasets.reduce((accum, dataset) => {
@@ -31,7 +31,7 @@ const getInitialDatasets = (data) => {
 const getInitialFilters = (data) => {
   return data.datasets.reduce(
     (accum, ds) => {
-      accum.experiment[ds.experiment] = accum.experiment[ds.experiment] || false
+      accum.experiment[ds.experiment] = accum.experiment[ds.experiment] || true
       accum.gcm[ds.gcm] = true
       accum.method[ds.method] = true
       return accum
@@ -39,7 +39,7 @@ const getInitialFilters = (data) => {
     {
       variable: 'tasmax',
       timescale: 'day',
-      experiment: { historical: true },
+      experiment: {},
       gcm: {},
       method: {},
     }
@@ -63,32 +63,32 @@ export const useDatasetsStore = create((set, get) => ({
         {
           name: 'daily test',
           gcm: 'MIROC6',
-          experiment: 'historical',
+          experiment: 'ssp370',
           member: 'r1i1p1f1',
           timescale: 'day',
           method: 'BCSD',
           variables: ['tasmax'],
-          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_daily/MIROC6/ssp370/tasmax/40.0_50.0_-125.0_-115.0/1981_2010/1981_2099/.pyr',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/testing_results/pyramid_daily/MIROC6/ssp370/tasmax/-90.0_90.0_-180.0_180.0/1990_1990/2020_2020/.pyr',
         },
         {
           name: 'monthly test',
           gcm: 'MIROC6',
-          experiment: 'historical',
+          experiment: 'ssp370',
           member: 'r1i1p1f1',
           timescale: 'month',
           method: 'BCSD',
           variables: ['tasmax'],
-          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_monthly/MIROC6/ssp370/tasmax/40.0_50.0_-125.0_-115.0/1981_2010/1981_2099/.pyr',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/testing_results/pyramid_monthly/MIROC6/ssp370/tasmax/-90.0_90.0_-180.0_180.0/1990_1990/2020_2020/.pyr',
         },
         {
           name: 'yearly test',
           gcm: 'MIROC6',
-          experiment: 'historical',
+          experiment: 'ssp370',
           member: 'r1i1p1f1',
           timescale: 'year',
           method: 'BCSD',
           variables: ['tasmax'],
-          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_annual/MIROC6/ssp370/tasmax/40.0_50.0_-125.0_-115.0/1981_2010/1981_2099/.pyr',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/testing_results/pyramid_annual/MIROC6/ssp370/tasmax/-90.0_90.0_-180.0_180.0/1990_1990/2020_2020/.pyr',
         },
       ],
     }
