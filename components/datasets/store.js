@@ -61,7 +61,7 @@ export const useDatasetsStore = create((set, get) => ({
         'This catalog represents the complete web-optimized archive for CarbonPlan\u2019s CMIP6 downscaled data archive. See https://github.com/carbonplan/cmip6-downscaling for more details.',
       datasets: [
         {
-          name: 'daily test',
+          name: 'BCSD daily',
           gcm: 'MIROC6',
           experiment: 'ssp370',
           member: 'r1i1p1f1',
@@ -71,7 +71,7 @@ export const useDatasetsStore = create((set, get) => ({
           uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/testing_results/pyramid_daily/MIROC6/ssp370/tasmax/-90.0_90.0_-180.0_180.0/1990_1990/2020_2020/.pyr',
         },
         {
-          name: 'monthly test',
+          name: 'BCSD monthly',
           gcm: 'MIROC6',
           experiment: 'ssp370',
           member: 'r1i1p1f1',
@@ -81,7 +81,7 @@ export const useDatasetsStore = create((set, get) => ({
           uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/testing_results/pyramid_monthly/MIROC6/ssp370/tasmax/-90.0_90.0_-180.0_180.0/1990_1990/2020_2020/.pyr',
         },
         {
-          name: 'yearly test',
+          name: 'BCSD yearly',
           gcm: 'MIROC6',
           experiment: 'ssp370',
           member: 'r1i1p1f1',
@@ -89,6 +89,36 @@ export const useDatasetsStore = create((set, get) => ({
           method: 'BCSD',
           variables: ['tasmax'],
           uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/testing_results/pyramid_annual/MIROC6/ssp370/tasmax/-90.0_90.0_-180.0_180.0/1990_1990/2020_2020/.pyr',
+        },
+        {
+          name: 'GARD daily',
+          gcm: 'MIROC6',
+          experiment: 'ssp370',
+          member: 'r1i1p1f1',
+          timescale: 'day',
+          method: 'GARD',
+          variables: ['tasmax'],
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_daily/gard/MIROC6/ssp370/pr_tasmax_tasmin/-90.0_90.0_-180.0_180.0/2010_2010/2099_2099/tasmax.pyr',
+        },
+        {
+          name: 'GARD monthly',
+          gcm: 'MIROC6',
+          experiment: 'ssp370',
+          member: 'r1i1p1f1',
+          timescale: 'month',
+          method: 'GARD',
+          variables: ['tasmax'],
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_monthly/gard/MIROC6/ssp370/pr_tasmax_tasmin/-90.0_90.0_-180.0_180.0/2010_2010/2099_2099/tasmax.pyr',
+        },
+        {
+          name: 'GARD yearly',
+          gcm: 'MIROC6',
+          experiment: 'ssp370',
+          member: 'r1i1p1f1',
+          timescale: 'year',
+          method: 'GARD',
+          variables: ['tasmax'],
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results_testing/pyramid_annual/gard/MIROC6/ssp370/pr_tasmax_tasmin/-90.0_90.0_-180.0_180.0/2010_2010/2099_2099/tasmax.pyr',
         },
       ],
     }
