@@ -61,6 +61,16 @@ export const useDatasetsStore = create((set, get) => ({
         'This catalog represents the complete web-optimized archive for CarbonPlan\u2019s CMIP6 downscaled data archive. See https://github.com/carbonplan/cmip6-downscaling for more details.',
       datasets: [
         {
+          name: 'yearly test',
+          gcm: 'MIROC6',
+          experiment: 'historical',
+          member: 'r1i1p1f1',
+          timescale: 'year',
+          method: 'BCSD',
+          variables: ['tasmax'],
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/prefect_results/pyramid_annual/MIROC6/ssp370/tasmax/40.0_50.0_80.0_90.0/1981_2010/1981_2099/.pyr',
+        },
+        {
           name: 'BCSD daily',
           gcm: 'MIROC6',
           experiment: 'ssp370',
