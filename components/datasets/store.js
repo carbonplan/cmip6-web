@@ -61,7 +61,7 @@ export const useDatasetsStore = create((set, get) => ({
         'This catalog represents the complete web-optimized archive for CarbonPlan\u2019s CMIP6 downscaled data archive. See https://github.com/carbonplan/cmip6-downscaling for more details.',
       datasets: [
         {
-          name: 'yearly test',
+          name: 'full time BCSD',
           gcm: 'MIROC6',
           experiment: 'historical',
           member: 'r1i1p1f1',
