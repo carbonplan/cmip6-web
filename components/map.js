@@ -6,7 +6,7 @@ import { useDatasetsStore } from './datasets'
 import { useRegionStore } from './region'
 import DatasetRaster from './dataset-raster'
 
-const bucket = 'https://storage.googleapis.com/carbonplan-share/'
+const bucket = 'https://storage.googleapis.com/carbonplan-maps/'
 
 const MapWrapper = ({ children, setLoading }) => {
   const { theme } = useThemeUI()
@@ -21,7 +21,7 @@ const MapWrapper = ({ children, setLoading }) => {
     <Map zoom={0} center={[0, 0]} debug={false} setLoading={setLoading}>
       <Line
         color={theme.rawColors.primary}
-        source={bucket + 'maps-demo/land'}
+        source={bucket + 'basemaps/land'}
         variable={'land'}
       />
       {showRegionPicker && (
