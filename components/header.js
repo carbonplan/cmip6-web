@@ -4,9 +4,10 @@ import {
   Guide,
   Dimmer,
   Header as HeaderComponent,
+  Settings,
 } from '@carbonplan/components'
 
-const Header = () => {
+const Header = ({ expanded, setExpanded }) => {
   return (
     <>
       <Meta
@@ -19,11 +20,35 @@ const Header = () => {
         <Guide color='teal' />
       </Container>
 
-      <Box sx={{ position: 'absolute', top: 0, width: '100%', zIndex: 5000 }}>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          width: '100%',
+          borderWidth: 0,
+          borderStyle: ['solid', 'solid', 'none', 'none'],
+          borderColor: ['muted', 'muted', 'unset', 'unset'],
+          borderBottomWidth: ['1px', '1px', 'unset', 'unset'],
+          bg: ['background', 'background', 'unset', 'unset'],
+          position: 'sticky',
+          top: 0,
+          height: '56px',
+          zIndex: 5000,
+        }}
+      >
         <Container>
           <HeaderComponent
             menuItems={[
               <Dimmer key='dimmer' sx={{ mt: '-2px', color: 'primary' }} />,
+              <Settings
+                key='settings'
+                sx={{
+                  mr: ['2px'],
+                  display: ['inherit', 'inherit', 'none', 'none'],
+                }}
+                value={expanded}
+                onClick={() => setExpanded((prev) => !prev)}
+              />,
             ]}
           />
         </Container>

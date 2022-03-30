@@ -1,9 +1,11 @@
-import { Box, Container, Divider } from 'theme-ui'
+import { Box, Container, Divider, Flex } from 'theme-ui'
+import { useBreakpointIndex } from '@theme-ui/match-media'
 import { Group } from '@carbonplan/components'
 import { Sidebar } from '@carbonplan/layouts'
 import { useState } from 'react'
 
 import Header from '../components/header'
+import MobileSettings from '../components/mobile-settings'
 import {
   AboutSection,
   DisplaySection,
@@ -37,13 +39,35 @@ const sx = {
 }
 
 const Tool = () => {
-  const [expanded, setExpanded] = useState(true)
+  const index = useBreakpointIndex({ defaultIndex: 2 })
+  const [expanded, setExpanded] = useState(index >= 2)
   const [loading, setLoading] = useState(false)
   const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
 
+  const inner = (
+    <Group spacing={4}>
+      <Box sx={sx.description}>
+        This explorer lets you browse a catalog of climate data. Use the panels
+        below to select datasets, variables, and times.
+      </Box>
+
+      <Divider sx={{ my: 4 }} />
+
+      <QuerySection sx={sx} />
+
+      <Divider sx={{ my: 4 }} />
+
+      <DisplaySection sx={sx} />
+
+      <Divider sx={{ my: 4 }} />
+
+      <AboutSection sx={sx} />
+    </Group>
+  )
+
   return (
     <>
-      <Header />
+      <Header expanded={expanded} setExpanded={setExpanded} />
       <Box
         sx={{
           position: 'absolute',
@@ -56,39 +80,31 @@ const Tool = () => {
       >
         <Map setLoading={setLoading}>
           <Container>
-            <Sidebar
-              expanded={expanded}
-              setExpanded={setExpanded}
-              tooltip='Data browser'
-              side='left'
-              width={4}
-              onClose={closeRegionPicker}
-              footer={
-                <>
-                  <RegionSection sx={sx} />
-                  <TimeSection sx={sx} />
-                </>
-              }
-            >
-              <Group spacing={4}>
-                <Box sx={sx.description}>
-                  This explorer lets you browse a catalog of climate data. Use
-                  the panels below to select datasets, variables, and times.
-                </Box>
-
-                <Divider sx={{ my: 4 }} />
-
-                <QuerySection sx={sx} />
-
-                <Divider sx={{ my: 4 }} />
-
-                <DisplaySection sx={sx} />
-
-                <Divider sx={{ my: 4 }} />
-
-                <AboutSection sx={sx} />
-              </Group>
-            </Sidebar>
+            {index < 2 ? (
+              <MobileSettings
+                expanded={expanded}
+                footer={<TimeSection sx={sx} />}
+              >
+                {inner}
+              </MobileSettings>
+            ) : (
+              <Sidebar
+                expanded={expanded}
+                setExpanded={setExpanded}
+                tooltip='Data browser'
+                side='left'
+                width={4}
+                onClose={closeRegionPicker}
+                footer={
+                  <>
+                    <RegionSection sx={sx} />
+                    <TimeSection sx={sx} />
+                  </>
+                }
+              >
+                {inner}
+              </Sidebar>
+            )}
 
             <LoadingStates loading={loading} expanded={expanded} />
           </Container>
