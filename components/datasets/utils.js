@@ -46,25 +46,18 @@ const countUniqueValues = (datasets, attribute) => {
   return Object.keys(counts).length
 }
 
-export const getSelectedShortNames = (datasets) => {
-  let uniqueIdentifiers
-  if (
-    Object.keys(datasets || {}).filter((key) => datasets[key].selected)
-      .length === 1
-  ) {
-    uniqueIdentifiers = ['gcm']
-  } else {
-    uniqueIdentifiers = ['gcm', 'method', 'experiment'].filter(
-      (identifier) => countUniqueValues(datasets, identifier) > 1
-    )
+const EXPERIMENTS = {
+  ssp245: 'SSP2-4.5',
+  ssp370: 'SSP3-7.0',
+  ssp585: 'SSP5-8.5',
+}
+export const getShortName = (dataset, filters) => {
+  const { experiment, gcm, method } = dataset
+
+  const attributes = [gcm, method]
+  if (!filters.experiment.historical) {
+    attributes.push(EXPERIMENTS[experiment])
   }
 
-  const result = {}
-  for (const name in datasets) {
-    result[name] = uniqueIdentifiers
-      .map((identifier) => datasets[name][identifier])
-      .join('.')
-  }
-
-  return result
+  return attributes.join(' ')
 }

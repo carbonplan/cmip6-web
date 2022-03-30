@@ -9,6 +9,7 @@ import {
   COLORMAP_COLORS,
   DEFAULT_COLORMAPS,
   useDatasetsStore,
+  getShortName,
 } from '../../datasets'
 import { useRegionStore } from '../../region'
 import CustomCheckbox from '../../custom-checkbox'
@@ -17,19 +18,20 @@ const Dataset = ({ name, last }) => {
   const anyActive = useDatasetsStore((state) => !!state.active)
   const active = useDatasetsStore((state) => state.active === name)
   const setActive = useDatasetsStore((state) => state.setActive)
-  const { colormapName, selected } = useDatasetsStore(
-    (state) => state.datasets[name],
-    shallow
-  )
-  const variable = useDatasetsStore((state) => state.filters.variable)
+  const dataset = useDatasetsStore((state) => state.datasets[name], shallow)
+  const filters = useDatasetsStore((state) => state.filters)
   const selectDataset = useDatasetsStore((state) => state.selectDataset)
   const deselectDataset = useDatasetsStore((state) => state.deselectDataset)
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const openRegionPicker = useRegionStore((state) => state.openRegionPicker)
+  const { selected } = dataset
+
+  const activeColor =
+    COLORMAP_COLORS[dataset.colormapName || DEFAULT_COLORMAPS[filters.variable]]
 
   let color = 'secondary'
   if (active) {
-    color = COLORMAP_COLORS[colormapName]
+    color = activeColor
   } else if (selected) {
     color = 'text'
   }
@@ -57,14 +59,13 @@ const Dataset = ({ name, last }) => {
             transition: 'color 0.15s',
             '@media (hover: hover) and (pointer: fine)': {
               '&:hover': {
-                color:
-                  COLORMAP_COLORS[colormapName || DEFAULT_COLORMAPS[variable]],
+                color: activeColor,
               },
             },
           }}
           htmlFor={name}
         >
-          {name}
+          {getShortName(dataset, filters)}
         </Label>
       </Column>
       <Column start={4} width={1}>
