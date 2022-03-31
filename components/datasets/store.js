@@ -10,7 +10,7 @@ const DEFAULT_DISPLAY_TIMES = {
 }
 
 const TIMESCALES = {
-  'daily-summary': 'day',
+  raw: 'day',
   'monthly-summary': 'month',
   'annual-summary': 'year',
 }
