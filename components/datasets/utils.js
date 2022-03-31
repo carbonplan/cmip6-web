@@ -1,6 +1,6 @@
 export const getFiltersCallback = (filters) => {
   return (d) =>
-    d.variables.some((v) => v === filters.variable) &&
+    d.variable === filters.variable &&
     d.timescale === filters.timescale &&
     filters.experiment[d.experiment] &&
     filters.gcm[d.gcm] &&
