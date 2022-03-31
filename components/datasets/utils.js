@@ -7,6 +7,14 @@ export const getFiltersCallback = (filters) => {
     filters.method[d.method]
 }
 
+export const areSiblings = (d1, d2) => {
+  return (
+    d1.experiment === d2.experiment &&
+    d1.gcm === d2.gcm &&
+    d1.method === d2.method
+  )
+}
+
 export const DEFAULT_COLORMAPS = {
   tasmax: 'warm',
   tasmin: 'warm',

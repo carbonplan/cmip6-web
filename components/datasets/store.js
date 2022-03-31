@@ -2,7 +2,7 @@ import create from 'zustand'
 import zarr from 'zarr-js'
 
 import DateStrings from './date-strings'
-import { getDatasetDisplay, getFiltersCallback } from './utils'
+import { areSiblings, getDatasetDisplay, getFiltersCallback } from './utils'
 
 const DEFAULT_DISPLAY_TIMES = {
   HISTORICAL: { year: 1950, month: 1, day: 1 },
@@ -147,23 +147,39 @@ export const useDatasetsStore = create((set, get) => ({
       }
     }),
   setFilters: (value) =>
-    set(({ active, displayTime, filters, datasets }) => {
+    set(({ active, displayTime, filters, datasets, selectDataset }) => {
       const updatedFilters = { ...filters, ...value }
       const cb = getFiltersCallback(updatedFilters)
       let updatedActive = active
       const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
         const dataset = datasets[k]
         const visible = cb(dataset)
+        let selected = false
         let displayUpdates = {}
+
         if (visible) {
+          selected = dataset.selected
           displayUpdates = getDatasetDisplay(dataset, updatedFilters, true)
-        } else if (active === k) {
+          if (active && areSiblings(dataset, datasets[active])) {
+            updatedActive = k
+          }
+
+          if (
+            !dataset.selected &&
+            Object.values(datasets).find(
+              (s) => s.selected && areSiblings(dataset, s)
+            )
+          ) {
+            selectDataset(k)
+            selected = true
+          }
+        } else if (updatedActive === k) {
           updatedActive = null
         }
         accum[k] = {
           ...dataset,
           ...displayUpdates,
-          selected: visible && dataset.selected,
+          selected,
         }
         return accum
       }, {})
