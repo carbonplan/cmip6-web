@@ -38,7 +38,7 @@ const Dataset = ({ name, last }) => {
 
   return (
     <Row
-      columns={[4]}
+      columns={[6, 8, 4, 4]}
       sx={{
         pt: '4px',
         mb: '1px',
@@ -48,7 +48,7 @@ const Dataset = ({ name, last }) => {
           : 'none',
       }}
     >
-      <Column start={1} width={3}>
+      <Column start={1} width={[4, 7, 3, 3]}>
         <Label
           sx={{
             color,
@@ -68,7 +68,7 @@ const Dataset = ({ name, last }) => {
           {getShortName(dataset, filters)}
         </Label>
       </Column>
-      <Column start={4} width={1}>
+      <Column start={[5, 8, 4, 4]} width={[2, 1, 1, 1]}>
         <Box sx={{ mt: '-8px', mr: '2px', float: 'right' }}>
           <Box sx={{ position: 'relative', top: '4px' }}>
             <Label

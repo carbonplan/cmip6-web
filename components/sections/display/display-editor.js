@@ -20,8 +20,8 @@ const DisplayEditor = ({ sx }) => {
     updateDatasetDisplay(name, { clim: setter(clim) })
   }
   return (
-    <Row columns={4}>
-      <Column start={1} width={2}>
+    <Row columns={[6, 8, 4, 4]}>
+      <Column start={1} width={[6, 4, 2, 2]}>
         <Box sx={{ ...sx.label, mb: 2 }}>
           Colormap
           <Select
@@ -51,7 +51,7 @@ const DisplayEditor = ({ sx }) => {
         </Box>
       </Column>
 
-      <Column start={3} width={2}>
+      <Column start={[1, 1, 3, 3]} width={[6, 4, 2, 2]}>
         <Box>
           <Box sx={{ ...sx.label, mb: '5px' }}>Color range</Box>
           <Colorbar
