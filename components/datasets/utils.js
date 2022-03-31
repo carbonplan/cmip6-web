@@ -22,9 +22,9 @@ export const DEFAULT_COLORMAPS = {
 }
 
 const DEFAULT_CLIMS = {
-  tasmax: [200, 320],
-  tasmin: [200, 300],
-  pr: [0, 0.0004],
+  tasmax: { day: [200, 320], month: [200, 320], year: [200, 320] },
+  tasmin: { day: [200, 300], month: [200, 300], year: [200, 300] },
+  pr: { day: [0, 0.0004], month: [0, 0.0004], year: [0, 0.01] },
 }
 
 export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
@@ -35,7 +35,7 @@ export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
   }
 
   if (!clim || forceUpdate) {
-    clim = DEFAULT_CLIMS[filters.variable]
+    clim = DEFAULT_CLIMS[filters.variable][filters.timescale]
   }
 
   return { colormapName, clim }
