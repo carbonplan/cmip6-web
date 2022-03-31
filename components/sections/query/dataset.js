@@ -1,6 +1,9 @@
-import { Box, Label } from 'theme-ui'
+import { useState } from 'react'
+import { Box, Flex, IconButton, Label } from 'theme-ui'
+import { alpha } from '@theme-ui/color'
 import { Row, Column } from '@carbonplan/components'
-import { Check, Search, X } from '@carbonplan/icons'
+import { Check, Info, Search, X } from '@carbonplan/icons'
+import AnimateHeight from 'react-animate-height'
 import shallow from 'zustand/shallow'
 
 import Eye from './icons/eye'
@@ -13,8 +16,10 @@ import {
 } from '../../datasets'
 import { useRegionStore } from '../../region'
 import CustomCheckbox from '../../custom-checkbox'
+import DatasetInfo from './dataset-info'
 
 const Dataset = ({ name, last }) => {
+  const [expanded, setExpanded] = useState(false)
   const anyActive = useDatasetsStore((state) => !!state.active)
   const active = useDatasetsStore((state) => state.active === name)
   const setActive = useDatasetsStore((state) => state.setActive)
@@ -37,8 +42,7 @@ const Dataset = ({ name, last }) => {
   }
 
   return (
-    <Row
-      columns={[6, 8, 4, 4]}
+    <Box
       sx={{
         pt: '4px',
         mb: '1px',
@@ -48,77 +52,116 @@ const Dataset = ({ name, last }) => {
           : 'none',
       }}
     >
-      <Column start={1} width={[4, 7, 3, 3]}>
-        <Label
-          sx={{
-            color,
-            cursor: 'pointer',
-            fontFamily: 'faux',
-            letterSpacing: 'faux',
-            fontSize: [1, 1, 1, 2],
-            transition: 'color 0.15s',
-            '@media (hover: hover) and (pointer: fine)': {
-              '&:hover': {
-                color: activeColor,
-              },
-            },
-          }}
-          htmlFor={name}
-        >
-          {getShortName(dataset, filters)}
-        </Label>
-      </Column>
-      <Column start={[5, 8, 4, 4]} width={[2, 1, 1, 1]}>
-        <Box sx={{ mt: '-8px', mr: '2px', float: 'right' }}>
-          <Box sx={{ position: 'relative', top: '4px' }}>
-            <Label
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[4, 7, 3, 3]}>
+          <Flex sx={{ gap: 2 }}>
+            <IconButton
+              onClick={() => setExpanded(!expanded)}
+              role='checkbox'
+              aria-checked={expanded}
+              aria-label='Information'
               sx={{
-                width: 'inherit',
-                display: 'inline-block',
-                position: 'relative',
-                mr: 2,
+                cursor: 'pointer',
+                height: '18px',
+                width: '18px',
+                '@media (hover: hover) and (pointer: fine)': {
+                  '&:hover > #info': {
+                    stroke: color,
+                  },
+                },
+                p: [0],
               }}
             >
-              <CustomCheckbox
-                uncheckedIcon={Search}
-                checkedIcon={Check}
-                checkedHoverIcon={X}
-                checked={selected}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    selectDataset(name)
-                    if (!anyActive) setActive(name)
-                    openRegionPicker()
-                  } else {
-                    deselectDataset(name)
-                    setRegionData(name, null)
-                  }
+              <Info
+                id='info'
+                height='18px'
+                width='18px'
+                sx={{
+                  stroke: expanded ? color : alpha(color, 0.25),
+                  transition: '0.1s',
+                  transform: 'translate(0px, 2px)',
                 }}
               />
-            </Label>
+            </IconButton>
             <Label
               sx={{
-                width: 'inherit',
-                display: 'inline-block',
-                position: 'relative',
+                color,
+                cursor: 'pointer',
+                fontFamily: 'faux',
+                letterSpacing: 'faux',
+                fontSize: [1, 1, 1, 2],
+                transition: 'color 0.15s',
+                '@media (hover: hover) and (pointer: fine)': {
+                  '&:hover': {
+                    color: activeColor,
+                  },
+                },
               }}
+              htmlFor={name}
             >
-              <CustomCheckbox
-                id={name}
-                uncheckedIcon={Eye}
-                checkedIcon={EyeFilled}
-                checked={active}
-                onChange={(e) => {
-                  if (e.target.checked && !active) {
-                    setActive(name)
-                  }
-                }}
-              />
+              {getShortName(dataset, filters)}
             </Label>
+          </Flex>
+        </Column>
+        <Column start={[5, 8, 4, 4]} width={[2, 1, 1, 1]}>
+          <Box sx={{ mt: '-8px', mr: '2px', float: 'right' }}>
+            <Box sx={{ position: 'relative', top: '4px' }}>
+              <Label
+                sx={{
+                  width: 'inherit',
+                  display: 'inline-block',
+                  position: 'relative',
+                  mr: 2,
+                }}
+              >
+                <CustomCheckbox
+                  uncheckedIcon={Search}
+                  checkedIcon={Check}
+                  checkedHoverIcon={X}
+                  checked={selected}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      selectDataset(name)
+                      if (!anyActive) setActive(name)
+                      openRegionPicker()
+                    } else {
+                      deselectDataset(name)
+                      setRegionData(name, null)
+                    }
+                  }}
+                />
+              </Label>
+              <Label
+                sx={{
+                  width: 'inherit',
+                  display: 'inline-block',
+                  position: 'relative',
+                }}
+              >
+                <CustomCheckbox
+                  id={name}
+                  uncheckedIcon={Eye}
+                  checkedIcon={EyeFilled}
+                  checked={active}
+                  onChange={(e) => {
+                    if (e.target.checked && !active) {
+                      setActive(name)
+                    }
+                  }}
+                />
+              </Label>
+            </Box>
           </Box>
-        </Box>
-      </Column>
-    </Row>
+        </Column>
+      </Row>
+      <AnimateHeight
+        duration={100}
+        height={expanded ? 'auto' : 0}
+        easing={'linear'}
+      >
+        {expanded && <DatasetInfo dataset={dataset} color={color} />}
+      </AnimateHeight>
+    </Box>
   )
 }
 
