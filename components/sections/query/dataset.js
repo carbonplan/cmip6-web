@@ -52,7 +52,7 @@ const Dataset = ({ name, last }) => {
       }}
     >
       <Row columns={[6, 8, 4, 4]}>
-        <Column start={1} width={[4, 7, 3, 3]}>
+        <Column start={1} width={[4, 6, 2, 3]}>
           <Label
             sx={{
               cursor: 'pointer',
@@ -72,7 +72,7 @@ const Dataset = ({ name, last }) => {
             {getShortName(dataset, filters)}
           </Label>
         </Column>
-        <Column start={[5, 8, 4, 4]} width={[2, 1, 1, 1]}>
+        <Column start={[5, 7, 3, 4]} width={[2, 2, 2, 1]}>
           <Box sx={{ mt: '-8px', mr: '2px', float: 'right' }}>
             <Box sx={{ position: 'relative', top: '4px' }}>
               <Label
