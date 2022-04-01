@@ -59,8 +59,6 @@ const DisplayEditor = ({ sx }) => {
             colormap={colormap}
             clim={clim}
             setClim={setClim}
-            setClimStep={variable === 'pr' ? 0.0001 : 1}
-            format={(d) => (variable === 'pr' ? d.toFixed(4) : d)}
             horizontal
             width={'100%'}
             sxClim={{ fontSize: [1, 1, 1, 2], mt: ['-1px'], pb: ['2px'] }}

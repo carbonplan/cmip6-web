@@ -24,7 +24,7 @@ export const DEFAULT_COLORMAPS = {
 const DEFAULT_CLIMS = {
   tasmax: { day: [200, 320], month: [200, 320], year: [200, 320] },
   tasmin: { day: [200, 300], month: [200, 300], year: [200, 300] },
-  pr: { day: [0, 0.0004], month: [0, 0.0004], year: [0, 0.01] },
+  pr: { day: [0, 5], month: [0, 150], year: [0, 2000] },
 }
 
 export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
