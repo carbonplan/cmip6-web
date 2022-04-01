@@ -41,19 +41,6 @@ export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
   return { colormapName, clim }
 }
 
-const countUniqueValues = (datasets, attribute) => {
-  const counts = {}
-  for (const name in datasets) {
-    if (datasets[name].selected) {
-      const value = datasets[name][attribute]
-      counts[value] ||= 0
-      counts[value] += 1
-    }
-  }
-
-  return Object.keys(counts).length
-}
-
 const EXPERIMENTS = {
   ssp245: 'SSP2-4.5',
   ssp370: 'SSP3-7.0',
