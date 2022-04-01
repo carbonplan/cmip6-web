@@ -29,7 +29,7 @@ const getInitialDatasets = (data, attrs) => {
       loaded: false,
       colormapName: null,
       clim: null,
-      ...attrs,
+      era5: dataset.experiment_id === 'reanalysis',
     }
     return accum
   }, {})
@@ -61,20 +61,13 @@ export const useDatasetsStore = create((set, get) => ({
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   updatingTime: false,
   fetchDatasets: async () => {
-    const results = await Promise.all([
-      fetch(
-        'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/cmip6/cmip6-pyramids-catalog-web.json'
-      ),
-      fetch(
-        'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/era5/era5-pyramids-catalog-web.json'
-      ),
-    ])
-    const data = await Promise.all(results.map((r) => r.json()))
+    const result = await fetch(
+      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/combined-cmip6-era5-pyramids-catalog-web.json'
+    )
 
-    const datasets = {
-      ...getInitialDatasets(data[0]),
-      ...getInitialDatasets(data[1], { era5: true }),
-    }
+    const data = await result.json()
+
+    const datasets = getInitialDatasets(data)
     const filters = getInitialFilters(datasets)
 
     set({ datasets, filters })
