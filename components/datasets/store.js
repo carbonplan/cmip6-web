@@ -5,7 +5,7 @@ import DateStrings from './date-strings'
 import { areSiblings, getDatasetDisplay, getFiltersCallback } from './utils'
 
 const DEFAULT_DISPLAY_TIMES = {
-  HISTORICAL: { year: 1950, month: 1, day: 1 },
+  HISTORICAL: { year: 1980, month: 1, day: 1 },
   PROJECTED: { year: 2015, month: 1, day: 1 },
 }
 
@@ -17,7 +17,7 @@ const getInitialDatasets = (data) => {
       variable: dataset.variable_id,
       gcm: dataset.source_id,
       method: dataset.method,
-      experiment: dataset.experiment_id,
+      experiment: dataset.experiment_id ?? 'historical',
       timescale: dataset.timescale,
       original_dataset_uris: dataset.original_dataset_uris,
       institution: dataset.institution_id,
@@ -38,7 +38,7 @@ const getInitialFilters = (datasets) => {
   return Object.keys(datasets).reduce(
     (accum, name) => {
       const ds = datasets[name]
-      accum.experiment[ds.experiment] = accum.experiment[ds.experiment] ?? true
+      accum.experiment[ds.experiment] = accum.experiment[ds.experiment] ?? false
       accum.gcm[ds.gcm] = true
       accum.method[ds.method] = true
       return accum
@@ -46,7 +46,7 @@ const getInitialFilters = (datasets) => {
     {
       variable: 'tasmax',
       timescale: 'year',
-      experiment: { historical: false },
+      experiment: { historical: true },
       gcm: {},
       method: {},
     }
