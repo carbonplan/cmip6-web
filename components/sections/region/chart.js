@@ -68,6 +68,7 @@ const ChartWrapper = ({ data }) => {
   const [hovered, setHovered] = useState(null)
   const activeDataset = useDatasetsStore((state) => state.active)
   const datasets = useDatasetsStore((state) => state.datasets)
+  const variable = useDatasetsStore((state) => state.filters.variable)
   const display = useDatasetsStore((state) => state.displayTime)
 
   // By default, use active dataset as primary dataset (reference for dateStrings and timescale)
@@ -156,6 +157,12 @@ const ChartWrapper = ({ data }) => {
     }, [])
 
   const loading = data.some(([name, value]) => !value)
+  const units = (
+    <Box as='span' sx={{ textTransform: 'none' }}>
+      {variable === 'pr' ? 'mm' : 'K'}
+    </Box>
+  )
+
   return (
     <Box
       sx={{
@@ -199,7 +206,8 @@ const ChartWrapper = ({ data }) => {
                 color: 'secondary',
               }}
             >
-              ({dateStrings.formatTick(displayTime)}, {formatValue(label[1])}K)
+              ({dateStrings.formatTick(displayTime)}, {formatValue(label[1])}
+              {units})
             </Box>
           </Box>
         )}

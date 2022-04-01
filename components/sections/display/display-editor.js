@@ -54,7 +54,13 @@ const DisplayEditor = ({ sx }) => {
 
       <Column start={[1, 1, 3, 3]} width={[6, 4, 2, 2]}>
         <Box>
-          <Box sx={{ ...sx.label, mb: '5px' }}>Color range</Box>
+          <Box sx={{ ...sx.label, mb: '5px' }}>
+            Color range (
+            <Box as='span' sx={{ textTransform: 'none' }}>
+              {variable === 'pr' ? 'mm' : 'K'}
+            </Box>
+            )
+          </Box>
           <Colorbar
             colormap={colormap}
             clim={clim}
