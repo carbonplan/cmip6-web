@@ -72,6 +72,21 @@ const DatasetInfo = ({ dataset, color }) => {
       >
         <Box as='table' sx={{ display: 'block' }}>
           <Box as='tbody' sx={{ display: 'block' }}>
+            {dataset.era5 && (
+              <Row as='tr' columns={[6, 8, 4, 4]} sx={sx.row}>
+                <Column as='td' start={[1]} width={[3, 2, 2, 2]} sx={sx.index}>
+                  Reanalysis
+                </Column>
+                <Column
+                  as='td'
+                  start={[4, 3, 3, 3]}
+                  width={[3, 2, 2, 3]}
+                  sx={sx.entry}
+                >
+                  ERA5
+                </Column>
+              </Row>
+            )}
             <Row as='tr' columns={[6, 8, 4, 4]} sx={sx.row}>
               <Column as='td' start={[1]} width={[3, 2, 2, 2]} sx={sx.index}>
                 Institution

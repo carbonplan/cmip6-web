@@ -46,7 +46,6 @@ const getInitialFilters = (datasets) => {
     },
     {
       variable: 'tasmax',
-      observational: true,
       timescale: 'year',
       experiment: { historical: false },
       gcm: {},

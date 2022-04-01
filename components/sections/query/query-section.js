@@ -211,21 +211,6 @@ const Filters = ({ sx }) => {
           />
         </Column>
       </Row>
-
-      <Row columns={[6, 8, 4, 4]}>
-        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
-          Observational
-        </Column>
-        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <Filter
-            values={{
-              include: filters.observational,
-              exclude: !filters.observational,
-            }}
-            setValues={(obj) => setFilters({ observational: obj.include })}
-          />
-        </Column>
-      </Row>
     </>
   )
 }

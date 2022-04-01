@@ -5,11 +5,7 @@ export const getFiltersCallback = (filters) => {
     }
 
     if (d.era5) {
-      if (!filters.observational) {
-        return false
-      } else {
-        return filters.experiment[d.experiment]
-      }
+      return filters.experiment[d.experiment]
     } else {
       return (
         filters.experiment[d.experiment] &&
@@ -76,7 +72,7 @@ export const getShortName = (dataset, filters) => {
   const { experiment, gcm, method, era5 } = dataset
 
   if (era5) {
-    return 'ERA5'
+    return 'Observational*'
   }
 
   const attributes = [gcm, method]
