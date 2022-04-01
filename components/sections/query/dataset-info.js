@@ -85,19 +85,21 @@ const DatasetInfo = ({ dataset, color }) => {
                 {dataset.institution}
               </Column>
             </Row>
-            <Row as='tr' columns={[6, 8, 4, 4]} sx={sx.row}>
-              <Column as='td' start={[1]} width={[3, 2, 2, 2]} sx={sx.index}>
-                Member
-              </Column>
-              <Column
-                as='td'
-                start={[4, 3, 3, 3]}
-                width={[3, 2, 2, 3]}
-                sx={sx.entry}
-              >
-                {dataset.member}
-              </Column>
-            </Row>
+            {dataset.member && (
+              <Row as='tr' columns={[6, 8, 4, 4]} sx={sx.row}>
+                <Column as='td' start={[1]} width={[3, 2, 2, 2]} sx={sx.index}>
+                  Member
+                </Column>
+                <Column
+                  as='td'
+                  start={[4, 3, 3, 3]}
+                  width={[3, 2, 2, 3]}
+                  sx={sx.entry}
+                >
+                  {dataset.member}
+                </Column>
+              </Row>
+            )}{' '}
             <Row as='tr' columns={[6, 8, 4, 4]} sx={sx.row}>
               <Column as='td' start={[1]} width={[3, 2, 2, 2]} sx={sx.index}>
                 Aggregation
