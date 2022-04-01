@@ -2,22 +2,35 @@ import create from 'zustand'
 import zarr from 'zarr-js'
 
 import DateStrings from './date-strings'
-import { getDatasetDisplay, getFiltersCallback } from './utils'
+import { areSiblings, getDatasetDisplay, getFiltersCallback } from './utils'
 
 const DEFAULT_DISPLAY_TIMES = {
   HISTORICAL: { year: 1950, month: 1, day: 1 },
   PROJECTED: { year: 2015, month: 1, day: 1 },
 }
+
+const TIMESCALES = {
+  raw: 'day',
+  'monthly-summary': 'month',
+  'annual-summary': 'year',
+}
+
 const getInitialDatasets = (data) => {
   return data.datasets.reduce((accum, dataset) => {
     accum[dataset.name] = {
       name: dataset.name,
       source: dataset.uri,
-      variables: dataset.variables,
-      gcm: dataset.gcm,
-      method: dataset.method,
-      experiment: dataset.experiment,
-      timescale: dataset.timescale,
+      variable: dataset.variable_id,
+      gcm: dataset.source_id,
+      method: dataset.method ?? 'Raw',
+      experiment: dataset.experiment_id,
+      timescale: TIMESCALES[dataset.kind],
+
+      original_dataset_uri: dataset.original_dataset_uri,
+      institution: dataset.institution_id,
+      aggregation: dataset.aggregation,
+      member: dataset.member_id,
+
       dateStrings: null,
       selected: false,
       loaded: false,
@@ -28,18 +41,19 @@ const getInitialDatasets = (data) => {
   }, {})
 }
 
-const getInitialFilters = (data) => {
-  return data.datasets.reduce(
-    (accum, ds) => {
-      accum.experiment[ds.experiment] = accum.experiment[ds.experiment] || false
+const getInitialFilters = (datasets) => {
+  return Object.keys(datasets).reduce(
+    (accum, name) => {
+      const ds = datasets[name]
+      accum.experiment[ds.experiment] = accum.experiment[ds.experiment] ?? true
       accum.gcm[ds.gcm] = true
       accum.method[ds.method] = true
       return accum
     },
     {
       variable: 'tasmax',
-      timescale: 'day',
-      experiment: { historical: true },
+      timescale: 'year',
+      experiment: { historical: false },
       gcm: {},
       method: {},
     }
@@ -54,14 +68,13 @@ export const useDatasetsStore = create((set, get) => ({
   updatingTime: false,
   fetchDatasets: async () => {
     const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/scratch/cmip6-web-test-8/catalog.json'
+      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/prefect_results/cmip6-pyramids/cmip6-pyramids-catalog-web.json'
     )
     const data = await result.json()
+    const datasets = getInitialDatasets(data)
+    const filters = getInitialFilters(datasets)
 
-    set({
-      datasets: getInitialDatasets(data),
-      filters: getInitialFilters(data),
-    })
+    set({ datasets, filters })
   },
   setDisplayTime: (value) => set({ displayTime: value }),
   setUpdatingTime: (value) => set({ updatingTime: value }),
@@ -134,23 +147,39 @@ export const useDatasetsStore = create((set, get) => ({
       }
     }),
   setFilters: (value) =>
-    set(({ active, displayTime, filters, datasets }) => {
+    set(({ active, displayTime, filters, datasets, selectDataset }) => {
       const updatedFilters = { ...filters, ...value }
       const cb = getFiltersCallback(updatedFilters)
       let updatedActive = active
       const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
         const dataset = datasets[k]
         const visible = cb(dataset)
+        let selected = false
         let displayUpdates = {}
+
         if (visible) {
+          selected = dataset.selected
           displayUpdates = getDatasetDisplay(dataset, updatedFilters, true)
-        } else if (active === k) {
+          if (active && areSiblings(dataset, datasets[active])) {
+            updatedActive = k
+          }
+
+          if (
+            !dataset.selected &&
+            Object.values(datasets).find(
+              (s) => s.selected && areSiblings(dataset, s)
+            )
+          ) {
+            selectDataset(k)
+            selected = true
+          }
+        } else if (updatedActive === k) {
           updatedActive = null
         }
         accum[k] = {
           ...dataset,
           ...displayUpdates,
-          selected: visible && dataset.selected,
+          selected,
         }
         return accum
       }, {})

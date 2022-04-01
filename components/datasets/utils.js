@@ -1,10 +1,18 @@
 export const getFiltersCallback = (filters) => {
   return (d) =>
-    d.variables.some((v) => v === filters.variable) &&
+    d.variable === filters.variable &&
     d.timescale === filters.timescale &&
     filters.experiment[d.experiment] &&
     filters.gcm[d.gcm] &&
     filters.method[d.method]
+}
+
+export const areSiblings = (d1, d2) => {
+  return (
+    d1.experiment === d2.experiment &&
+    d1.gcm === d2.gcm &&
+    d1.method === d2.method
+  )
 }
 
 export const DEFAULT_COLORMAPS = {
@@ -14,9 +22,9 @@ export const DEFAULT_COLORMAPS = {
 }
 
 const DEFAULT_CLIMS = {
-  tasmax: [200, 320],
-  tasmin: [200, 300],
-  pr: [0, 0.0004],
+  tasmax: { day: [200, 320], month: [200, 320], year: [200, 320] },
+  tasmin: { day: [200, 300], month: [200, 300], year: [200, 300] },
+  pr: { day: [0, 0.0004], month: [0, 0.0004], year: [0, 0.01] },
 }
 
 export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
@@ -27,7 +35,7 @@ export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
   }
 
   if (!clim || forceUpdate) {
-    clim = DEFAULT_CLIMS[filters.variable]
+    clim = DEFAULT_CLIMS[filters.variable][filters.timescale]
   }
 
   return { colormapName, clim }
@@ -46,25 +54,18 @@ const countUniqueValues = (datasets, attribute) => {
   return Object.keys(counts).length
 }
 
-export const getSelectedShortNames = (datasets) => {
-  let uniqueIdentifiers
-  if (
-    Object.keys(datasets || {}).filter((key) => datasets[key].selected)
-      .length === 1
-  ) {
-    uniqueIdentifiers = ['gcm']
-  } else {
-    uniqueIdentifiers = ['gcm', 'method', 'experiment'].filter(
-      (identifier) => countUniqueValues(datasets, identifier) > 1
-    )
+const EXPERIMENTS = {
+  ssp245: 'SSP2-4.5',
+  ssp370: 'SSP3-7.0',
+  ssp585: 'SSP5-8.5',
+}
+export const getShortName = (dataset, filters) => {
+  const { experiment, gcm, method } = dataset
+
+  const attributes = [gcm, method]
+  if (!filters.experiment.historical) {
+    attributes.push(EXPERIMENTS[experiment])
   }
 
-  const result = {}
-  for (const name in datasets) {
-    result[name] = uniqueIdentifiers
-      .map((identifier) => datasets[name][identifier])
-      .join('.')
-  }
-
-  return result
+  return attributes.join(' ')
 }

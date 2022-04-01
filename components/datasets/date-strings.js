@@ -164,10 +164,15 @@ class DateStrings {
 
   getDayRange({ year, month }) {
     const times = this.getDisplayRange({ year, month })
-    const start = times[0]
-    const end = times[times.length - 1]
 
-    return [this._indexToValues(start).day, this._indexToValues(end).day]
+    if (times.length) {
+      const start = times[0]
+      const end = times[times.length - 1]
+
+      return [this._indexToValues(start).day, this._indexToValues(end).day]
+    } else {
+      return []
+    }
   }
 }
 export default DateStrings

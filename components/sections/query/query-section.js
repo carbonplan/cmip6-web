@@ -40,8 +40,8 @@ const Results = ({ sx }) => {
 
   return (
     <>
-      <Row columns={4} sx={{ ...sx.label, mb: 3 }}>
-        <Column start={1} width={2}>
+      <Row columns={[6, 8, 4, 4]} sx={{ ...sx.label, mb: 3 }}>
+        <Column start={1} width={[6, 8, 4, 4]}>
           <Box>
             Results <Badge sx={{ ml: 4 }}>{formatNumber(results.length)}</Badge>{' '}
             <Box as='span'>/</Box>{' '}
@@ -95,11 +95,11 @@ const Filters = ({ sx }) => {
 
   return (
     <>
-      <Row columns={4}>
-        <Column start={1} width={1} sx={sx.label}>
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
           Variable
         </Column>
-        <Column start={2} width={3}>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
           <Filter
             values={variableFilter}
             setValues={(obj) => {
@@ -114,11 +114,11 @@ const Filters = ({ sx }) => {
           />
         </Column>
       </Row>
-      <Row columns={4}>
-        <Column start={1} width={1} sx={sx.label}>
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
           GCMs
         </Column>
-        <Column start={2} width={3}>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
           <ExpandableFilter
             values={filters.gcm}
             setValues={(obj) => {
@@ -128,11 +128,11 @@ const Filters = ({ sx }) => {
           />
         </Column>
       </Row>
-      <Row columns={4}>
-        <Column start={1} width={1} sx={sx.label}>
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
           Scenarios
         </Column>
-        <Column start={2} width={3}>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
           <Filter
             values={historicalFilter}
             setValues={(obj) => {
@@ -155,8 +155,8 @@ const Filters = ({ sx }) => {
           />
         </Column>
       </Row>
-      <Row columns={4}>
-        <Column start={2} width={3}>
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
           <Filter
             values={scenarioFilter}
             setValues={(obj) => {
@@ -180,11 +180,11 @@ const Filters = ({ sx }) => {
           />
         </Column>
       </Row>
-      <Row columns={4}>
-        <Column start={1} width={1} sx={sx.label}>
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
           Methods
         </Column>
-        <Column start={2} width={3}>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
           <Filter
             values={filters.method}
             setValues={(obj) => {
@@ -194,11 +194,11 @@ const Filters = ({ sx }) => {
           />
         </Column>
       </Row>
-      <Row columns={4}>
-        <Column start={1} width={1} sx={sx.label}>
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
           Timescale
         </Column>
-        <Column start={2} width={3}>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
           <Filter
             values={timescaleFilter}
             setValues={(obj) => {
