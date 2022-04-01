@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Column, Row, Button } from '@carbonplan/components'
 import { Down } from '@carbonplan/icons'
-import { Box } from 'theme-ui'
+import { Box, Flex } from 'theme-ui'
 
 const getSx = (color) => ({
   row: {
@@ -18,6 +18,7 @@ const getSx = (color) => ({
     fontFamily: 'faux',
     letterSpacing: 'faux',
     fontSize: [1, 1, 1, 2],
+    mb: 1,
   },
   entry: {
     fontSize: [1, 1, 1, 2],
@@ -62,91 +63,46 @@ const DatasetInfo = ({ dataset, color }) => {
 
   return (
     <Row columns={[6, 8, 4, 4]}>
-      <Column start={1} width={[6, 8, 4, 4]} sx={{ pt: 1 }}>
-        <Box as='table' sx={{ display: 'block' }}>
-          <Box as='tbody' sx={{ display: 'block' }}>
-            {dataset.era5 && (
-              <Row as='tr' columns={[6, 8, 4, 4]} sx={sx.row}>
-                <Column as='td' start={[1]} width={[3, 2, 2, 2]} sx={sx.index}>
-                  Reanalysis
-                </Column>
-                <Column
-                  as='td'
-                  start={[4, 3, 3, 3]}
-                  width={[3, 2, 2, 2]}
-                  sx={sx.entry}
-                >
-                  ERA5
-                </Column>
-              </Row>
-            )}
-            <Row as='tr' columns={[6, 8, 4, 4]} sx={sx.row}>
-              <Column as='td' start={[1]} width={[3, 2, 2, 2]} sx={sx.index}>
-                Institution
-              </Column>
-              <Column
-                as='td'
-                start={[4, 3, 3, 3]}
-                width={[3, 2, 2, 2]}
-                sx={sx.entry}
-              >
-                {dataset.institution}
-              </Column>
-            </Row>
-            {dataset.member && (
-              <Row as='tr' columns={[6, 8, 4, 4]} sx={sx.row}>
-                <Column as='td' start={[1]} width={[3, 2, 2, 2]} sx={sx.index}>
-                  Member
-                </Column>
-                <Column
-                  as='td'
-                  start={[4, 3, 3, 3]}
-                  width={[3, 2, 2, 2]}
-                  sx={sx.entry}
-                >
-                  {dataset.member}
-                </Column>
-              </Row>
-            )}{' '}
-            <Row as='tr' columns={[6, 8, 4, 4]} sx={sx.row}>
-              <Column as='td' start={[1]} width={[3, 2, 2, 2]} sx={sx.index}>
-                Aggregation
-              </Column>
-              <Column
-                as='td'
-                start={[4, 3, 3, 3]}
-                width={[3, 2, 2, 2]}
-                sx={sx.entry}
-              >
-                {dataset.aggregation}
-              </Column>
-            </Row>
-            <Row
-              as='tr'
-              columns={[6, 8, 4, 4]}
-              sx={{ ...sx.row, borderBottomWidth: 0 }}
-            >
-              <Column as='td' start={1} width={[6, 8, 4, 4]} sx={sx.entry}>
-                <Button
-                  prefix={<Down />}
-                  sx={{
-                    fontSize: [1, 1, 1, 2],
-                    color,
-                    '@media (hover: hover) and (pointer: fine)': {
-                      '&:hover': {
-                        color,
-                      },
-                    },
-                  }}
-                  onClick={handleClick}
-                  size='xs'
-                >
-                  {copyText}
-                </Button>
-              </Column>
-            </Row>
+      <Column start={1} width={[6, 8, 4, 4]} sx={{ py: 3 }}>
+        <Flex sx={{ gap: [4, 5, 5, 6], mb: 3 }}>
+          {dataset.era5 && (
+            <Box>
+              <Box sx={sx.index}>Reanalysis</Box>
+              <Box sx={sx.entry}>ERA5</Box>
+            </Box>
+          )}
+
+          <Box>
+            <Box sx={sx.index}>Institution</Box>
+            <Box sx={sx.entry}>{dataset.institution}</Box>
           </Box>
-        </Box>
+          {dataset.member && (
+            <Box>
+              <Box sx={sx.index}>Member</Box>
+              <Box sx={sx.entry}>{dataset.member}</Box>
+            </Box>
+          )}
+          <Box>
+            <Box sx={sx.index}>Aggregation</Box>
+            <Box sx={sx.entry}>{dataset.aggregation}</Box>
+          </Box>
+        </Flex>
+        <Button
+          prefix={<Down />}
+          sx={{
+            fontSize: [1, 1, 1, 2],
+            color,
+            '@media (hover: hover) and (pointer: fine)': {
+              '&:hover': {
+                color,
+              },
+            },
+          }}
+          onClick={handleClick}
+          size='xs'
+        >
+          {copyText}
+        </Button>
       </Column>
     </Row>
   )
