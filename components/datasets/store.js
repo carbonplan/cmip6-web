@@ -73,7 +73,7 @@ export const useDatasetsStore = create((set, get) => ({
 
     const datasets = {
       ...getInitialDatasets(data[0]),
-      ...getInitialDatasets(data[1], { era5: true, experiment: 'historical' }),
+      ...getInitialDatasets(data[1], { era5: true }),
     }
     const filters = getInitialFilters(datasets)
 

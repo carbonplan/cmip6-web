@@ -5,7 +5,7 @@ export const getFiltersCallback = (filters) => {
     }
 
     if (d.era5) {
-      return filters.experiment[d.experiment]
+      return filters.experiment.historical
     } else {
       return (
         filters.experiment[d.experiment] &&
