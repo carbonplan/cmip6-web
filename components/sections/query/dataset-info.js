@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { alpha } from '@theme-ui/color'
+
 import { Column, Row, Button } from '@carbonplan/components'
 import { Down } from '@carbonplan/icons'
 import { Box } from 'theme-ui'
@@ -8,24 +8,21 @@ const getSx = (color) => ({
   row: {
     borderStyle: 'solid',
     borderWidth: '0px',
-    borderColor: alpha(color, 0.25),
+    borderColor: color,
     borderBottomWidth: '1px',
-    py: 2,
     mb: ['2px'],
   },
   index: {
     textTransform: 'uppercase',
-    letterSpacing: 'smallcaps',
     color,
-    fontFamily: 'heading',
-    fontSize: [2, 2, 2, 3],
-  },
-  entry: {
-    fontSize: [2, 2, 2, 3],
     fontFamily: 'faux',
     letterSpacing: 'faux',
-    mb: ['1px'],
-    mt: [2, 0, 0, 0],
+    fontSize: [1, 1, 1, 2],
+  },
+  entry: {
+    fontSize: [1, 1, 1, 2],
+    fontFamily: 'faux',
+    letterSpacing: 'faux',
   },
 })
 const DatasetInfo = ({ dataset, color }) => {
@@ -55,21 +52,17 @@ const DatasetInfo = ({ dataset, color }) => {
     setTick(timeout)
   }
 
-  let copyText = 'Zarr store'
+  let copyText = 'Copy Zarr store link'
 
   if (copied) {
     copyText = 'Copied!'
   } else if (dataset.original_dataset_uris.length > 1) {
-    copyText = 'Zarr stores'
+    copyText = 'Copy Zarr store links'
   }
 
   return (
     <Row columns={[6, 8, 4, 4]}>
-      <Column
-        start={1}
-        width={[6, 8, 4, 4]}
-        sx={{ bg: alpha(color, 0.25), my: 2, py: 1, px: '24px' }}
-      >
+      <Column start={1} width={[6, 8, 4, 4]} sx={{ pt: 1 }}>
         <Box as='table' sx={{ display: 'block' }}>
           <Box as='tbody' sx={{ display: 'block' }}>
             {dataset.era5 && (
@@ -80,7 +73,7 @@ const DatasetInfo = ({ dataset, color }) => {
                 <Column
                   as='td'
                   start={[4, 3, 3, 3]}
-                  width={[3, 2, 2, 3]}
+                  width={[3, 2, 2, 2]}
                   sx={sx.entry}
                 >
                   ERA5
@@ -94,7 +87,7 @@ const DatasetInfo = ({ dataset, color }) => {
               <Column
                 as='td'
                 start={[4, 3, 3, 3]}
-                width={[3, 2, 2, 3]}
+                width={[3, 2, 2, 2]}
                 sx={sx.entry}
               >
                 {dataset.institution}
@@ -108,7 +101,7 @@ const DatasetInfo = ({ dataset, color }) => {
                 <Column
                   as='td'
                   start={[4, 3, 3, 3]}
-                  width={[3, 2, 2, 3]}
+                  width={[3, 2, 2, 2]}
                   sx={sx.entry}
                 >
                   {dataset.member}
@@ -122,7 +115,7 @@ const DatasetInfo = ({ dataset, color }) => {
               <Column
                 as='td'
                 start={[4, 3, 3, 3]}
-                width={[3, 2, 2, 3]}
+                width={[3, 2, 2, 2]}
                 sx={sx.entry}
               >
                 {dataset.aggregation}
@@ -137,7 +130,8 @@ const DatasetInfo = ({ dataset, color }) => {
                 <Button
                   prefix={<Down />}
                   sx={{
-                    color: alpha(color, 0.75),
+                    fontSize: [1, 1, 1, 2],
+                    color,
                     '@media (hover: hover) and (pointer: fine)': {
                       '&:hover': {
                         color,

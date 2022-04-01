@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Box, Flex, IconButton, Label } from 'theme-ui'
-import { alpha } from '@theme-ui/color'
+import { Box, IconButton, Label } from 'theme-ui'
 import { Row, Column } from '@carbonplan/components'
 import { Check, Info, Search, X } from '@carbonplan/icons'
 import AnimateHeight from 'react-animate-height'
@@ -54,54 +53,24 @@ const Dataset = ({ name, last }) => {
     >
       <Row columns={[6, 8, 4, 4]}>
         <Column start={1} width={[4, 7, 3, 3]}>
-          <Flex sx={{ gap: 2 }}>
-            <IconButton
-              onClick={() => setExpanded(!expanded)}
-              role='checkbox'
-              aria-checked={expanded}
-              aria-label='Information'
-              sx={{
-                cursor: 'pointer',
-                height: '18px',
-                width: '18px',
-                '@media (hover: hover) and (pointer: fine)': {
-                  '&:hover > #info': {
-                    stroke: color,
-                  },
+          <Label
+            sx={{
+              cursor: 'pointer',
+              color,
+              fontFamily: 'faux',
+              letterSpacing: 'faux',
+              fontSize: [1, 1, 1, 2],
+              transition: 'color 0.15s',
+              '@media (hover: hover) and (pointer: fine)': {
+                '&:hover': {
+                  color: activeColor,
                 },
-                p: [0],
-              }}
-            >
-              <Info
-                id='info'
-                height='18px'
-                width='18px'
-                sx={{
-                  stroke: expanded ? color : alpha(color, 0.25),
-                  transition: '0.1s',
-                  transform: 'translate(0px, 2px)',
-                }}
-              />
-            </IconButton>
-            <Label
-              sx={{
-                color,
-                cursor: 'pointer',
-                fontFamily: 'faux',
-                letterSpacing: 'faux',
-                fontSize: [1, 1, 1, 2],
-                transition: 'color 0.15s',
-                '@media (hover: hover) and (pointer: fine)': {
-                  '&:hover': {
-                    color: activeColor,
-                  },
-                },
-              }}
-              htmlFor={name}
-            >
-              {getShortName(dataset, filters)}
-            </Label>
-          </Flex>
+              },
+            }}
+            htmlFor={name}
+          >
+            {getShortName(dataset, filters)}
+          </Label>
         </Column>
         <Column start={[5, 8, 4, 4]} width={[2, 1, 1, 1]}>
           <Box sx={{ mt: '-8px', mr: '2px', float: 'right' }}>
@@ -136,6 +105,7 @@ const Dataset = ({ name, last }) => {
                   width: 'inherit',
                   display: 'inline-block',
                   position: 'relative',
+                  mr: 2,
                 }}
               >
                 <CustomCheckbox
@@ -150,6 +120,34 @@ const Dataset = ({ name, last }) => {
                   }}
                 />
               </Label>
+              <IconButton
+                onClick={() => setExpanded(!expanded)}
+                role='checkbox'
+                aria-checked={expanded}
+                aria-label='Information'
+                sx={{
+                  cursor: 'pointer',
+                  height: '16px',
+                  width: '16px',
+                  '@media (hover: hover) and (pointer: fine)': {
+                    '&:hover > #info': {
+                      stroke: 'primary',
+                    },
+                  },
+                  p: [0],
+                  transform: 'translate(0px, -4px)',
+                }}
+              >
+                <Info
+                  id='info'
+                  height='16px'
+                  width='16px'
+                  sx={{
+                    stroke: expanded ? 'primary' : 'secondary',
+                    transition: '0.1s',
+                  }}
+                />
+              </IconButton>
             </Box>
           </Box>
         </Column>
