@@ -4,14 +4,46 @@ import { Column, Row, Button } from '@carbonplan/components'
 import { Down } from '@carbonplan/icons'
 import { Box } from 'theme-ui'
 
+const getSx = (color) => ({
+  row: {
+    borderStyle: 'solid',
+    borderWidth: '0px',
+    borderColor: alpha(color, 0.25),
+    borderBottomWidth: '1px',
+    py: 2,
+    mb: ['2px'],
+  },
+  index: {
+    textTransform: 'uppercase',
+    letterSpacing: 'smallcaps',
+    color,
+    fontFamily: 'heading',
+    fontSize: [2, 2, 2, 3],
+  },
+  entry: {
+    fontSize: [2, 2, 2, 3],
+    fontFamily: 'faux',
+    letterSpacing: 'faux',
+    mb: ['1px'],
+    mt: [2, 0, 0, 0],
+  },
+})
 const DatasetInfo = ({ dataset, color }) => {
   const [copied, setCopied] = useState(false)
   const [tick, setTick] = useState(false)
+  const sx = getSx(color)
 
   const handleClick = () => {
     const blank = document.createElement('textarea')
     document.body.appendChild(blank)
-    blank.value = dataset.original_dataset_uri
+
+    if (dataset.original_dataset_uris.length === 1) {
+      blank.value = dataset.original_dataset_uris[0]
+    } else {
+      blank.value = `[${dataset.original_dataset_uris
+        .map((uri) => `"${uri}"`)
+        .join(', ')}]`
+    }
     blank.select()
     document.execCommand('copy')
     document.body.removeChild(blank)
@@ -23,29 +55,12 @@ const DatasetInfo = ({ dataset, color }) => {
     setTick(timeout)
   }
 
-  const sx = {
-    row: {
-      borderStyle: 'solid',
-      borderWidth: '0px',
-      borderColor: alpha(color, 0.25),
-      borderBottomWidth: '1px',
-      py: 2,
-      mb: ['2px'],
-    },
-    index: {
-      textTransform: 'uppercase',
-      letterSpacing: 'smallcaps',
-      color,
-      fontFamily: 'heading',
-      fontSize: [2, 2, 2, 3],
-    },
-    entry: {
-      fontSize: [2, 2, 2, 3],
-      fontFamily: 'faux',
-      letterSpacing: 'faux',
-      mb: ['1px'],
-      mt: [2, 0, 0, 0],
-    },
+  let copyText = 'Zarr store'
+
+  if (copied) {
+    copyText = 'Copied!'
+  } else if (dataset.original_dataset_uris.length > 1) {
+    copyText = 'Zarr stores'
   }
 
   return (
@@ -115,7 +130,7 @@ const DatasetInfo = ({ dataset, color }) => {
                   onClick={handleClick}
                   size='xs'
                 >
-                  {copied ? 'Copied!' : 'Zarr store'}
+                  {copyText}
                 </Button>
               </Column>
             </Row>

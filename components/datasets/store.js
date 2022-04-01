@@ -9,12 +9,6 @@ const DEFAULT_DISPLAY_TIMES = {
   PROJECTED: { year: 2015, month: 1, day: 1 },
 }
 
-const TIMESCALES = {
-  raw: 'day',
-  'monthly-summary': 'month',
-  'annual-summary': 'year',
-}
-
 const getInitialDatasets = (data) => {
   return data.datasets.reduce((accum, dataset) => {
     accum[dataset.name] = {
@@ -22,11 +16,10 @@ const getInitialDatasets = (data) => {
       source: dataset.uri,
       variable: dataset.variable_id,
       gcm: dataset.source_id,
-      method: dataset.method ?? 'Raw',
+      method: dataset.method,
       experiment: dataset.experiment_id,
-      timescale: TIMESCALES[dataset.kind],
-
-      original_dataset_uri: dataset.original_dataset_uri,
+      timescale: dataset.timescale,
+      original_dataset_uris: dataset.original_dataset_uris,
       institution: dataset.institution_id,
       aggregation: dataset.aggregation,
       member: dataset.member_id,
@@ -68,7 +61,7 @@ export const useDatasetsStore = create((set, get) => ({
   updatingTime: false,
   fetchDatasets: async () => {
     const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/prefect_results/cmip6-pyramids/cmip6-pyramids-catalog-web.json'
+      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/cmip6/cmip6-pyramids-catalog-web.json'
     )
     const data = await result.json()
     const datasets = getInitialDatasets(data)
