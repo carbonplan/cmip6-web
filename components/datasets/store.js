@@ -77,8 +77,8 @@ export const useDatasetsStore = create((set, get) => ({
     // annual:  az://flow-outputs/results/0.0.post527+dirty/pyramid/13cd19fce7850f81
     // historical stores:
     // daily: az://flow-outputs/results/0.0.post527+dirty/pyramid/26bb7efed9cefb2b
-    // monthly: az://flow-outputs/results/0.0.post527+dirty/pyramid/5256e5b11f7b9f7d
-    // annual: az://flow-outputs/results/0.0.post527+dirty/pyramid/82a566d0321881c9
+    // monthly: az://flow-outputs/results/0.0.post527+dirty/pyramid/82a566d0321881c9
+    // annual: az://flow-outputs/results/0.0.post527+dirty/pyramid/5256e5b11f7b9f7d
 
     const data = {
       datasets: [
@@ -152,9 +152,9 @@ export const useDatasetsStore = create((set, get) => ({
           name: 'BCSD historical monthly',
           method: 'BCSD',
           original_dataset_uri:
-            'az://flow-outputs/results/0.0.post527+dirty/pyramid/5256e5b11f7b9f7d',
+            'az://flow-outputs/results/0.0.post527+dirty/pyramid/82a566d0321881c9',
           source_id: 'testing',
-          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/5256e5b11f7b9f7d',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/82a566d0321881c9',
           variable_id: 'tasmax',
         },
         {
@@ -167,9 +167,9 @@ export const useDatasetsStore = create((set, get) => ({
           name: 'BCSD historical annual',
           method: 'BCSD',
           original_dataset_uri:
-            'az://flow-outputs/results/0.0.post527+dirty/pyramid/82a566d0321881c9',
+            'az://flow-outputs/results/0.0.post527+dirty/pyramid/5256e5b11f7b9f7d',
           source_id: 'testing',
-          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/82a566d0321881c9',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/5256e5b11f7b9f7d',
           variable_id: 'tasmax',
         },
       ],
