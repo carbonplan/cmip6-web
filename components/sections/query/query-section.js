@@ -218,7 +218,10 @@ const Filters = ({ sx }) => {
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
           <Filter
-            values={{ include: true, exclude: false }}
+            values={{
+              include: filters.observational,
+              exclude: !filters.observational,
+            }}
             setValues={(obj) => setFilters({ observational: obj.include })}
           />
         </Column>
