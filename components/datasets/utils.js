@@ -1,10 +1,23 @@
 export const getFiltersCallback = (filters) => {
-  return (d) =>
-    d.variable === filters.variable &&
-    d.timescale === filters.timescale &&
-    filters.experiment[d.experiment] &&
-    filters.gcm[d.gcm] &&
-    filters.method[d.method]
+  return (d) => {
+    if (d.variable !== filters.variable || d.timescale !== filters.timescale) {
+      return false
+    }
+
+    if (d.era5) {
+      if (!filters.observational) {
+        return false
+      } else {
+        return filters.experiment[d.experiment]
+      }
+    } else {
+      return (
+        filters.experiment[d.experiment] &&
+        filters.gcm[d.gcm] &&
+        filters.method[d.method]
+      )
+    }
+  }
 }
 
 export const areSiblings = (d1, d2) => {
@@ -60,7 +73,11 @@ const EXPERIMENTS = {
   ssp585: 'SSP5-8.5',
 }
 export const getShortName = (dataset, filters) => {
-  const { experiment, gcm, method } = dataset
+  const { experiment, gcm, method, era5 } = dataset
+
+  if (era5) {
+    return 'ERA5'
+  }
 
   const attributes = [gcm, method]
   if (!filters.experiment.historical) {

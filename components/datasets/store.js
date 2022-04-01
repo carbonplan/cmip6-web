@@ -9,7 +9,7 @@ const DEFAULT_DISPLAY_TIMES = {
   PROJECTED: { year: 2015, month: 1, day: 1 },
 }
 
-const getInitialDatasets = (data) => {
+const getInitialDatasets = (data, attrs) => {
   return data.datasets.reduce((accum, dataset) => {
     accum[dataset.name] = {
       name: dataset.name,
@@ -29,6 +29,7 @@ const getInitialDatasets = (data) => {
       loaded: false,
       colormapName: null,
       clim: null,
+      ...attrs,
     }
     return accum
   }, {})
@@ -45,6 +46,7 @@ const getInitialFilters = (datasets) => {
     },
     {
       variable: 'tasmax',
+      observational: true,
       timescale: 'year',
       experiment: { historical: false },
       gcm: {},
@@ -60,11 +62,20 @@ export const useDatasetsStore = create((set, get) => ({
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   updatingTime: false,
   fetchDatasets: async () => {
-    const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/cmip6/cmip6-pyramids-catalog-web.json'
-    )
-    const data = await result.json()
-    const datasets = getInitialDatasets(data)
+    const results = await Promise.all([
+      fetch(
+        'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/cmip6/cmip6-pyramids-catalog-web.json'
+      ),
+      fetch(
+        'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/era5/era5-pyramids-catalog-web.json'
+      ),
+    ])
+    const data = await Promise.all(results.map((r) => r.json()))
+
+    const datasets = {
+      ...getInitialDatasets(data[0]),
+      ...getInitialDatasets(data[1], { era5: true, experiment: 'historical' }),
+    }
     const filters = getInitialFilters(datasets)
 
     set({ datasets, filters })

@@ -116,15 +116,17 @@ const Filters = ({ sx }) => {
       </Row>
       <Row columns={[6, 8, 4, 4]}>
         <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
-          GCMs
+          Timescale
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <ExpandableFilter
-            values={filters.gcm}
+          <Filter
+            values={timescaleFilter}
             setValues={(obj) => {
-              setFilters({ gcm: obj })
+              const timescale = Object.keys(LABEL_MAP).find(
+                (k) => obj[LABEL_MAP[k]]
+              )
+              setFilters({ timescale })
             }}
-            multiSelect
           />
         </Column>
       </Row>
@@ -180,6 +182,21 @@ const Filters = ({ sx }) => {
           />
         </Column>
       </Row>
+
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
+          GCMs
+        </Column>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
+          <ExpandableFilter
+            values={filters.gcm}
+            setValues={(obj) => {
+              setFilters({ gcm: obj })
+            }}
+            multiSelect
+          />
+        </Column>
+      </Row>
       <Row columns={[6, 8, 4, 4]}>
         <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
           Methods
@@ -194,19 +211,15 @@ const Filters = ({ sx }) => {
           />
         </Column>
       </Row>
+
       <Row columns={[6, 8, 4, 4]}>
         <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
-          Timescale
+          Observational
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
           <Filter
-            values={timescaleFilter}
-            setValues={(obj) => {
-              const timescale = Object.keys(LABEL_MAP).find(
-                (k) => obj[LABEL_MAP[k]]
-              )
-              setFilters({ timescale })
-            }}
+            values={{ include: true, exclude: false }}
+            setValues={(obj) => setFilters({ observational: obj.include })}
           />
         </Column>
       </Row>
