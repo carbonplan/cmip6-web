@@ -66,11 +66,114 @@ export const useDatasetsStore = create((set, get) => ({
   filters: null,
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   updatingTime: false,
-  fetchDatasets: async () => {
-    const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/prefect_results/cmip6-pyramids/cmip6-pyramids-catalog-web.json'
-    )
-    const data = await result.json()
+  fetchDatasets: () => {
+    // const result = await fetch(
+    //   'https://cmip6downscaling.blob.core.windows.net/flow-outputs/prefect_results/cmip6-pyramids/cmip6-pyramids-catalog-web.json'
+    // )
+    // const data = await result.json()
+
+    // daily: az://flow-outputs/results/0.0.post527+dirty/pyramid/b044268ce457ecef
+    // monthly: az://flow-outputs/results/0.0.post527+dirty/pyramid/1de98c8813d2a513
+    // annual:  az://flow-outputs/results/0.0.post527+dirty/pyramid/13cd19fce7850f81
+    // historical stores:
+    // daily: az://flow-outputs/results/0.0.post527+dirty/pyramid/26bb7efed9cefb2b
+    // monthly: az://flow-outputs/results/0.0.post527+dirty/pyramid/5256e5b11f7b9f7d
+    // annual: az://flow-outputs/results/0.0.post527+dirty/pyramid/82a566d0321881c9
+
+    const data = {
+      datasets: [
+        {
+          activity_id: 'CMIP',
+          aggregation: 'sum',
+          experiment_id: 'ssp370',
+          institution_id: '??',
+          kind: 'raw',
+          member_id: 'r1i1p1f1',
+          name: 'BCSD projected daily',
+          method: 'BCSD',
+          original_dataset_uri:
+            'az://flow-outputs/results/0.0.post527+dirty/pyramid/b044268ce457ecef',
+          source_id: 'testing',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/b044268ce457ecef',
+          variable_id: 'tasmax',
+        },
+        {
+          activity_id: 'CMIP',
+          aggregation: 'sum',
+          experiment_id: 'ssp370',
+          institution_id: '??',
+          kind: 'monthly-summary',
+          member_id: 'r1i1p1f1',
+          name: 'BCSD projected monthly',
+          method: 'BCSD',
+          original_dataset_uri:
+            'az://flow-outputs/results/0.0.post527+dirty/pyramid/1de98c8813d2a513',
+          source_id: 'testing',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/1de98c8813d2a513',
+          variable_id: 'tasmax',
+        },
+        {
+          activity_id: 'CMIP',
+          aggregation: 'sum',
+          experiment_id: 'ssp370',
+          institution_id: '??',
+          kind: 'annual-summary',
+          member_id: 'r1i1p1f1',
+          name: 'BCSD projected annual',
+          method: 'BCSD',
+          original_dataset_uri:
+            'az://flow-outputs/results/0.0.post527+dirty/pyramid/13cd19fce7850f81',
+          source_id: 'testing',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/13cd19fce7850f81',
+          variable_id: 'tasmax',
+        },
+        {
+          activity_id: 'CMIP',
+          aggregation: 'sum',
+          experiment_id: 'historical',
+          institution_id: '??',
+          kind: 'raw',
+          member_id: 'r1i1p1f1',
+          name: 'BCSD historical daily',
+          method: 'BCSD',
+          original_dataset_uri:
+            'az://flow-outputs/results/0.0.post527+dirty/pyramid/26bb7efed9cefb2b',
+          source_id: 'testing',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/26bb7efed9cefb2b',
+          variable_id: 'tasmax',
+        },
+        {
+          activity_id: 'CMIP',
+          aggregation: 'sum',
+          experiment_id: 'historical',
+          institution_id: '??',
+          kind: 'monthly-summary',
+          member_id: 'r1i1p1f1',
+          name: 'BCSD historical monthly',
+          method: 'BCSD',
+          original_dataset_uri:
+            'az://flow-outputs/results/0.0.post527+dirty/pyramid/5256e5b11f7b9f7d',
+          source_id: 'testing',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/5256e5b11f7b9f7d',
+          variable_id: 'tasmax',
+        },
+        {
+          activity_id: 'CMIP',
+          aggregation: 'sum',
+          experiment_id: 'historical',
+          institution_id: '??',
+          kind: 'annual-summary',
+          member_id: 'r1i1p1f1',
+          name: 'BCSD historical annual',
+          method: 'BCSD',
+          original_dataset_uri:
+            'az://flow-outputs/results/0.0.post527+dirty/pyramid/82a566d0321881c9',
+          source_id: 'testing',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.0.post527+dirty/pyramid/82a566d0321881c9',
+          variable_id: 'tasmax',
+        },
+      ],
+    }
     const datasets = getInitialDatasets(data)
     const filters = getInitialFilters(datasets)
 
