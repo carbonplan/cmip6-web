@@ -5,16 +5,9 @@ import { Down } from '@carbonplan/icons'
 import { Box, Flex } from 'theme-ui'
 
 const getSx = (color) => ({
-  row: {
-    borderStyle: 'solid',
-    borderWidth: '0px',
-    borderColor: color,
-    borderBottomWidth: '1px',
-    mb: ['2px'],
-  },
   index: {
     textTransform: 'uppercase',
-    color,
+    color: 'secondary',
     fontFamily: 'faux',
     letterSpacing: 'faux',
     fontSize: [1, 1, 1, 2],
@@ -24,6 +17,7 @@ const getSx = (color) => ({
     fontSize: [1, 1, 1, 2],
     fontFamily: 'faux',
     letterSpacing: 'faux',
+    color,
   },
 })
 const DatasetInfo = ({ dataset, color }) => {
@@ -91,12 +85,7 @@ const DatasetInfo = ({ dataset, color }) => {
           prefix={<Down />}
           sx={{
             fontSize: [1, 1, 1, 2],
-            color,
-            '@media (hover: hover) and (pointer: fine)': {
-              '&:hover': {
-                color,
-              },
-            },
+            color: 'secondary',
           }}
           onClick={handleClick}
           size='xs'
