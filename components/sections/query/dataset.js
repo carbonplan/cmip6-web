@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Box, IconButton, Label } from 'theme-ui'
+import { Box, Label } from 'theme-ui'
 import { Row, Column } from '@carbonplan/components'
-import { Check, Info, Search, X } from '@carbonplan/icons'
+import { Check, Search, X } from '@carbonplan/icons'
 import AnimateHeight from 'react-animate-height'
 import shallow from 'zustand/shallow'
 
@@ -15,6 +15,7 @@ import {
 } from '../../datasets'
 import { useRegionStore } from '../../region'
 import CustomCheckbox from '../../custom-checkbox'
+import Tooltip from '../../tooltip'
 import DatasetInfo from './dataset-info'
 
 const Dataset = ({ name, last }) => {
@@ -120,34 +121,7 @@ const Dataset = ({ name, last }) => {
                   }}
                 />
               </Label>
-              <IconButton
-                onClick={() => setExpanded(!expanded)}
-                role='checkbox'
-                aria-checked={expanded}
-                aria-label='Information'
-                sx={{
-                  cursor: 'pointer',
-                  height: '16px',
-                  width: '16px',
-                  '@media (hover: hover) and (pointer: fine)': {
-                    '&:hover > #info': {
-                      stroke: 'primary',
-                    },
-                  },
-                  p: [0],
-                  transform: 'translate(0px, -4px)',
-                }}
-              >
-                <Info
-                  id='info'
-                  height='16px'
-                  width='16px'
-                  sx={{
-                    stroke: expanded ? 'primary' : 'secondary',
-                    transition: '0.1s',
-                  }}
-                />
-              </IconButton>
+              <Tooltip expanded={expanded} setExpanded={setExpanded} />
             </Box>
           </Box>
         </Column>
