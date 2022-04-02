@@ -162,6 +162,13 @@ class DateStrings {
     }
   }
 
+  getYearRange() {
+    const first = this._indexToValues(0)
+    const last = this._indexToValues(this.length - 1)
+
+    return [first.year, last.year]
+  }
+
   getDayRange({ year, month }) {
     const times = this.getDisplayRange({ year, month })
 
