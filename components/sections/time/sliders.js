@@ -88,11 +88,6 @@ const TimeSlider = ({
   )
 }
 
-const YEAR_RANGES = {
-  HISTORICAL: [1950, 2014],
-  PROJECTED: [2015, 2100],
-}
-
 const Sliders = ({ dateStrings, historical = false }) => {
   const display = useDatasetsStore((state) => state.displayTime)
   const timescale = useDatasetsStore((state) => state.filters.timescale)
@@ -101,7 +96,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
 
   const ranges = useMemo(() => {
     return {
-      year: historical ? YEAR_RANGES.HISTORICAL : YEAR_RANGES.PROJECTED,
+      year: dateStrings.getYearRange(),
       month: [1, 12],
       day: timescale === 'day' ? dateStrings.getDayRange(display) : [],
     }

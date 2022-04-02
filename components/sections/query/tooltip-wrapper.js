@@ -1,0 +1,27 @@
+import { Box, Flex } from 'theme-ui'
+import { useState } from 'react'
+import AnimateHeight from 'react-animate-height'
+
+import Tooltip from '../../tooltip'
+
+const TooltipWrapper = ({ children, tooltip }) => {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <>
+      <Flex sx={{ justifyContent: 'space-between' }}>
+        {children}
+        <Tooltip expanded={expanded} setExpanded={setExpanded} />
+      </Flex>
+      <AnimateHeight
+        duration={100}
+        height={expanded ? 'auto' : 0}
+        easing={'linear'}
+      >
+        <Box sx={{ my: 1 }}>{tooltip}</Box>
+      </AnimateHeight>
+    </>
+  )
+}
+
+export default TooltipWrapper

@@ -1,4 +1,4 @@
-import { Box, Divider, Spinner } from 'theme-ui'
+import { Box, Divider, Flex, Spinner } from 'theme-ui'
 import { useEffect, useMemo } from 'react'
 import shallow from 'zustand/shallow'
 import { Badge, Column, Filter, Group, Row } from '@carbonplan/components'
@@ -7,7 +7,7 @@ import { getFiltersCallback, useDatasetsStore } from '../../datasets'
 import ExpandableFilter from './expandable-filter'
 import Dataset from './dataset'
 import { useRegionStore } from '../../region'
-
+import TooltipWrapper from './tooltip-wrapper'
 const formatNumber = (value) => String(value).padStart(2, '0')
 
 const LABEL_MAP = {
@@ -100,98 +100,20 @@ const Filters = ({ sx }) => {
           Variable
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <Filter
-            values={variableFilter}
-            setValues={(obj) => {
-              const variable = Object.keys(LABEL_MAP).find(
-                (k) => obj[LABEL_MAP[k]]
-              )
-              if (variable !== filters.variable) {
-                setFilters({ variable })
-                clearRegionData()
-              }
-            }}
-          />
-        </Column>
-      </Row>
-      <Row columns={[6, 8, 4, 4]}>
-        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
-          GCMs
-        </Column>
-        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <ExpandableFilter
-            values={filters.gcm}
-            setValues={(obj) => {
-              setFilters({ gcm: obj })
-            }}
-            multiSelect
-          />
-        </Column>
-      </Row>
-      <Row columns={[6, 8, 4, 4]}>
-        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
-          Scenarios
-        </Column>
-        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <Filter
-            values={historicalFilter}
-            setValues={(obj) => {
-              const historical = obj[LABEL_MAP.historical]
-              const { historical: previousHistorical, ...previousScenarios } =
-                filters.experiment
-              const scenarios = historical
-                ? { ssp245: false, ssp370: false, ssp585: false }
-                : previousScenarios
-
-              setFilters({
-                experiment: {
-                  historical,
-                  ...scenarios,
-                },
-              })
-              clearRegionData()
-            }}
-            multiSelect
-          />
-        </Column>
-      </Row>
-      <Row columns={[6, 8, 4, 4]}>
-        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <Filter
-            values={scenarioFilter}
-            setValues={(obj) => {
-              const scenarioSelected = Object.keys(obj).some((k) => obj[k])
-              const { historical: previousHistorical } = filters.experiment
-              const historical = scenarioSelected ? false : previousHistorical
-
-              setFilters({
-                experiment: {
-                  historical,
-                  ssp245: obj[LABEL_MAP.ssp245],
-                  ssp370: obj[LABEL_MAP.ssp370],
-                  ssp585: obj[LABEL_MAP.ssp585],
-                },
-              })
-              if (historical !== previousHistorical) {
-                clearRegionData()
-              }
-            }}
-            multiSelect
-          />
-        </Column>
-      </Row>
-      <Row columns={[6, 8, 4, 4]}>
-        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
-          Methods
-        </Column>
-        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <Filter
-            values={filters.method}
-            setValues={(obj) => {
-              setFilters({ method: obj })
-            }}
-            multiSelect
-          />
+          <TooltipWrapper tooltip='Select climate variable mapped in dataset.'>
+            <Filter
+              values={variableFilter}
+              setValues={(obj) => {
+                const variable = Object.keys(LABEL_MAP).find(
+                  (k) => obj[LABEL_MAP[k]]
+                )
+                if (variable !== filters.variable) {
+                  setFilters({ variable })
+                  clearRegionData()
+                }
+              }}
+            />
+          </TooltipWrapper>
         </Column>
       </Row>
       <Row columns={[6, 8, 4, 4]}>
@@ -199,15 +121,106 @@ const Filters = ({ sx }) => {
           Timescale
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <Filter
-            values={timescaleFilter}
-            setValues={(obj) => {
-              const timescale = Object.keys(LABEL_MAP).find(
-                (k) => obj[LABEL_MAP[k]]
-              )
-              setFilters({ timescale })
-            }}
-          />
+          <TooltipWrapper tooltip='Select whether to view full daily data or summarized to monthly or annual timesteps.'>
+            <Filter
+              values={timescaleFilter}
+              setValues={(obj) => {
+                const timescale = Object.keys(LABEL_MAP).find(
+                  (k) => obj[LABEL_MAP[k]]
+                )
+                setFilters({ timescale })
+              }}
+            />
+          </TooltipWrapper>
+        </Column>
+      </Row>
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
+          Scenarios
+        </Column>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
+          <TooltipWrapper tooltip='Select whether to view historical data or future  data from Shared Socioeconomic Pathways (SSPs) representing different levels of warming.'>
+            <Flex sx={{ flexDirection: 'column' }}>
+              <Filter
+                values={historicalFilter}
+                setValues={(obj) => {
+                  const historical = obj[LABEL_MAP.historical]
+                  const {
+                    historical: previousHistorical,
+                    ...previousScenarios
+                  } = filters.experiment
+                  const scenarios = historical
+                    ? { ssp245: false, ssp370: false, ssp585: false }
+                    : previousScenarios
+
+                  setFilters({
+                    experiment: {
+                      historical,
+                      ...scenarios,
+                    },
+                  })
+                  clearRegionData()
+                }}
+                multiSelect
+              />
+              <Filter
+                values={scenarioFilter}
+                setValues={(obj) => {
+                  const scenarioSelected = Object.keys(obj).some((k) => obj[k])
+                  const { historical: previousHistorical } = filters.experiment
+                  const historical = scenarioSelected
+                    ? false
+                    : previousHistorical
+
+                  setFilters({
+                    experiment: {
+                      historical,
+                      ssp245: obj[LABEL_MAP.ssp245],
+                      ssp370: obj[LABEL_MAP.ssp370],
+                      ssp585: obj[LABEL_MAP.ssp585],
+                    },
+                  })
+                  if (historical !== previousHistorical) {
+                    clearRegionData()
+                  }
+                }}
+                multiSelect
+              />
+            </Flex>
+          </TooltipWrapper>
+        </Column>
+      </Row>
+
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
+          GCMs
+        </Column>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
+          <TooltipWrapper tooltip='Select global climate models (GCMs) used produce either downscaled or raw datasets.'>
+            <ExpandableFilter
+              values={filters.gcm}
+              setValues={(obj) => {
+                setFilters({ gcm: obj })
+              }}
+              multiSelect
+            />
+          </TooltipWrapper>
+        </Column>
+      </Row>
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[2, 2, 1, 1]} sx={sx.label}>
+          Methods
+        </Column>
+        <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
+          <TooltipWrapper tooltip='Select downscaling method used to derive datasets.'>
+            <Filter
+              values={filters.method}
+              setValues={(obj) => {
+                setFilters({ method: obj })
+              }}
+              multiSelect
+            />
+          </TooltipWrapper>
         </Column>
       </Row>
     </>

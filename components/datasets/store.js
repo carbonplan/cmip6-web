@@ -9,7 +9,7 @@ const DEFAULT_DISPLAY_TIMES = {
   PROJECTED: { year: 2015, month: 1, day: 1 },
 }
 
-const getInitialDatasets = (data) => {
+const getInitialDatasets = (data, attrs) => {
   return data.datasets.reduce((accum, dataset) => {
     accum[dataset.name] = {
       name: dataset.name,
@@ -29,6 +29,7 @@ const getInitialDatasets = (data) => {
       loaded: false,
       colormapName: null,
       clim: null,
+      era5: dataset.experiment_id === 'reanalysis',
     }
     return accum
   }, {})
@@ -61,9 +62,11 @@ export const useDatasetsStore = create((set, get) => ({
   updatingTime: false,
   fetchDatasets: async () => {
     const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/cmip6/cmip6-pyramids-catalog-web.json'
+      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/combined-cmip6-era5-pyramids-catalog-web.json'
     )
+
     const data = await result.json()
+
     const datasets = getInitialDatasets(data)
     const filters = getInitialFilters(datasets)
 
