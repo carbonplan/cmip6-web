@@ -10,29 +10,31 @@ const DEFAULT_DISPLAY_TIMES = {
 }
 
 const getInitialDatasets = (data, attrs) => {
-  return data.datasets.reduce((accum, dataset) => {
-    accum[dataset.name] = {
-      name: dataset.name,
-      source: dataset.uri,
-      variable: dataset.variable_id,
-      gcm: dataset.source_id,
-      method: dataset.method,
-      experiment: dataset.experiment_id,
-      timescale: dataset.timescale,
-      original_dataset_uris: dataset.original_dataset_uris,
-      institution: dataset.institution_id,
-      aggregation: dataset.aggregation,
-      member: dataset.member_id,
+  return data.datasets
+    .sort((a, b) => (a.experiment_id === 'reanalysis' ? -1 : 1))
+    .reduce((accum, dataset) => {
+      accum[dataset.name] = {
+        name: dataset.name,
+        source: dataset.uri,
+        variable: dataset.variable_id,
+        gcm: dataset.source_id,
+        method: dataset.method,
+        experiment: dataset.experiment_id,
+        timescale: dataset.timescale,
+        original_dataset_uris: dataset.original_dataset_uris,
+        institution: dataset.institution_id,
+        aggregation: dataset.aggregation,
+        member: dataset.member_id,
 
-      dateStrings: null,
-      selected: false,
-      loaded: false,
-      colormapName: null,
-      clim: null,
-      era5: dataset.experiment_id === 'reanalysis',
-    }
-    return accum
-  }, {})
+        dateStrings: null,
+        selected: false,
+        loaded: false,
+        colormapName: null,
+        clim: null,
+        era5: dataset.experiment_id === 'reanalysis',
+      }
+      return accum
+    }, {})
 }
 
 const getInitialFilters = (datasets) => {
