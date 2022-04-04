@@ -22,6 +22,7 @@ const RegionSection = ({ sx }) => {
         .map((key) => [
           key,
           regionData[key].value ? regionData[key].value[variable] : undefined,
+          regionData[key].value?.coordinates?.lat,
         ]),
     [regionData, variable]
   )

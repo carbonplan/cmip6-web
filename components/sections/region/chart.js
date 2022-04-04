@@ -10,20 +10,56 @@ import {
   Rect,
   TickLabels,
 } from '@carbonplan/charts'
+import { useRegion } from '@carbonplan/maps'
+
 import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
 
-const getArrayData = (arr) => {
-  const { sum, min, max } = arr.reduce(
-    (accum, el) => {
+const degToRad = (degrees) => {
+  return degrees * (Math.PI / 180)
+}
+
+const areaOfPixel = (pixelSize, centerLat) => {
+  const a = 6378137 // meters
+  const b = 6356752.3142 // meters
+  const e = Math.sqrt(1 - Math.pow(b / a, 2))
+  const delta = [centerLat + pixelSize / 2, centerLat - pixelSize / 2]
+  const areaList = delta.map((f) => {
+    const zm = 1 - e * Math.sin(degToRad(f))
+    const zp = 1 + e * Math.sin(degToRad(f))
+    return (
+      Math.PI *
+      Math.pow(b, 2) *
+      (Math.log(zp / zm) / (2 * e) + Math.sin(degToRad(f)) / (zp * zm))
+    )
+  })
+  return ((pixelSize / 360) * (areaList[0] - areaList[1])) / (1000 * 1000) // to km2
+}
+
+const areaOfPixelProjected = (lat, zoom) => {
+  const c = 40075016.686 / 1000
+  return Math.pow(
+    (c * Math.cos(degToRad(lat))) / Math.pow(2, Math.floor(zoom) + 7),
+    2
+  )
+}
+
+const getArrayData = (arr, lats, zoom) => {
+  const areas = lats.map((lat) => areaOfPixelProjected(lat, zoom))
+  const totalArea = areas.reduce((a, d) => a + d, 0)
+  return arr.reduce(
+    (accum, el, i) => {
+      // const area = areaOfPixel(1 / 40, lats[i]) // area of 3km pixel at lat
+      // const projectedArea = areaOfPixelProjected(lats[i], zoom) // area of web mercator pixel at lat,zoom
+
       return {
-        sum: accum.sum + el,
+        // avg: accum.avg + el * (area / projectedArea),
+        avg: accum.avg + el * (areas[i] / totalArea),
         min: Math.min(el, accum.min),
         max: Math.max(el, accum.max),
       }
     },
-    { sum: 0, min: Infinity, max: -Infinity }
+    { avg: 0, min: Infinity, max: -Infinity }
   )
-  return { avg: sum / arr.length, min, max }
 }
 
 // TODO: add units
@@ -80,6 +116,8 @@ const ChartWrapper = ({ data }) => {
   const variable = useDatasetsStore((state) => state.filters.variable)
   const display = useDatasetsStore((state) => state.displayTime)
   const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
+  const { region } = useRegion()
+  const zoom = region?.properties?.zoom || 0
 
   // By default, use active dataset as primary dataset (reference for dateStrings and timescale)
   let primaryDataset = datasets[activeDataset]
@@ -131,11 +169,11 @@ const ChartWrapper = ({ data }) => {
   const range = [Infinity, -Infinity]
 
   const lines = data
-    .filter(([name, value]) => value && datasets[name].selected)
-    .map(([name, value]) => {
+    .filter(([name, value, lats]) => value && lats && datasets[name].selected)
+    .map(([name, value, lats]) => {
       const lineData = Object.keys(value)
         .map((time) => {
-          const { avg, min, max } = getArrayData(value[time])
+          const { avg, min, max } = getArrayData(value[time], lats, zoom)
           range[0] = Math.min(range[0], min)
           range[1] = Math.max(range[1], max)
 
