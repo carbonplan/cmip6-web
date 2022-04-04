@@ -8,7 +8,9 @@ const AboutSection = ({ sx }) => {
       <Box sx={sx.description}>
         <Box sx={{ mb: 2 }}>
           These data products and the website were developed jointly by the
-          following contributors (in alphabetical order): TK.
+          following contributors (in alphabetical order): Anderson Banihirwe,
+          Oriana Chegwidden, Cindy Chiao, Jeremy Freeman, Raphael Hagen, Joe
+          Hamman, Kata Martin.
         </Box>
 
         <Box>
