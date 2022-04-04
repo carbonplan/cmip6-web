@@ -58,7 +58,7 @@ const LoadingStates = ({ expanded, loading }) => {
           opacity: updatingTime ? 0.5 : 0,
           transition: 'opacity 0.15s',
           bg: 'background',
-          zIndex: 1000,
+          zIndex: 500,
         }}
       />
     </>
