@@ -1,7 +1,7 @@
 import { IconButton } from 'theme-ui'
 import { Info } from '@carbonplan/icons'
 
-const Tooltip = ({ expanded, setExpanded }) => {
+const Tooltip = ({ expanded, setExpanded, sx }) => {
   return (
     <IconButton
       onClick={() => setExpanded(!expanded)}
@@ -19,6 +19,7 @@ const Tooltip = ({ expanded, setExpanded }) => {
         },
         p: [0],
         transform: 'translate(0px, -4px)',
+        ...sx,
       }}
     >
       <Info

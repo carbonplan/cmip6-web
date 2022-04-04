@@ -9,9 +9,13 @@ const TooltipWrapper = ({ children, tooltip }) => {
 
   return (
     <>
-      <Flex sx={{ justifyContent: 'space-between' }}>
+      <Flex sx={{ justifyContent: 'space-between', alignItems: 'flex-end' }}>
         {children}
-        <Tooltip expanded={expanded} setExpanded={setExpanded} />
+        <Tooltip
+          expanded={expanded}
+          setExpanded={setExpanded}
+          sx={{ mb: '7px' }}
+        />
       </Flex>
       <AnimateHeight
         duration={100}
