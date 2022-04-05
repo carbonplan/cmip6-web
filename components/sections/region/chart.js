@@ -130,8 +130,6 @@ const ChartWrapper = ({ data }) => {
   let circle
   const range = [Infinity, -Infinity]
 
-  const displayTime = dateStrings.valuesToTime(display)
-
   const lines = data
     .filter(([name, value]) => value && datasets[name].selected)
     .map(([name, value]) => {
@@ -205,7 +203,7 @@ const ChartWrapper = ({ data }) => {
           values={timescale === 'day' ? undefined : ticks}
           format={(d) => dateStrings.formatTick(Math.round(d))}
         />
-        {hovered && circle && (
+        {typeof hovered === 'number' && circle && (
           <Box
             sx={{
               position: 'absolute',
