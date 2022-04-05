@@ -276,17 +276,18 @@ const ChartWrapper = ({ data }) => {
                   )}
                 </Box>
               ))}
-          {bands.map(({ time, x0, x1 }) => (
-            <Rect
-              key={time}
-              x={[x0, x1]}
-              y={range}
-              color='transparent'
-              onMouseEnter={() => setHovered(time)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={() => setDisplay(dateStrings.timeToValues(time))}
-            />
-          ))}
+          {!loading &&
+            bands.map(({ time, x0, x1 }) => (
+              <Rect
+                key={time}
+                x={[x0, x1]}
+                y={range}
+                color='transparent'
+                onMouseEnter={() => setHovered(time)}
+                onMouseLeave={() => setHovered(null)}
+                onClick={() => setDisplay(dateStrings.timeToValues(time))}
+              />
+            ))}
         </Plot>
       </Chart>
     </Box>
