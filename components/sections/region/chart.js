@@ -1,7 +1,15 @@
 import { Box, Spinner } from 'theme-ui'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { format } from 'd3-format'
-import { Chart, Circle, Grid, Line, Plot, TickLabels } from '@carbonplan/charts'
+import {
+  Chart,
+  Circle,
+  Grid,
+  Line,
+  Plot,
+  Rect,
+  TickLabels,
+} from '@carbonplan/charts'
 import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
 
 const getArrayData = (arr) => {
@@ -70,6 +78,7 @@ const ChartWrapper = ({ data }) => {
   const datasets = useDatasetsStore((state) => state.datasets)
   const variable = useDatasetsStore((state) => state.filters.variable)
   const display = useDatasetsStore((state) => state.displayTime)
+  const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
 
   // By default, use active dataset as primary dataset (reference for dateStrings and timescale)
   let primaryDataset = datasets[activeDataset]
@@ -84,83 +93,23 @@ const ChartWrapper = ({ data }) => {
   const dateStrings = primaryDataset?.dateStrings
   const timescale = primaryDataset?.timescale
 
-  const { timeRange, ticks } = useMemo(() => {
+  const { timeRange, ticks, bands } = useMemo(() => {
     if (!dateStrings) {
       return {}
     }
     const fullRange = dateStrings.getDisplayRange(display)
+    const bands = fullRange.map((d, i) => ({
+      time: d,
+      x0: i === 0 ? d : (fullRange[i - 1] + d) / 2,
+      x1: i === fullRange.length - 1 ? d : (d + fullRange[i + 1]) / 2,
+    }))
 
     return {
       timeRange: [fullRange[0], fullRange[fullRange.length - 1]],
       ticks: dateStrings.getTicks(display),
+      bands,
     }
   }, [dateStrings, display])
-
-  let circle
-  let lines
-  const range = [Infinity, -Infinity]
-
-  if (datasets && dateStrings) {
-    const displayTime = dateStrings.valuesToTime(display)
-
-    lines = data
-      .filter(([name, value]) => value && datasets[name].selected)
-      .map(([name, value]) => {
-        const lineData = Object.keys(value)
-          .map((time) => {
-            const { avg, min, max } = getArrayData(value[time])
-            range[0] = Math.min(range[0], min)
-            range[1] = Math.max(range[1], max)
-
-            const activeTime = dateStrings.valuesToTime(
-              datasets[name].dateStrings.timeToValues(Number(time))
-            )
-
-            return [activeTime, avg]
-          })
-          .filter((p) => typeof p[0] === 'number')
-
-        const circleData = lineData.map(([x, y], i) => {
-          const id = `${name}-${i}`
-          const circleValue = { id, x, y }
-
-          if (name === activeDataset && displayTime === x) {
-            circle = circleValue
-          }
-
-          return {
-            key: id,
-            x,
-            y,
-            sx: { opacity: hovered?.id === id ? 1 : 0 },
-            onMouseEnter: () => setHovered(circleValue),
-            // onMouseLeave: () => setHovered(null),
-          }
-        })
-
-        let color = 'secondary'
-        let width = 1.5
-
-        if (name === activeDataset) {
-          color = COLORMAP_COLORS[datasets[name].colormapName]
-          width = 2
-        }
-        return {
-          key: name,
-          circle,
-          color,
-          width,
-          lineData,
-          circleData,
-        }
-      }, [])
-  }
-
-  useEffect(() => {
-    if (circle) {
-      setHovered(circle)
-    }
-  }, [circle?.x, circle?.y])
 
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
   if (!datasets || !dateStrings) {
@@ -176,6 +125,48 @@ const ChartWrapper = ({ data }) => {
       </Box>
     )
   }
+
+  let circle
+  const range = [Infinity, -Infinity]
+
+  const displayTime = dateStrings.valuesToTime(display)
+
+  const lines = data
+    .filter(([name, value]) => value && datasets[name].selected)
+    .map(([name, value]) => {
+      const lineData = Object.keys(value)
+        .map((time) => {
+          const { avg, min, max } = getArrayData(value[time])
+          range[0] = Math.min(range[0], min)
+          range[1] = Math.max(range[1], max)
+
+          const activeTime = dateStrings.valuesToTime(
+            datasets[name].dateStrings.timeToValues(Number(time))
+          )
+
+          if (name === activeDataset && hovered === activeTime) {
+            circle = [activeTime, avg]
+          }
+
+          return [activeTime, avg]
+        })
+        .filter((p) => typeof p[0] === 'number')
+
+      let color = 'secondary'
+      let width = 1.5
+
+      if (name === activeDataset) {
+        color = COLORMAP_COLORS[datasets[name].colormapName]
+        width = 2
+      }
+      return {
+        key: name,
+        circle,
+        color,
+        width,
+        lineData,
+      }
+    }, [])
 
   const loading = data.some(([name, value]) => !value)
   const units = (
@@ -209,7 +200,7 @@ const ChartWrapper = ({ data }) => {
           values={timescale === 'day' ? undefined : ticks}
           format={(d) => dateStrings.formatTick(Math.round(d))}
         />
-        {hovered && (
+        {hovered && circle && (
           <Box
             sx={{
               position: 'absolute',
@@ -227,7 +218,7 @@ const ChartWrapper = ({ data }) => {
                 color: 'secondary',
               }}
             >
-              ({dateStrings.formatTick(hovered.x)}, {formatValue(hovered.y)}
+              ({dateStrings.formatTick(circle[0])}, {formatValue(circle[1])}
               {units})
             </Box>
           </Box>
@@ -247,19 +238,30 @@ const ChartWrapper = ({ data }) => {
 
                 return aWeight - bWeight
               })
-              .map(({ key, circle, color, width, lineData, circleData }) => (
+              .map(({ key, circle, color, width, lineData }) => (
                 <Box as='g' key={key}>
                   <Line color={color} data={lineData} width={width} />
-                  {!hovered && circle && (
-                    <Circle x={circle.x} y={circle.y} color={color} size={15} />
+                  {circle && (
+                    <Circle
+                      x={circle[0]}
+                      y={circle[1]}
+                      color={color}
+                      size={15}
+                    />
                   )}
-                  {circleData.map(({ key, x, y, sx, ...props }) => (
-                    <Box as='g' key={key} {...props}>
-                      <Circle x={x} y={y} size={15} sx={sx} color={color} />
-                    </Box>
-                  ))}
                 </Box>
               ))}
+          {bands.map(({ time, x0, x1 }) => (
+            <Rect
+              key={time}
+              x={[x0, x1]}
+              y={range}
+              color='transparent'
+              onMouseEnter={() => setHovered(time)}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => setDisplay(dateStrings.timeToValues(time))}
+            />
+          ))}
         </Plot>
       </Chart>
     </Box>
