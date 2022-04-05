@@ -18,23 +18,6 @@ const degToRad = (degrees) => {
   return degrees * (Math.PI / 180)
 }
 
-const areaOfPixel = (pixelSize, centerLat) => {
-  const a = 6378137 // meters
-  const b = 6356752.3142 // meters
-  const e = Math.sqrt(1 - Math.pow(b / a, 2))
-  const delta = [centerLat + pixelSize / 2, centerLat - pixelSize / 2]
-  const areaList = delta.map((f) => {
-    const zm = 1 - e * Math.sin(degToRad(f))
-    const zp = 1 + e * Math.sin(degToRad(f))
-    return (
-      Math.PI *
-      Math.pow(b, 2) *
-      (Math.log(zp / zm) / (2 * e) + Math.sin(degToRad(f)) / (zp * zm))
-    )
-  })
-  return ((pixelSize / 360) * (areaList[0] - areaList[1])) / (1000 * 1000) // to km2
-}
-
 const areaOfPixelProjected = (lat, zoom) => {
   const c = 40075016.686 / 1000
   return Math.pow(
@@ -47,17 +30,11 @@ const getArrayData = (arr, lats, zoom) => {
   const areas = lats.map((lat) => areaOfPixelProjected(lat, zoom))
   const totalArea = areas.reduce((a, d) => a + d, 0)
   return arr.reduce(
-    (accum, el, i) => {
-      // const area = areaOfPixel(1 / 40, lats[i]) // area of 3km pixel at lat
-      // const projectedArea = areaOfPixelProjected(lats[i], zoom) // area of web mercator pixel at lat,zoom
-
-      return {
-        // avg: accum.avg + el * (area / projectedArea),
-        avg: accum.avg + el * (areas[i] / totalArea),
-        min: Math.min(el, accum.min),
-        max: Math.max(el, accum.max),
-      }
-    },
+    (accum, el, i) => ({
+      avg: accum.avg + el * (areas[i] / totalArea),
+      min: Math.min(el, accum.min),
+      max: Math.max(el, accum.max),
+    }),
     { avg: 0, min: Infinity, max: -Infinity }
   )
 }
