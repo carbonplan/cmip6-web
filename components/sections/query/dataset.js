@@ -23,6 +23,7 @@ const Dataset = ({ name, last }) => {
   const anyActive = useDatasetsStore((state) => !!state.active)
   const active = useDatasetsStore((state) => state.active === name)
   const setActive = useDatasetsStore((state) => state.setActive)
+  const setHovered = useDatasetsStore((state) => state.setHovered)
   const dataset = useDatasetsStore((state) => state.datasets[name], shallow)
   const filters = useDatasetsStore((state) => state.filters)
   const selectDataset = useDatasetsStore((state) => state.selectDataset)
@@ -69,6 +70,8 @@ const Dataset = ({ name, last }) => {
               },
             }}
             htmlFor={name}
+            onMouseOver={() => setHovered(name)}
+            onMouseLeave={() => setHovered(null)}
           >
             {getShortName(dataset, filters)}
           </Label>

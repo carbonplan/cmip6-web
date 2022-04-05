@@ -75,6 +75,7 @@ const LoadingSpinner = ({ opacity = 1 }) => {
 const ChartWrapper = ({ data }) => {
   const [hovered, setHovered] = useState(null)
   const activeDataset = useDatasetsStore((state) => state.active)
+  const hoveredDataset = useDatasetsStore((state) => state.hovered)
   const datasets = useDatasetsStore((state) => state.datasets)
   const variable = useDatasetsStore((state) => state.filters.variable)
   const display = useDatasetsStore((state) => state.displayTime)
@@ -154,9 +155,13 @@ const ChartWrapper = ({ data }) => {
 
       let color = 'secondary'
       let width = 1.5
+      const activeColor = COLORMAP_COLORS[datasets[name].colormapName]
 
       if (name === activeDataset) {
-        color = COLORMAP_COLORS[datasets[name].colormapName]
+        color = activeColor
+        width = 2
+      } else if (name === hoveredDataset) {
+        color = 'primary'
         width = 2
       }
       return {
@@ -229,7 +234,9 @@ const ChartWrapper = ({ data }) => {
             lines
               .sort((a, b) => {
                 const [aWeight, bWeight] = [a, b].map(({ key }) => {
-                  if (key === activeDataset) {
+                  if (key === hoveredDataset) {
+                    return 2
+                  } else if (key === activeDataset) {
                     return 1
                   } else {
                     return 0
@@ -240,7 +247,12 @@ const ChartWrapper = ({ data }) => {
               })
               .map(({ key, circle, color, width, lineData }) => (
                 <Box as='g' key={key}>
-                  <Line color={color} data={lineData} width={width} />
+                  <Line
+                    color={color}
+                    data={lineData}
+                    width={width}
+                    sx={{ transition: 'all 0.2s' }}
+                  />
                   {circle && (
                     <Circle
                       x={circle[0]}

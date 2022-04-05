@@ -59,6 +59,7 @@ const getInitialFilters = (datasets) => {
 export const useDatasetsStore = create((set, get) => ({
   datasets: null,
   active: null,
+  hovered: null,
   filters: null,
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   updatingTime: false,
@@ -115,6 +116,7 @@ export const useDatasetsStore = create((set, get) => ({
         active: name,
       }
     }),
+  setHovered: (name) => set({ hovered: name }),
   setLoaded: (name) =>
     set(({ datasets }) => {
       const updatedDataset = {
