@@ -10,20 +10,33 @@ import {
   Rect,
   TickLabels,
 } from '@carbonplan/charts'
+import { useRegion } from '@carbonplan/maps'
+
 import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
 
-const getArrayData = (arr) => {
-  const { sum, min, max } = arr.reduce(
-    (accum, el) => {
-      return {
-        sum: accum.sum + el,
-        min: Math.min(el, accum.min),
-        max: Math.max(el, accum.max),
-      }
-    },
-    { sum: 0, min: Infinity, max: -Infinity }
+const degToRad = (degrees) => {
+  return degrees * (Math.PI / 180)
+}
+
+const areaOfPixelProjected = (lat, zoom) => {
+  const c = 40075016.686 / 1000
+  return Math.pow(
+    (c * Math.cos(degToRad(lat))) / Math.pow(2, Math.floor(zoom) + 7),
+    2
   )
-  return { avg: sum / arr.length, min, max }
+}
+
+const getArrayData = (arr, lats, zoom) => {
+  const areas = lats.map((lat) => areaOfPixelProjected(lat, zoom))
+  const totalArea = areas.reduce((a, d) => a + d, 0)
+  return arr.reduce(
+    (accum, el, i) => ({
+      avg: accum.avg + el * (areas[i] / totalArea),
+      min: Math.min(el, accum.min),
+      max: Math.max(el, accum.max),
+    }),
+    { avg: 0, min: Infinity, max: -Infinity }
+  )
 }
 
 // TODO: add units
@@ -80,6 +93,8 @@ const ChartWrapper = ({ data }) => {
   const variable = useDatasetsStore((state) => state.filters.variable)
   const display = useDatasetsStore((state) => state.displayTime)
   const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
+  const { region } = useRegion()
+  const zoom = region?.properties?.zoom || 0
 
   // By default, use active dataset as primary dataset (reference for dateStrings and timescale)
   let primaryDataset = datasets[activeDataset]
@@ -131,11 +146,11 @@ const ChartWrapper = ({ data }) => {
   const range = [Infinity, -Infinity]
 
   const lines = data
-    .filter(([name, value]) => value && datasets[name].selected)
-    .map(([name, value]) => {
+    .filter(([name, value, lats]) => value && lats && datasets[name].selected)
+    .map(([name, value, lats]) => {
       const lineData = Object.keys(value)
         .map((time) => {
-          const { avg, min, max } = getArrayData(value[time])
+          const { avg, min, max } = getArrayData(value[time], lats, zoom)
           range[0] = Math.min(range[0], min)
           range[1] = Math.max(range[1], max)
 
