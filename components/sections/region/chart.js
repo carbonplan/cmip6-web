@@ -1,5 +1,5 @@
 import { Box, Spinner } from 'theme-ui'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { format } from 'd3-format'
 import { Chart, Circle, Grid, Line, Plot, TickLabels } from '@carbonplan/charts'
 import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
@@ -96,6 +96,72 @@ const ChartWrapper = ({ data }) => {
     }
   }, [dateStrings, display])
 
+  let circle
+  let lines
+  const range = [Infinity, -Infinity]
+
+  if (datasets && dateStrings) {
+    const displayTime = dateStrings.valuesToTime(display)
+
+    lines = data
+      .filter(([name, value]) => value && datasets[name].selected)
+      .map(([name, value]) => {
+        const lineData = Object.keys(value)
+          .map((time) => {
+            const { avg, min, max } = getArrayData(value[time])
+            range[0] = Math.min(range[0], min)
+            range[1] = Math.max(range[1], max)
+
+            const activeTime = dateStrings.valuesToTime(
+              datasets[name].dateStrings.timeToValues(Number(time))
+            )
+
+            return [activeTime, avg]
+          })
+          .filter((p) => typeof p[0] === 'number')
+
+        const circleData = lineData.map(([x, y], i) => {
+          const id = `${name}-${i}`
+          const circleValue = { id, x, y }
+
+          if (name === activeDataset && displayTime === x) {
+            circle = circleValue
+          }
+
+          return {
+            key: id,
+            x,
+            y,
+            sx: { opacity: hovered?.id === id ? 1 : 0 },
+            onMouseEnter: () => setHovered(circleValue),
+            // onMouseLeave: () => setHovered(null),
+          }
+        })
+
+        let color = 'secondary'
+        let width = 1.5
+
+        if (name === activeDataset) {
+          color = COLORMAP_COLORS[datasets[name].colormapName]
+          width = 2
+        }
+        return {
+          key: name,
+          circle,
+          color,
+          width,
+          lineData,
+          circleData,
+        }
+      }, [])
+  }
+
+  useEffect(() => {
+    if (circle) {
+      setHovered(circle)
+    }
+  }, [circle?.x, circle?.y])
+
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
   if (!datasets || !dateStrings) {
     return (
@@ -110,51 +176,6 @@ const ChartWrapper = ({ data }) => {
       </Box>
     )
   }
-
-  const displayTime = dateStrings.valuesToTime(display)
-
-  let label
-  const range = [Infinity, -Infinity]
-  const lines = data
-    .filter(([name, value]) => value && datasets[name].selected)
-    .map(([name, value]) => {
-      let circle
-      const lineData = Object.keys(value)
-        .map((time) => {
-          const { avg, min, max } = getArrayData(value[time])
-          range[0] = Math.min(range[0], min)
-          range[1] = Math.max(range[1], max)
-
-          const activeTime = dateStrings.valuesToTime(
-            datasets[name].dateStrings.timeToValues(Number(time))
-          )
-          let point = [activeTime, avg]
-          if (displayTime === point[0]) {
-            circle = point
-          }
-          return point
-        })
-        .filter((p) => typeof p[0] === 'number')
-
-      let color = 'secondary'
-      let width = 1.5
-
-      if (name === hovered) {
-        label = circle
-        color = 'primary'
-        width = 2
-      } else if (name === activeDataset) {
-        color = COLORMAP_COLORS[datasets[name].colormapName]
-        width = 2
-      }
-      return {
-        key: name,
-        circle,
-        color,
-        width,
-        lineData,
-      }
-    }, [])
 
   const loading = data.some(([name, value]) => !value)
   const units = (
@@ -188,7 +209,7 @@ const ChartWrapper = ({ data }) => {
           values={timescale === 'day' ? undefined : ticks}
           format={(d) => dateStrings.formatTick(Math.round(d))}
         />
-        {label && (
+        {hovered && (
           <Box
             sx={{
               position: 'absolute',
@@ -206,7 +227,7 @@ const ChartWrapper = ({ data }) => {
                 color: 'secondary',
               }}
             >
-              ({dateStrings.formatTick(displayTime)}, {formatValue(label[1])}
+              ({dateStrings.formatTick(hovered.x)}, {formatValue(hovered.y)}
               {units})
             </Box>
           </Box>
@@ -217,9 +238,7 @@ const ChartWrapper = ({ data }) => {
             lines
               .sort((a, b) => {
                 const [aWeight, bWeight] = [a, b].map(({ key }) => {
-                  if (key === hovered) {
-                    return 2
-                  } else if (key === activeDataset) {
+                  if (key === activeDataset) {
                     return 1
                   } else {
                     return 0
@@ -228,22 +247,17 @@ const ChartWrapper = ({ data }) => {
 
                 return aWeight - bWeight
               })
-              .map(({ key, circle, color, width, lineData }) => (
-                <Box
-                  as='g'
-                  key={key}
-                  onMouseEnter={() => setHovered(key)}
-                  onMouseLeave={() => setHovered(null)}
-                >
+              .map(({ key, circle, color, width, lineData, circleData }) => (
+                <Box as='g' key={key}>
                   <Line color={color} data={lineData} width={width} />
-                  {circle && (
-                    <Circle
-                      x={circle[0]}
-                      y={circle[1]}
-                      color={color}
-                      size={15}
-                    />
+                  {!hovered && circle && (
+                    <Circle x={circle.x} y={circle.y} color={color} size={15} />
                   )}
+                  {circleData.map(({ key, x, y, sx, ...props }) => (
+                    <Box as='g' key={key} {...props}>
+                      <Circle x={x} y={y} size={15} sx={sx} color={color} />
+                    </Box>
+                  ))}
                 </Box>
               ))}
         </Plot>
