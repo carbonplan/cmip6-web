@@ -39,7 +39,6 @@ const getArrayData = (arr, lats, zoom) => {
   )
 }
 
-// TODO: add units
 export const formatValue = (value) => {
   let result
   if (value === 0) {
@@ -90,7 +89,6 @@ const ChartWrapper = ({ data }) => {
   const activeDataset = useDatasetsStore((state) => state.active)
   const hoveredDataset = useDatasetsStore((state) => state.hovered)
   const datasets = useDatasetsStore((state) => state.datasets)
-  const variable = useDatasetsStore((state) => state.filters.variable)
   const display = useDatasetsStore((state) => state.displayTime)
   const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
   const { region } = useRegion()
@@ -187,11 +185,6 @@ const ChartWrapper = ({ data }) => {
     }, [])
 
   const loading = data.some(([name, value]) => !value)
-  const units = (
-    <Box as='span' sx={{ textTransform: 'none' }}>
-      {variable === 'pr' ? 'mm' : 'K'}
-    </Box>
-  )
 
   return (
     <Box
@@ -237,7 +230,10 @@ const ChartWrapper = ({ data }) => {
               }}
             >
               ({dateStrings.formatTick(circle[0])}, {formatValue(circle[1])}
-              {units})
+              <Box as='span' sx={{ textTransform: 'none' }}>
+                {primaryDataset.units}
+              </Box>
+              )
             </Box>
           </Box>
         )}

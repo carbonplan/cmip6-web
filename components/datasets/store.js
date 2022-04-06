@@ -31,6 +31,8 @@ const getInitialDatasets = (data, attrs) => {
         loaded: false,
         colormapName: null,
         clim: null,
+        units: null,
+
         era5: dataset.experiment_id === 'reanalysis',
       }
       return accum
@@ -144,6 +146,27 @@ export const useDatasetsStore = create((set, get) => ({
 
       return {
         datasets: { ...datasets, [name]: updatedDataset },
+      }
+    }),
+  setDatasetUnits: (name, units) =>
+    set(({ datasets, filters }) => {
+      const dataset = datasets[name]
+
+      if (dataset.units) {
+        return {}
+      } else {
+        let updatedDataset = {
+          ...dataset,
+          units,
+        }
+        updatedDataset = {
+          ...updatedDataset,
+          ...getDatasetDisplay(updatedDataset, filters, true),
+        }
+
+        return {
+          datasets: { ...datasets, [name]: updatedDataset },
+        }
       }
     }),
   setFilters: (value) =>

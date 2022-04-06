@@ -7,11 +7,10 @@ import { useDatasetsStore } from '../../datasets'
 
 const DisplayEditor = ({ sx }) => {
   const name = useDatasetsStore((state) => state.active)
-  const variable = useDatasetsStore((state) => state.filters.variable)
   const updateDatasetDisplay = useDatasetsStore(
     (state) => state.updateDatasetDisplay
   )
-  const { colormapName, clim } = useDatasetsStore(
+  const { colormapName, clim, units } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
   )
@@ -57,7 +56,7 @@ const DisplayEditor = ({ sx }) => {
           <Box sx={{ ...sx.label, mb: '5px' }}>
             Color range (
             <Box as='span' sx={{ textTransform: 'none' }}>
-              {variable === 'pr' ? 'mm' : 'K'}
+              {units}
             </Box>
             )
           </Box>

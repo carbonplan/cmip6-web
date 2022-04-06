@@ -17,6 +17,7 @@ const DatasetRaster = ({ name, index }) => {
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const display = useDatasetsStore((state) => state.displayTime, shallow)
   const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
+  const setDatasetUnits = useDatasetsStore((state) => state.setDatasetUnits)
   const colormap = useThemedColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 
@@ -70,6 +71,9 @@ const DatasetRaster = ({ name, index }) => {
       mode={'texture'}
       variable={filters.variable}
       selector={{ time }}
+      setMetadata={(m) =>
+        setDatasetUnits(name, m.metadata[`0/${filters.variable}/.zattrs`].units)
+      }
       regionOptions={{
         setData: showRegionPicker ? (v) => setRegionData(name, v) : null,
         selector: { time: timeRange },
