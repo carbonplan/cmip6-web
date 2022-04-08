@@ -7,6 +7,8 @@ import { useDatasetsStore } from '../../datasets'
 
 const DisplayEditor = ({ sx }) => {
   const name = useDatasetsStore((state) => state.active)
+  const variable = useDatasetsStore((state) => state.filters.variable)
+
   const updateDatasetDisplay = useDatasetsStore(
     (state) => state.updateDatasetDisplay
   )
@@ -54,7 +56,7 @@ const DisplayEditor = ({ sx }) => {
       <Column start={[1, 1, 3, 3]} width={[6, 4, 2, 2]}>
         <Box>
           <Box sx={{ ...sx.label, mb: '5px' }}>
-            Color range (
+            {variable} (
             <Box as='span' sx={{ textTransform: 'none' }}>
               {units}
             </Box>
