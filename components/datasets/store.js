@@ -2,7 +2,12 @@ import create from 'zustand'
 import zarr from 'zarr-js'
 
 import DateStrings from './date-strings'
-import { areSiblings, getDatasetDisplay, getFiltersCallback } from './utils'
+import {
+  areSiblings,
+  getDatasetDisplay,
+  getFiltersCallback,
+  getUnitsConverter,
+} from './utils'
 
 const DEFAULT_DISPLAY_TIMES = {
   HISTORICAL: { year: 1950, month: 1, day: 1 },
@@ -31,7 +36,10 @@ const getInitialDatasets = (data, attrs) => {
         loaded: false,
         colormapName: null,
         clim: null,
+
         units: null,
+        displayUnits: null,
+        unitsConverter: null,
 
         era5: dataset.experiment_id === 'reanalysis',
       }
@@ -158,6 +166,8 @@ export const useDatasetsStore = create((set, get) => ({
         let updatedDataset = {
           ...dataset,
           units,
+          displayUnits: units,
+          unitsConverter: getUnitsConverter(units, units),
         }
         updatedDataset = {
           ...updatedDataset,
@@ -241,11 +251,11 @@ export const useDatasetsStore = create((set, get) => ({
   updateDatasetDisplay: (name, values) =>
     set(({ datasets, filters }) => {
       const invalidKey = Object.keys(values).find(
-        (k) => !['colormapName', 'clim'].includes(k)
+        (k) => !['colormapName', 'clim', 'displayUnits'].includes(k)
       )
       if (invalidKey) {
         throw new Error(
-          `Unexpected display update. Invalid key: ${invalidKey}, must be one of 'colormapName', 'clim'`
+          `Unexpected display update. Invalid key: ${invalidKey}, must be one of 'colormapName', 'clim', 'displayUnits'`
         )
       }
 
@@ -257,6 +267,10 @@ export const useDatasetsStore = create((set, get) => ({
           [name]: {
             ...updatedDataset,
             ...getDatasetDisplay(updatedDataset, filters),
+            unitsConverter: getUnitsConverter(
+              updatedDataset.units,
+              updatedDataset.displayUnits
+            ),
           },
         },
       }

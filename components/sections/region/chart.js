@@ -104,9 +104,8 @@ const ChartWrapper = ({ data }) => {
     primaryDataset = datasets[selectedName]
   }
 
-  const dateStrings = primaryDataset?.dateStrings
-  const timescale = primaryDataset?.timescale
-
+  const { dateStrings, timescale, displayUnits, unitsConverter } =
+    primaryDataset
   const { timeRange, ticks, bands } = useMemo(() => {
     if (!dateStrings) {
       return {}
@@ -126,7 +125,7 @@ const ChartWrapper = ({ data }) => {
   }, [dateStrings, display])
 
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
-  if (!datasets || !dateStrings) {
+  if (!datasets || !dateStrings || !unitsConverter) {
     return (
       <Box
         sx={{
@@ -200,7 +199,7 @@ const ChartWrapper = ({ data }) => {
       <LoadingSpinner opacity={loading ? 1 : 0} />
       <Chart
         x={timeRange}
-        y={range}
+        y={range.map((d) => unitsConverter.display(d))}
         padding={{ left: 35, right: 0, top: 0, bottom: 25 }}
       >
         <Grid horizontal />
@@ -229,9 +228,10 @@ const ChartWrapper = ({ data }) => {
                 color: 'secondary',
               }}
             >
-              ({dateStrings.formatTick(circle[0])}, {formatValue(circle[1])}
+              ({dateStrings.formatTick(circle[0])},{' '}
+              {formatValue(unitsConverter.display(circle[1]))}
               <Box as='span' sx={{ textTransform: 'none' }}>
-                {primaryDataset.units}
+                {displayUnits}
               </Box>
               )
             </Box>
@@ -258,14 +258,17 @@ const ChartWrapper = ({ data }) => {
                 <Box as='g' key={key}>
                   <Line
                     color={color}
-                    data={lineData}
+                    data={lineData.map(([x, y]) => [
+                      x,
+                      unitsConverter.display(y),
+                    ])}
                     width={width}
                     sx={{ transition: 'all 0.2s' }}
                   />
                   {circle && (
                     <Circle
                       x={circle[0]}
-                      y={circle[1]}
+                      y={unitsConverter.display(circle[1])}
                       color={color}
                       size={15}
                     />
@@ -277,7 +280,7 @@ const ChartWrapper = ({ data }) => {
               <Rect
                 key={time}
                 x={[x0, x1]}
-                y={range}
+                y={range.map((d) => unitsConverter.display(d))}
                 color='transparent'
                 onMouseEnter={() => setHovered(time)}
                 onMouseLeave={() => setHovered(null)}

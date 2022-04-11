@@ -5,6 +5,11 @@ import shallow from 'zustand/shallow'
 
 import { useDatasetsStore } from '../../datasets'
 
+const UNITS_OPTIONS = {
+  tasmax: ['K', '°C', '°F'],
+  tasmin: ['K', '°C', '°F'],
+  pr: ['mm', 'in'],
+}
 const DisplayEditor = ({ sx }) => {
   const name = useDatasetsStore((state) => state.active)
   const variable = useDatasetsStore((state) => state.filters.variable)
@@ -12,10 +17,11 @@ const DisplayEditor = ({ sx }) => {
   const updateDatasetDisplay = useDatasetsStore(
     (state) => state.updateDatasetDisplay
   )
-  const { colormapName, clim, units } = useDatasetsStore(
+  const { colormapName, clim, displayUnits, unitsConverter } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
   )
+
   const colormap = useThemedColormap(colormapName)
 
   const setClim = (setter) => {
@@ -52,18 +58,48 @@ const DisplayEditor = ({ sx }) => {
           </Select>
         </Box>
       </Column>
-
       <Column start={[1, 1, 3, 3]} width={[6, 4, 2, 2]}>
+        <Box sx={{ ...sx.label, mb: 2 }}>
+          Units
+          <Select
+            value={displayUnits}
+            onChange={(e) =>
+              updateDatasetDisplay(name, { displayUnits: e.target.value })
+            }
+            size='xs'
+            sx={{
+              mt: [1],
+              display: 'block',
+            }}
+            sxSelect={{
+              textTransform: 'uppercase',
+              fontFamily: 'mono',
+              fontSize: [1, 1, 1, 2],
+              width: '100%',
+              pb: [1],
+            }}
+          >
+            {UNITS_OPTIONS[variable].map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </Select>
+        </Box>
+      </Column>
+
+      <Column start={1} width={[6, 4, 4, 4]}>
         <Box>
           <Box sx={{ ...sx.label, mb: '5px' }}>
             {variable} (
             <Box as='span' sx={{ textTransform: 'none' }}>
-              {units}
+              {displayUnits}
             </Box>
             )
           </Box>
           <Colorbar
             colormap={colormap}
+            format={(d) => unitsConverter?.display(d).toFixed(0)}
             clim={clim}
             setClim={setClim}
             horizontal
