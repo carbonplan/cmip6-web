@@ -3,6 +3,7 @@ import { Colorbar, Column, Row, Select } from '@carbonplan/components'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
+import { formatValue } from '../../utils'
 import {
   convertUnits,
   useDatasetsStore,
@@ -104,11 +105,9 @@ const DisplayEditor = ({ sx }) => {
           <Colorbar
             colormap={colormap}
             format={(d) =>
-              convertUnits(
-                d,
-                DEFAULT_DISPLAY_UNITS[variable],
-                displayUnits
-              )?.toFixed(0)
+              formatValue(
+                convertUnits(d, DEFAULT_DISPLAY_UNITS[variable], displayUnits)
+              )
             }
             clim={clim}
             setClim={setClim}

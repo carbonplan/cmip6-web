@@ -1,6 +1,5 @@
 import { Box, Spinner } from 'theme-ui'
 import React, { useMemo, useState } from 'react'
-import { format } from 'd3-format'
 import {
   Chart,
   Circle,
@@ -12,6 +11,7 @@ import {
 } from '@carbonplan/charts'
 import { useRegion } from '@carbonplan/maps'
 
+import { formatValue as formatValueRaw } from '../../utils'
 import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
 
 const degToRad = (degrees) => {
@@ -39,23 +39,8 @@ const getArrayData = (arr, lats, zoom) => {
   )
 }
 
-export const formatValue = (value) => {
-  let result
-  if (value === 0) {
-    result = 0
-  } else if (value < 0.0001) {
-    result = format('.0e')(value)
-  } else if (value < 0.01) {
-    result = format('.2')(value)
-  } else if (value < 1) {
-    result = format('.2f')(value)
-  } else if (value < 10) {
-    result = format('.1f')(value)
-  } else if (value < 10000) {
-    result = format('.0f')(value)
-  } else {
-    result = format('0.2s')(value)
-  }
+const formatValue = (value) => {
+  const result = formatValueRaw(value)
 
   return (
     <Box as='span' sx={{ whiteSpace: 'nowrap' }}>
