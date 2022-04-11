@@ -1,3 +1,5 @@
+import { DEFAULT_CLIMS, DEFAULT_COLORMAPS } from './constants'
+
 export const getFiltersCallback = (filters) => {
   return (d) => {
     if (d.variable !== filters.variable || d.timescale !== filters.timescale) {
@@ -22,18 +24,6 @@ export const areSiblings = (d1, d2) => {
     d1.gcm === d2.gcm &&
     d1.method === d2.method
   )
-}
-
-export const DEFAULT_COLORMAPS = {
-  tasmax: 'warm',
-  tasmin: 'warm',
-  pr: 'cool',
-}
-
-const DEFAULT_CLIMS = {
-  tasmax: { day: [200, 320], month: [200, 320], year: [200, 320] },
-  tasmin: { day: [200, 300], month: [200, 300], year: [200, 300] },
-  pr: { day: [0, 1], month: [0, 300], year: [0, 2000] },
 }
 
 export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
@@ -70,17 +60,18 @@ export const convertUnits = (value, from, to) => {
     return value / 25.4
   } else if (from === 'in' && to === 'mm') {
     return value * 25.4
+  } else if (from === 'mm' && to === 'kg m-2 s-1') {
+    return value / 86400
+  } else if (from === 'kg m-2 s-1' && to === 'mm') {
+    return value * 86400
+  } else if (from === 'in' && to === 'kg m-2 s-1') {
+    return convertUnits(value, from, 'mm') / 86400
+  } else if (from === 'kg m-2 s-1' && to === 'in') {
+    return convertUnits(value * 86400, 'mm', to)
   }
 
   throw new Error(`Unable to convert units from ${from} to ${to}`)
 }
-
-// export const getUnitsConverter = (units, displayUnits) => {
-//   return {
-//     display: (value) => convertUnits(value, units, displayUnits),
-//     raw: (displayValue) => convertUnits(displayValue, displayUnits, units),
-//   }
-// }
 
 const EXPERIMENTS = {
   ssp245: 'SSP2-4.5',

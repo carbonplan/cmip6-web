@@ -8,17 +8,7 @@ import {
   getFiltersCallback,
   convertUnits,
 } from './utils'
-
-const DEFAULT_DISPLAY_TIMES = {
-  HISTORICAL: { year: 1950, month: 1, day: 1 },
-  PROJECTED: { year: 2015, month: 1, day: 1 },
-}
-
-const DEFAULT_DISPLAY_UNITS = {
-  tasmax: 'K',
-  tasmin: 'K',
-  pr: 'mm',
-}
+import { DEFAULT_DISPLAY_TIMES, DEFAULT_DISPLAY_UNITS } from './constants'
 
 const getInitialDatasets = (data, attrs) => {
   return data.datasets

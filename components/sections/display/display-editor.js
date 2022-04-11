@@ -3,12 +3,16 @@ import { Colorbar, Column, Row, Select } from '@carbonplan/components'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
-import { useDatasetsStore } from '../../datasets'
+import {
+  convertUnits,
+  useDatasetsStore,
+  DEFAULT_DISPLAY_UNITS,
+} from '../../datasets'
 
 const UNITS_OPTIONS = {
   tasmax: ['K', '°C', '°F'],
   tasmin: ['K', '°C', '°F'],
-  pr: ['mm', 'in'],
+  pr: ['mm', 'in', 'kg m-2 s-1'],
 }
 const DisplayEditor = ({ sx }) => {
   const name = useDatasetsStore((state) => state.active)
@@ -19,7 +23,7 @@ const DisplayEditor = ({ sx }) => {
   const updateDatasetDisplay = useDatasetsStore(
     (state) => state.updateDatasetDisplay
   )
-  const { colormapName, clim, getDisplayValue } = useDatasetsStore(
+  const { colormapName, clim } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
   )
@@ -99,7 +103,13 @@ const DisplayEditor = ({ sx }) => {
           </Box>
           <Colorbar
             colormap={colormap}
-            format={(d) => getDisplayValue(d, displayUnits)?.toFixed(0)}
+            format={(d) =>
+              convertUnits(
+                d,
+                DEFAULT_DISPLAY_UNITS[variable],
+                displayUnits
+              )?.toFixed(0)
+            }
             clim={clim}
             setClim={setClim}
             horizontal
