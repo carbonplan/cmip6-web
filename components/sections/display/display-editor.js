@@ -11,9 +11,21 @@ import {
 } from '../../datasets'
 
 const UNITS_OPTIONS = {
-  tasmax: ['K', '°C', '°F'],
-  tasmin: ['K', '°C', '°F'],
-  pr: ['mm', 'in', 'kg m-2 s-1'],
+  tasmax: [
+    { value: 'K', label: 'K' },
+    { value: '°C', label: '°C' },
+    { value: '°F', label: '°F' },
+  ],
+  tasmin: [
+    { value: 'K', label: 'K' },
+    { value: '°C', label: '°C' },
+    { value: '°F', label: '°F' },
+  ],
+  pr: [
+    { value: 'mm', label: 'mm' },
+    { value: 'in', label: 'in' },
+    { value: 'kg m-2 s-1', label: 'kg/m²/s' },
+  ],
 }
 const DisplayEditor = ({ sx }) => {
   const name = useDatasetsStore((state) => state.active)
@@ -77,16 +89,15 @@ const DisplayEditor = ({ sx }) => {
               display: 'block',
             }}
             sxSelect={{
-              textTransform: 'uppercase',
               fontFamily: 'mono',
               fontSize: [1, 1, 1, 2],
               width: '100%',
               pb: [1],
             }}
           >
-            {UNITS_OPTIONS[variable].map((d) => (
-              <option key={d} value={d}>
-                {d}
+            {UNITS_OPTIONS[variable].map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
               </option>
             ))}
           </Select>
