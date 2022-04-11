@@ -90,6 +90,7 @@ const ChartWrapper = ({ data }) => {
   const hoveredDataset = useDatasetsStore((state) => state.hovered)
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useDatasetsStore((state) => state.displayTime)
+  const displayUnits = useDatasetsStore((state) => state.displayUnits)
   const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
   const { region } = useRegion()
   const zoom = region?.properties?.zoom || 0
@@ -104,8 +105,7 @@ const ChartWrapper = ({ data }) => {
     primaryDataset = datasets[selectedName]
   }
 
-  const { dateStrings, timescale, displayUnits, unitsConverter } =
-    primaryDataset
+  const { dateStrings, timescale } = primaryDataset
   const { timeRange, ticks, bands } = useMemo(() => {
     if (!dateStrings) {
       return {}
@@ -125,7 +125,7 @@ const ChartWrapper = ({ data }) => {
   }, [dateStrings, display])
 
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
-  if (!datasets || !dateStrings || !unitsConverter) {
+  if (!datasets || !dateStrings) {
     return (
       <Box
         sx={{
@@ -145,27 +145,31 @@ const ChartWrapper = ({ data }) => {
   const lines = data
     .filter(([name, value, lats]) => value && lats && datasets[name].selected)
     .map(([name, value, lats]) => {
+      const ds = datasets[name]
+
       const lineData = Object.keys(value)
         .map((time) => {
           const { avg, min, max } = getArrayData(value[time], lats, zoom)
-          range[0] = Math.min(range[0], min)
-          range[1] = Math.max(range[1], max)
+          range[0] = Math.min(range[0], ds.getDisplayValue(min, displayUnits))
+          range[1] = Math.max(range[1], ds.getDisplayValue(max, displayUnits))
 
           const activeTime = dateStrings.valuesToTime(
-            datasets[name].dateStrings.timeToValues(Number(time))
+            ds.dateStrings.timeToValues(Number(time))
           )
 
+          const convertedAvg = ds.getDisplayValue(avg, displayUnits)
+
           if (name === activeDataset && hovered === activeTime) {
-            circle = [activeTime, avg]
+            circle = [activeTime, convertedAvg]
           }
 
-          return [activeTime, avg]
+          return [activeTime, convertedAvg]
         })
         .filter((p) => typeof p[0] === 'number')
 
       let color = 'secondary'
       let width = 1.5
-      const activeColor = COLORMAP_COLORS[datasets[name].colormapName]
+      const activeColor = COLORMAP_COLORS[ds.colormapName]
 
       if (name === activeDataset) {
         color = activeColor
@@ -199,7 +203,7 @@ const ChartWrapper = ({ data }) => {
       <LoadingSpinner opacity={loading ? 1 : 0} />
       <Chart
         x={timeRange}
-        y={range.map((d) => unitsConverter.display(d))}
+        y={range}
         padding={{ left: 35, right: 0, top: 0, bottom: 25 }}
       >
         <Grid horizontal />
@@ -228,8 +232,7 @@ const ChartWrapper = ({ data }) => {
                 color: 'secondary',
               }}
             >
-              ({dateStrings.formatTick(circle[0])},{' '}
-              {formatValue(unitsConverter.display(circle[1]))}
+              ({dateStrings.formatTick(circle[0])}, {formatValue(circle[1])}
               <Box as='span' sx={{ textTransform: 'none' }}>
                 {displayUnits}
               </Box>
@@ -258,17 +261,14 @@ const ChartWrapper = ({ data }) => {
                 <Box as='g' key={key}>
                   <Line
                     color={color}
-                    data={lineData.map(([x, y]) => [
-                      x,
-                      unitsConverter.display(y),
-                    ])}
+                    data={lineData}
                     width={width}
                     sx={{ transition: 'all 0.2s' }}
                   />
                   {circle && (
                     <Circle
                       x={circle[0]}
-                      y={unitsConverter.display(circle[1])}
+                      y={circle[1]}
                       color={color}
                       size={15}
                     />
@@ -280,7 +280,7 @@ const ChartWrapper = ({ data }) => {
               <Rect
                 key={time}
                 x={[x0, x1]}
-                y={range.map((d) => unitsConverter.display(d))}
+                y={range}
                 color='transparent'
                 onMouseEnter={() => setHovered(time)}
                 onMouseLeave={() => setHovered(null)}

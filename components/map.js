@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useThemeUI } from 'theme-ui'
 import { Map, Line, RegionPicker } from '@carbonplan/maps'
 

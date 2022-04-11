@@ -50,7 +50,7 @@ export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
   return { colormapName, clim }
 }
 
-const convertUnits = (value, from, to) => {
+export const convertUnits = (value, from, to) => {
   if (from === to) {
     return value
   }
@@ -75,12 +75,12 @@ const convertUnits = (value, from, to) => {
   throw new Error(`Unable to convert units from ${from} to ${to}`)
 }
 
-export const getUnitsConverter = (units, displayUnits) => {
-  return {
-    display: (value) => convertUnits(value, units, displayUnits),
-    raw: (displayValue) => convertUnits(displayValue, displayUnits, units),
-  }
-}
+// export const getUnitsConverter = (units, displayUnits) => {
+//   return {
+//     display: (value) => convertUnits(value, units, displayUnits),
+//     raw: (displayValue) => convertUnits(displayValue, displayUnits, units),
+//   }
+// }
 
 const EXPERIMENTS = {
   ssp245: 'SSP2-4.5',

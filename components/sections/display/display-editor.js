@@ -13,11 +13,13 @@ const UNITS_OPTIONS = {
 const DisplayEditor = ({ sx }) => {
   const name = useDatasetsStore((state) => state.active)
   const variable = useDatasetsStore((state) => state.filters.variable)
+  const displayUnits = useDatasetsStore((state) => state.displayUnits)
+  const setDisplayUnits = useDatasetsStore((state) => state.setDisplayUnits)
 
   const updateDatasetDisplay = useDatasetsStore(
     (state) => state.updateDatasetDisplay
   )
-  const { colormapName, clim, displayUnits, unitsConverter } = useDatasetsStore(
+  const { colormapName, clim, getDisplayValue } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
   )
@@ -63,9 +65,7 @@ const DisplayEditor = ({ sx }) => {
           Units
           <Select
             value={displayUnits}
-            onChange={(e) =>
-              updateDatasetDisplay(name, { displayUnits: e.target.value })
-            }
+            onChange={(e) => setDisplayUnits(e.target.value)}
             size='xs'
             sx={{
               mt: [1],
@@ -99,7 +99,7 @@ const DisplayEditor = ({ sx }) => {
           </Box>
           <Colorbar
             colormap={colormap}
-            format={(d) => unitsConverter?.display(d).toFixed(0)}
+            format={(d) => getDisplayValue(d, displayUnits)?.toFixed(0)}
             clim={clim}
             setClim={setClim}
             horizontal

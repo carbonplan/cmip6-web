@@ -6,12 +6,18 @@ import {
   areSiblings,
   getDatasetDisplay,
   getFiltersCallback,
-  getUnitsConverter,
+  convertUnits,
 } from './utils'
 
 const DEFAULT_DISPLAY_TIMES = {
   HISTORICAL: { year: 1950, month: 1, day: 1 },
   PROJECTED: { year: 2015, month: 1, day: 1 },
+}
+
+const DEFAULT_DISPLAY_UNITS = {
+  tasmax: 'K',
+  tasmin: 'K',
+  pr: 'mm',
 }
 
 const getInitialDatasets = (data, attrs) => {
@@ -38,8 +44,7 @@ const getInitialDatasets = (data, attrs) => {
         clim: null,
 
         units: null,
-        displayUnits: null,
-        unitsConverter: null,
+        getDisplayValue: () => null,
 
         era5: dataset.experiment_id === 'reanalysis',
       }
@@ -72,6 +77,7 @@ export const useDatasetsStore = create((set, get) => ({
   hovered: null,
   filters: null,
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
+  displayUnits: DEFAULT_DISPLAY_UNITS.tasmax,
   updatingTime: false,
   fetchDatasets: async () => {
     const result = await fetch(
@@ -86,6 +92,7 @@ export const useDatasetsStore = create((set, get) => ({
     set({ datasets, filters })
   },
   setDisplayTime: (value) => set({ displayTime: value }),
+  setDisplayUnits: (value) => set({ displayUnits: value }),
   setUpdatingTime: (value) => set({ updatingTime: value }),
   loadDateStrings: async (name) => {
     const [date_str, time] = await Promise.all([
@@ -157,82 +164,94 @@ export const useDatasetsStore = create((set, get) => ({
       }
     }),
   setDatasetUnits: (name, units) =>
-    set(({ datasets, filters }) => {
+    set(({ datasets }) => {
       const dataset = datasets[name]
 
       if (dataset.units) {
         return {}
       } else {
-        let updatedDataset = {
-          ...dataset,
-          units,
-          displayUnits: units,
-          unitsConverter: getUnitsConverter(units, units),
-        }
-        updatedDataset = {
-          ...updatedDataset,
-          ...getDatasetDisplay(updatedDataset, filters, true),
-        }
-
         return {
-          datasets: { ...datasets, [name]: updatedDataset },
+          datasets: {
+            ...datasets,
+            [name]: {
+              ...dataset,
+              units,
+              getDisplayValue: (value, displayUnits) =>
+                convertUnits(value, units, displayUnits),
+            },
+          },
         }
       }
     }),
   setFilters: (value) =>
-    set(({ active, displayTime, filters, datasets, selectDataset }) => {
-      const updatedFilters = { ...filters, ...value }
-      const cb = getFiltersCallback(updatedFilters)
-      let updatedActive = active
-      const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
-        const dataset = datasets[k]
-        const visible = cb(dataset)
-        let selected = false
-        let displayUpdates = {}
+    set(
+      ({
+        active,
+        displayTime,
+        displayUnits,
+        filters,
+        datasets,
+        selectDataset,
+      }) => {
+        const updatedFilters = { ...filters, ...value }
+        const cb = getFiltersCallback(updatedFilters)
+        let updatedActive = active
+        const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
+          const dataset = datasets[k]
+          const visible = cb(dataset)
+          let selected = false
+          let displayUpdates = {}
 
-        if (visible) {
-          selected = dataset.selected
-          displayUpdates = getDatasetDisplay(dataset, updatedFilters, true)
-          if (active && areSiblings(dataset, datasets[active])) {
-            updatedActive = k
+          if (visible) {
+            selected = dataset.selected
+            displayUpdates = getDatasetDisplay(dataset, updatedFilters, true)
+            if (active && areSiblings(dataset, datasets[active])) {
+              updatedActive = k
+            }
+
+            if (
+              !dataset.selected &&
+              Object.values(datasets).find(
+                (s) => s.selected && areSiblings(dataset, s)
+              )
+            ) {
+              selectDataset(k)
+              selected = true
+            }
+          } else if (updatedActive === k) {
+            updatedActive = null
           }
-
-          if (
-            !dataset.selected &&
-            Object.values(datasets).find(
-              (s) => s.selected && areSiblings(dataset, s)
-            )
-          ) {
-            selectDataset(k)
-            selected = true
+          accum[k] = {
+            ...dataset,
+            ...displayUpdates,
+            selected,
           }
-        } else if (updatedActive === k) {
-          updatedActive = null
-        }
-        accum[k] = {
-          ...dataset,
-          ...displayUpdates,
-          selected,
-        }
-        return accum
-      }, {})
+          return accum
+        }, {})
 
-      let updatedDisplayTime = displayTime
-      if (
-        filters.experiment.historical !== updatedFilters.experiment.historical
-      ) {
-        updatedDisplayTime = updatedFilters.experiment.historical
-          ? DEFAULT_DISPLAY_TIMES.HISTORICAL
-          : DEFAULT_DISPLAY_TIMES.PROJECTED
-      }
+        let updatedDisplayTime = displayTime
+        if (
+          filters.experiment.historical !== updatedFilters.experiment.historical
+        ) {
+          updatedDisplayTime = updatedFilters.experiment.historical
+            ? DEFAULT_DISPLAY_TIMES.HISTORICAL
+            : DEFAULT_DISPLAY_TIMES.PROJECTED
+        }
 
-      return {
-        active: updatedActive,
-        datasets: updatedDatasets,
-        filters: updatedFilters,
-        displayTime: updatedDisplayTime,
+        let updatedDisplayUnits = displayUnits
+        if (filters.variable !== updatedFilters.variable) {
+          updatedDisplayUnits = DEFAULT_DISPLAY_UNITS[updatedFilters.variable]
+        }
+
+        return {
+          active: updatedActive,
+          datasets: updatedDatasets,
+          filters: updatedFilters,
+          displayTime: updatedDisplayTime,
+          displayUnits: updatedDisplayUnits,
+        }
       }
-    }),
+    ),
 
   deselectDataset: (name) =>
     set(({ active, datasets }) => {
@@ -251,11 +270,11 @@ export const useDatasetsStore = create((set, get) => ({
   updateDatasetDisplay: (name, values) =>
     set(({ datasets, filters }) => {
       const invalidKey = Object.keys(values).find(
-        (k) => !['colormapName', 'clim', 'displayUnits'].includes(k)
+        (k) => !['colormapName', 'clim'].includes(k)
       )
       if (invalidKey) {
         throw new Error(
-          `Unexpected display update. Invalid key: ${invalidKey}, must be one of 'colormapName', 'clim', 'displayUnits'`
+          `Unexpected display update. Invalid key: ${invalidKey}, must be one of 'colormapName', 'clim'`
         )
       }
 
@@ -267,10 +286,6 @@ export const useDatasetsStore = create((set, get) => ({
           [name]: {
             ...updatedDataset,
             ...getDatasetDisplay(updatedDataset, filters),
-            unitsConverter: getUnitsConverter(
-              updatedDataset.units,
-              updatedDataset.displayUnits
-            ),
           },
         },
       }
