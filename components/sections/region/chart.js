@@ -211,11 +211,11 @@ const ChartWrapper = ({ data }) => {
         padding={{ left: 35, right: 0, top: 0, bottom: 25 }}
       >
         <Grid horizontal />
-        <Grid vertical values={timescale === 'day' ? undefined : ticks} />
+        <Grid vertical values={ticks} />
         <TickLabels left count={4} format={formatValue} />
         <TickLabels
           bottom
-          values={timescale === 'day' ? undefined : ticks}
+          values={ticks}
           format={(d) => dateStrings.formatTick(Math.round(d))}
         />
         {typeof hovered === 'number' && circle && (

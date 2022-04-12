@@ -121,14 +121,15 @@ class DateStrings {
       case 'day':
         return null
       case 'month':
-        return Array(12)
+        return Array(7)
           .fill(null)
-          .map((_, i) => this.valuesToTime({ year, month: i + 1, day: 1 }))
+          .map((_, i) => this.valuesToTime({ year, month: 1 + 2 * i, day: 1 }))
           .filter((index) => typeof index === 'number')
       case 'year':
         const { year: initialYear } = this._indexToValues(0)
-        const step = Math.floor(this.time.length / 10)
-        return Array(11)
+        const count = 9
+        const step = Math.floor(this.time.length / (count - 1))
+        return Array(count)
           .fill(null)
           .map((_, i) =>
             this.valuesToTime({
@@ -152,7 +153,10 @@ class DateStrings {
           .map((_, i) => this.valuesToTime({ year, month, day: i + 1 }))
           .filter((index) => typeof index === 'number')
       case 'month':
-        return this.getTicks({ year })
+        return Array(12)
+          .fill(null)
+          .map((_, i) => this.valuesToTime({ year, month: i + 1, day: 1 }))
+          .filter((index) => typeof index === 'number')
       case 'year':
         return this.time
       default:
