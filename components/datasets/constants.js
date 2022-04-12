@@ -45,7 +45,7 @@ export const DEFAULT_DISPLAY_UNITS = {
 export const DEFAULT_CLIMS = {
   tasmax: { day: [200, 320], month: [200, 320], year: [200, 320] },
   tasmin: { day: [200, 300], month: [200, 300], year: [200, 300] },
-  pr: { day: [0, 1], month: [0, 300], year: [0, 2000] },
+  pr: { day: [0, 10], month: [0, 300], year: [0, 2000] },
 }
 
 export const DEFAULT_COLORMAPS = {
