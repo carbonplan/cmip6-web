@@ -1,3 +1,5 @@
+import { DEFAULT_CLIMS, DEFAULT_COLORMAPS } from './constants'
+
 export const getFiltersCallback = (filters) => {
   return (d) => {
     if (d.variable !== filters.variable || d.timescale !== filters.timescale) {
@@ -24,18 +26,6 @@ export const areSiblings = (d1, d2) => {
   )
 }
 
-export const DEFAULT_COLORMAPS = {
-  tasmax: 'warm',
-  tasmin: 'warm',
-  pr: 'cool',
-}
-
-const DEFAULT_CLIMS = {
-  tasmax: { day: [200, 320], month: [200, 320], year: [200, 320] },
-  tasmin: { day: [200, 300], month: [200, 300], year: [200, 300] },
-  pr: { day: [0, 5], month: [0, 300], year: [0, 2000] },
-}
-
 export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
   let { colormapName, clim } = dataset
 
@@ -48,6 +38,39 @@ export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
   }
 
   return { colormapName, clim }
+}
+
+export const convertUnits = (value, from, to) => {
+  if (from === to) {
+    return value
+  }
+  // temperature units
+  if (from === 'K' && to === '°C') {
+    return value - 273.15
+  } else if (from === '°C' && to === 'K') {
+    return value + 273.15
+  } else if (from === 'K' && to === '°F') {
+    return convertUnits(value, from, '°C') * (9 / 5) + 32
+  } else if (from === '°F' && to === 'K') {
+    return convertUnits((value - 32) * (5 / 9), '°C', to)
+  }
+
+  // precipitation units
+  if (from === 'mm' && to === 'in') {
+    return value / 25.4
+  } else if (from === 'in' && to === 'mm') {
+    return value * 25.4
+  } else if (from === 'mm' && to === 'kg m-2 s-1') {
+    return value / 86400
+  } else if (from === 'kg m-2 s-1' && to === 'mm') {
+    return value * 86400
+  } else if (from === 'in' && to === 'kg m-2 s-1') {
+    return convertUnits(value, from, 'mm') / 86400
+  } else if (from === 'kg m-2 s-1' && to === 'in') {
+    return convertUnits(value * 86400, 'mm', to)
+  }
+
+  throw new Error(`Unable to convert units from ${from} to ${to}`)
 }
 
 const EXPERIMENTS = {

@@ -1,22 +1,25 @@
 import { Raster } from '@carbonplan/maps'
 import { useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
-
-import { useDatasetsStore } from './datasets'
-import { useRegionStore } from './region'
 import { useCallback, useEffect, useMemo } from 'react'
+
+import {
+  convertUnits,
+  useDatasetsStore,
+  DEFAULT_DISPLAY_UNITS,
+} from './datasets'
+import { useRegionStore } from './region'
 
 const DatasetRaster = ({ name, index }) => {
   const active = useDatasetsStore((state) => state.active === name)
-  const { dateStrings, source, colormapName, clim, loaded } = useDatasetsStore(
-    (state) => state.datasets[name],
-    shallow
-  )
+  const { dateStrings, source, colormapName, clim, loaded, units } =
+    useDatasetsStore((state) => state.datasets[name], shallow)
   const setLoaded = useDatasetsStore((state) => state.setLoaded)
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const display = useDatasetsStore((state) => state.displayTime, shallow)
   const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
+  const setDatasetUnits = useDatasetsStore((state) => state.setDatasetUnits)
   const colormap = useThemedColormap(colormapName)
   const filters = useDatasetsStore((state) => state.filters)
 
@@ -66,10 +69,19 @@ const DatasetRaster = ({ name, index }) => {
       index={index}
       source={source}
       colormap={colormap}
-      clim={clim}
+      clim={
+        units
+          ? clim.map((d) =>
+              convertUnits(d, DEFAULT_DISPLAY_UNITS[filters.variable], units)
+            )
+          : clim
+      }
       mode={'texture'}
       variable={filters.variable}
       selector={{ time }}
+      setMetadata={(m) =>
+        setDatasetUnits(name, m.metadata[`0/${filters.variable}/.zattrs`].units)
+      }
       regionOptions={{
         setData: showRegionPicker ? (v) => setRegionData(name, v) : null,
         selector: { time: timeRange },

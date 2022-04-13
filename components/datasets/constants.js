@@ -30,3 +30,26 @@ export const COLORMAP_COLORS = {
   rainbow: 'teal',
   sinebow: 'yellow',
 }
+
+export const DEFAULT_DISPLAY_TIMES = {
+  HISTORICAL: { year: 1950, month: 1, day: 1 },
+  PROJECTED: { year: 2015, month: 1, day: 1 },
+}
+
+export const DEFAULT_DISPLAY_UNITS = {
+  tasmax: 'K',
+  tasmin: 'K',
+  pr: 'mm',
+}
+
+export const DEFAULT_CLIMS = {
+  tasmax: { day: [200, 320], month: [200, 320], year: [200, 320] },
+  tasmin: { day: [200, 300], month: [200, 300], year: [200, 300] },
+  pr: { day: [0, 10], month: [0, 300], year: [0, 2000] },
+}
+
+export const DEFAULT_COLORMAPS = {
+  tasmax: 'warm',
+  tasmin: 'warm',
+  pr: 'cool',
+}

@@ -1,6 +1,5 @@
 import { Box, Spinner } from 'theme-ui'
 import React, { useMemo, useState } from 'react'
-import { format } from 'd3-format'
 import {
   Chart,
   Circle,
@@ -12,6 +11,7 @@ import {
 } from '@carbonplan/charts'
 import { useRegion } from '@carbonplan/maps'
 
+import { formatValue as formatValueRaw } from '../../utils'
 import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
 
 const degToRad = (degrees) => {
@@ -39,24 +39,8 @@ const getArrayData = (arr, lats, zoom) => {
   )
 }
 
-// TODO: add units
-export const formatValue = (value) => {
-  let result
-  if (value === 0) {
-    result = 0
-  } else if (value < 0.0001) {
-    result = format('.0e')(value)
-  } else if (value < 0.01) {
-    result = format('.2')(value)
-  } else if (value < 1) {
-    result = format('.2f')(value)
-  } else if (value < 10) {
-    result = format('.1f')(value)
-  } else if (value < 10000) {
-    result = format('.0f')(value)
-  } else {
-    result = format('0.2s')(value)
-  }
+const formatValue = (value) => {
+  const result = formatValueRaw(value)
 
   return (
     <Box as='span' sx={{ whiteSpace: 'nowrap' }}>
@@ -90,8 +74,8 @@ const ChartWrapper = ({ data }) => {
   const activeDataset = useDatasetsStore((state) => state.active)
   const hoveredDataset = useDatasetsStore((state) => state.hovered)
   const datasets = useDatasetsStore((state) => state.datasets)
-  const variable = useDatasetsStore((state) => state.filters.variable)
   const display = useDatasetsStore((state) => state.displayTime)
+  const displayUnits = useDatasetsStore((state) => state.displayUnits)
   const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
   const { region } = useRegion()
   const zoom = region?.properties?.zoom || 0
@@ -106,9 +90,7 @@ const ChartWrapper = ({ data }) => {
     primaryDataset = datasets[selectedName]
   }
 
-  const dateStrings = primaryDataset?.dateStrings
-  const timescale = primaryDataset?.timescale
-
+  const { dateStrings, timescale } = primaryDataset
   const { timeRange, ticks, bands } = useMemo(() => {
     if (!dateStrings) {
       return {}
@@ -148,27 +130,31 @@ const ChartWrapper = ({ data }) => {
   const lines = data
     .filter(([name, value, lats]) => value && lats && datasets[name].selected)
     .map(([name, value, lats]) => {
+      const ds = datasets[name]
+
       const lineData = Object.keys(value)
         .map((time) => {
           const { avg, min, max } = getArrayData(value[time], lats, zoom)
-          range[0] = Math.min(range[0], min)
-          range[1] = Math.max(range[1], max)
+          range[0] = Math.min(range[0], ds.getDisplayValue(min, displayUnits))
+          range[1] = Math.max(range[1], ds.getDisplayValue(max, displayUnits))
 
           const activeTime = dateStrings.valuesToTime(
-            datasets[name].dateStrings.timeToValues(Number(time))
+            ds.dateStrings.timeToValues(Number(time))
           )
 
+          const convertedAvg = ds.getDisplayValue(avg, displayUnits)
+
           if (name === activeDataset && hovered === activeTime) {
-            circle = [activeTime, avg]
+            circle = [activeTime, convertedAvg]
           }
 
-          return [activeTime, avg]
+          return [activeTime, convertedAvg]
         })
         .filter((p) => typeof p[0] === 'number')
 
       let color = 'secondary'
       let width = 1.5
-      const activeColor = COLORMAP_COLORS[datasets[name].colormapName]
+      const activeColor = COLORMAP_COLORS[ds.colormapName]
 
       if (name === activeDataset) {
         color = activeColor
@@ -187,11 +173,6 @@ const ChartWrapper = ({ data }) => {
     }, [])
 
   const loading = data.some(([name, value]) => !value)
-  const units = (
-    <Box as='span' sx={{ textTransform: 'none' }}>
-      {variable === 'pr' ? 'mm' : 'K'}
-    </Box>
-  )
 
   return (
     <Box
@@ -237,7 +218,10 @@ const ChartWrapper = ({ data }) => {
               }}
             >
               ({dateStrings.formatTick(circle[0])}, {formatValue(circle[1])}
-              {units})
+              <Box as='span' sx={{ textTransform: 'none' }}>
+                {displayUnits}
+              </Box>
+              )
             </Box>
           </Box>
         )}

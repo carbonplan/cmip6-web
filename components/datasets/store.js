@@ -2,12 +2,13 @@ import create from 'zustand'
 import zarr from 'zarr-js'
 
 import DateStrings from './date-strings'
-import { areSiblings, getDatasetDisplay, getFiltersCallback } from './utils'
-
-const DEFAULT_DISPLAY_TIMES = {
-  HISTORICAL: { year: 1950, month: 1, day: 1 },
-  PROJECTED: { year: 2015, month: 1, day: 1 },
-}
+import {
+  areSiblings,
+  getDatasetDisplay,
+  getFiltersCallback,
+  convertUnits,
+} from './utils'
+import { DEFAULT_DISPLAY_TIMES, DEFAULT_DISPLAY_UNITS } from './constants'
 
 const getInitialDatasets = (data, attrs) => {
   return data.datasets
@@ -31,6 +32,10 @@ const getInitialDatasets = (data, attrs) => {
         loaded: false,
         colormapName: null,
         clim: null,
+
+        units: null,
+        getDisplayValue: () => null,
+
         era5: dataset.experiment_id === 'reanalysis',
       }
       return accum
@@ -62,6 +67,7 @@ export const useDatasetsStore = create((set, get) => ({
   hovered: null,
   filters: null,
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
+  displayUnits: DEFAULT_DISPLAY_UNITS.tasmax,
   updatingTime: false,
   fetchDatasets: async () => {
     const result = await fetch(
@@ -76,6 +82,7 @@ export const useDatasetsStore = create((set, get) => ({
     set({ datasets, filters })
   },
   setDisplayTime: (value) => set({ displayTime: value }),
+  setDisplayUnits: (value) => set({ displayUnits: value }),
   setUpdatingTime: (value) => set({ updatingTime: value }),
   loadDateStrings: async (name) => {
     const [date_str, time] = await Promise.all([
@@ -146,60 +153,95 @@ export const useDatasetsStore = create((set, get) => ({
         datasets: { ...datasets, [name]: updatedDataset },
       }
     }),
-  setFilters: (value) =>
-    set(({ active, displayTime, filters, datasets, selectDataset }) => {
-      const updatedFilters = { ...filters, ...value }
-      const cb = getFiltersCallback(updatedFilters)
-      let updatedActive = active
-      const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
-        const dataset = datasets[k]
-        const visible = cb(dataset)
-        let selected = false
-        let displayUpdates = {}
+  setDatasetUnits: (name, units) =>
+    set(({ datasets }) => {
+      const dataset = datasets[name]
 
-        if (visible) {
-          selected = dataset.selected
-          displayUpdates = getDatasetDisplay(dataset, updatedFilters, true)
-          if (active && areSiblings(dataset, datasets[active])) {
-            updatedActive = k
-          }
-
-          if (
-            !dataset.selected &&
-            Object.values(datasets).find(
-              (s) => s.selected && areSiblings(dataset, s)
-            )
-          ) {
-            selectDataset(k)
-            selected = true
-          }
-        } else if (updatedActive === k) {
-          updatedActive = null
+      if (dataset.units) {
+        return {}
+      } else {
+        return {
+          datasets: {
+            ...datasets,
+            [name]: {
+              ...dataset,
+              units,
+              getDisplayValue: (value, displayUnits) =>
+                convertUnits(value, units, displayUnits),
+            },
+          },
         }
-        accum[k] = {
-          ...dataset,
-          ...displayUpdates,
-          selected,
-        }
-        return accum
-      }, {})
-
-      let updatedDisplayTime = displayTime
-      if (
-        filters.experiment.historical !== updatedFilters.experiment.historical
-      ) {
-        updatedDisplayTime = updatedFilters.experiment.historical
-          ? DEFAULT_DISPLAY_TIMES.HISTORICAL
-          : DEFAULT_DISPLAY_TIMES.PROJECTED
-      }
-
-      return {
-        active: updatedActive,
-        datasets: updatedDatasets,
-        filters: updatedFilters,
-        displayTime: updatedDisplayTime,
       }
     }),
+  setFilters: (value) =>
+    set(
+      ({
+        active,
+        displayTime,
+        displayUnits,
+        filters,
+        datasets,
+        selectDataset,
+      }) => {
+        const updatedFilters = { ...filters, ...value }
+        const cb = getFiltersCallback(updatedFilters)
+        let updatedActive = active
+        const updatedDatasets = Object.keys(datasets).reduce((accum, k) => {
+          const dataset = datasets[k]
+          const visible = cb(dataset)
+          let selected = false
+          let displayUpdates = {}
+
+          if (visible) {
+            selected = dataset.selected
+            displayUpdates = getDatasetDisplay(dataset, updatedFilters, true)
+            if (active && areSiblings(dataset, datasets[active])) {
+              updatedActive = k
+            }
+
+            if (
+              !dataset.selected &&
+              Object.values(datasets).find(
+                (s) => s.selected && areSiblings(dataset, s)
+              )
+            ) {
+              selectDataset(k)
+              selected = true
+            }
+          } else if (updatedActive === k) {
+            updatedActive = null
+          }
+          accum[k] = {
+            ...dataset,
+            ...displayUpdates,
+            selected,
+          }
+          return accum
+        }, {})
+
+        let updatedDisplayTime = displayTime
+        if (
+          filters.experiment.historical !== updatedFilters.experiment.historical
+        ) {
+          updatedDisplayTime = updatedFilters.experiment.historical
+            ? DEFAULT_DISPLAY_TIMES.HISTORICAL
+            : DEFAULT_DISPLAY_TIMES.PROJECTED
+        }
+
+        let updatedDisplayUnits = displayUnits
+        if (filters.variable !== updatedFilters.variable) {
+          updatedDisplayUnits = DEFAULT_DISPLAY_UNITS[updatedFilters.variable]
+        }
+
+        return {
+          active: updatedActive,
+          datasets: updatedDatasets,
+          filters: updatedFilters,
+          displayTime: updatedDisplayTime,
+          displayUnits: updatedDisplayUnits,
+        }
+      }
+    ),
 
   deselectDataset: (name) =>
     set(({ active, datasets }) => {
