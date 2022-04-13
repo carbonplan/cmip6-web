@@ -109,7 +109,11 @@ const DisplayEditor = ({ sx }) => {
           <Box sx={{ ...sx.label, mb: '5px' }}>
             {variable} (
             <Box as='span' sx={{ textTransform: 'none' }}>
-              {displayUnits}
+              {
+                UNITS_OPTIONS[variable].find(
+                  ({ value }) => value === displayUnits
+                )?.label
+              }
             </Box>
             )
           </Box>
