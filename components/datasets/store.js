@@ -71,7 +71,7 @@ export const useDatasetsStore = create((set, get) => ({
   updatingTime: false,
   fetchDatasets: async () => {
     const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/combined-cmip6-era5-pyramids-catalog-web.json'
+      'https://cmip6downscaling.blob.core.windows.net/scratch/results/pyramids/combined-cmip6-era5-pyramids-catalog-web.json'
     )
 
     const data = await result.json()
