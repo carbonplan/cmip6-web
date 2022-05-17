@@ -93,6 +93,7 @@ const DisplayEditor = ({ sx }) => {
               fontSize: [1, 1, 1, 2],
               width: '100%',
               pb: [1],
+              backgroundColor: 'background',
             }}
           >
             {UNITS_OPTIONS[variable].map(({ value, label }) => (
