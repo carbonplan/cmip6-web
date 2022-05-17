@@ -69,6 +69,7 @@ const DatasetRaster = ({ name, index }) => {
       index={index}
       source={source}
       colormap={colormap}
+      fillValue={9.969209968386869e36}
       clim={
         units
           ? clim.map((d) =>
