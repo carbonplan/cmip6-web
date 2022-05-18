@@ -1,5 +1,5 @@
 import { useThemeUI } from 'theme-ui'
-import { Map, Line, RegionPicker } from '@carbonplan/maps'
+import { Fill, Map, Line, RegionPicker } from '@carbonplan/maps'
 
 import { useDatasetsStore } from './datasets'
 import { useRegionStore } from './region'
@@ -18,6 +18,11 @@ const MapWrapper = ({ children, setLoading }) => {
 
   return (
     <Map zoom={0} center={[0, 0]} debug={false} setLoading={setLoading}>
+      <Fill
+        color={theme.rawColors.background}
+        source={bucket + 'basemaps/ocean'}
+        variable={'ocean'}
+      />
       <Line
         color={theme.rawColors.primary}
         source={bucket + 'basemaps/land'}
