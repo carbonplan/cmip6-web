@@ -7,6 +7,7 @@ import {
   convertUnits,
   useDatasetsStore,
   DEFAULT_DISPLAY_UNITS,
+  NAN,
 } from './datasets'
 import { useRegionStore } from './region'
 
@@ -69,7 +70,7 @@ const DatasetRaster = ({ name, index }) => {
       index={index}
       source={source}
       colormap={colormap}
-      fillValue={9.969209968386869e36}
+      fillValue={NAN}
       clim={
         units
           ? clim.map((d) =>

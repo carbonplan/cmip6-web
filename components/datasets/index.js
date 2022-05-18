@@ -4,5 +4,6 @@ export {
   COLORMAP_COLORS,
   DEFAULT_COLORMAPS,
   DEFAULT_DISPLAY_UNITS,
+  NAN,
 } from './constants'
 export { convertUnits } from './utils'

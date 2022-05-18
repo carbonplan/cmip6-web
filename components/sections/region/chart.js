@@ -12,7 +12,7 @@ import {
 import { useRegion } from '@carbonplan/maps'
 
 import { formatValue as formatValueRaw } from '../../utils'
-import { COLORMAP_COLORS, useDatasetsStore } from '../../datasets'
+import { COLORMAP_COLORS, NAN, useDatasetsStore } from '../../datasets'
 
 const degToRad = (degrees) => {
   return degrees * (Math.PI / 180)
@@ -27,16 +27,20 @@ const areaOfPixelProjected = (lat, zoom) => {
 }
 
 const getArrayData = (arr, lats, zoom) => {
-  const areas = lats.map((lat) => areaOfPixelProjected(lat, zoom))
+  const areas = lats
+    .filter((l, i) => arr[i] !== NAN)
+    .map((lat) => areaOfPixelProjected(lat, zoom))
   const totalArea = areas.reduce((a, d) => a + d, 0)
-  return arr.reduce(
-    (accum, el, i) => ({
-      avg: accum.avg + el * (areas[i] / totalArea),
-      min: Math.min(el, accum.min),
-      max: Math.max(el, accum.max),
-    }),
-    { avg: 0, min: Infinity, max: -Infinity }
-  )
+  return arr
+    .filter((el) => el !== NAN)
+    .reduce(
+      (accum, el, i) => ({
+        avg: accum.avg + el * (areas[i] / totalArea),
+        min: Math.min(el, accum.min),
+        max: Math.max(el, accum.max),
+      }),
+      { avg: 0, min: Infinity, max: -Infinity }
+    )
 }
 
 const formatValue = (value) => {

@@ -53,3 +53,5 @@ export const DEFAULT_COLORMAPS = {
   tasmin: 'warm',
   pr: 'cool',
 }
+
+export const NAN = 9.969209968386869e36
