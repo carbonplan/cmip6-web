@@ -197,7 +197,7 @@ const ChartWrapper = ({ data }) => {
       >
         <Grid horizontal />
         <Grid vertical values={ticks} />
-        <TickLabels left count={4} format={formatValue} />
+        <TickLabels left count={4} />
         <TickLabels
           bottom
           values={ticks}
