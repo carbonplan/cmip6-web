@@ -17,15 +17,9 @@
 
 **maps of downscaled cmip6 models**
 
-[![GitHub][github-badge]][github]
-[![Build Status]][actions]
-![MIT License][]
-
-[github]: https://github.com/carbonplan/cmip6-web
-[github-badge]: https://badgen.net/badge/-/github?icon=github&label
-[build status]: https://github.com/carbonplan/cmip6-web/actions/workflows/main.yml/badge.svg
-[actions]: https://github.com/carbonplan/cmip6-web/actions/workflows/main.yaml
-[mit license]: https://badgen.net/badge/license/MIT/blue
+![GitHub branch checks state](https://img.shields.io/github/checks-status/carbonplan/cmip6-web/main?style=flat-square)
+![GitHub deployments](https://img.shields.io/github/deployments/carbonplan/cmip6-web/production?label=vercel&style=flat-square)
+![GitHub](https://img.shields.io/github/license/carbonplan/cmip6-web?style=flat-square)
 
 ## to build the site locally
 
