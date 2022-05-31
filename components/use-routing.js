@@ -12,7 +12,24 @@ const useRouting = () => {
       (state) => state.datasets && state.datasets[state.active]
     ) || {}
   const displayTime = useDatasetsStore((state) => state.displayTime)
+  const setActive = useDatasetsStore((state) => state.setActive)
+  const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
 
+  // Sets values in the store based on the initial URL parameters
+  useEffect(() => {
+    if (router.isReady && initialized) {
+      const { active, year, month, day } = router.query
+      if (active) {
+        setActive(active)
+      }
+
+      if (year && month && day) {
+        setDisplayTime({ year, month, day })
+      }
+    }
+  }, [initialized, router.isReady])
+
+  // Update the URL when the active dataset changes or the display time changes.
   useEffect(() => {
     if (initialized) {
       const query = {
@@ -23,8 +40,6 @@ const useRouting = () => {
       router.replace({ pathname: '', query }, null, {
         shallow: true,
       })
-
-      console.log({ active, displayTime })
     }
   }, [initialized, active, displayTime])
 }
