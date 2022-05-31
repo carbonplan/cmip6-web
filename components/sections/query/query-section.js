@@ -8,6 +8,7 @@ import ExpandableFilter from './expandable-filter'
 import Dataset from './dataset'
 import { useRegionStore } from '../../region'
 import TooltipWrapper from './tooltip-wrapper'
+import { useRouter } from 'next/router'
 const formatNumber = (value) => String(value).padStart(2, '0')
 
 const LABEL_MAP = {
@@ -230,12 +231,30 @@ const Filters = ({ sx }) => {
 const QuerySection = ({ sx }) => {
   const datasets = useDatasetsStore((state) => !!state.datasets)
   const fetchDatasets = useDatasetsStore((state) => state.fetchDatasets)
+  const setActive = useDatasetsStore((state) => state.setActive)
+  const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
+  const router = useRouter()
 
   useEffect(() => {
     if (!datasets) {
       fetchDatasets()
     }
   }, [])
+
+  useEffect(() => {
+    if (router.isReady && datasets) {
+      console.log('setting from query', router.query)
+
+      const { active, year, month, day } = router.query
+      if (active) {
+        setActive(active)
+      }
+
+      if (year && month && day) {
+        setDisplayTime({ year, month, day })
+      }
+    }
+  }, [datasets, router.isReady])
 
   return (
     <Box>
