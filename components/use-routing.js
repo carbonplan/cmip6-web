@@ -19,10 +19,8 @@ const useRouting = () => {
   // Sets values in the store based on the initial URL parameters
   useEffect(() => {
     if (router.isReady && initialized) {
+      const { query } = router
       const {
-        active,
-        variable,
-        timescale,
         // displayTime values
         year,
         month,
@@ -32,11 +30,11 @@ const useRouting = () => {
         ssp245,
         ssp370,
         ssp585,
-      } = router.query
+      } = query
 
       const filters = {
-        ...(variable ? { variable } : {}),
-        ...(timescale ? { timescale } : {}),
+        ...(query.variable ? { variable: query.variable } : {}),
+        ...(query.timescale ? { timescale: query.timescale } : {}),
         ...(historical || ssp245 || ssp370 || ssp585
           ? {
               experiment: {
@@ -53,8 +51,8 @@ const useRouting = () => {
         setFilters(filters)
       }
 
-      if (active) {
-        setActive(active)
+      if (query.active) {
+        setActive(query.active)
       }
 
       if (year && month && day) {
