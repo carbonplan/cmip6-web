@@ -1,21 +1,15 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDatasetsStore } from './datasets'
+import display from './sections/display'
 
 const validateQuery = (query, datasets) => {
   const {
     active,
-    variable,
-    timescale,
-    // displayTime values
-    year,
-    month,
-    day,
-    // experiment values
-    historical,
-    ssp245,
-    ssp370,
-    ssp585,
+    var: variable,
+    scale,
+    t, // displayTime value
+    scenarios, // experiment value
   } = query
 
   if (!datasets[active]) {
@@ -26,14 +20,19 @@ const validateQuery = (query, datasets) => {
     return false
   }
 
-  if (!['year', 'month', 'day'].includes(timescale)) {
+  if (!['year', 'month', 'day'].includes(scale)) {
     return false
   }
 
-  if (![historical, ssp245, ssp370, ssp585].some((d) => d === 'true')) {
+  if (
+    !['historical', 'ssp245', 'ssp370', 'ssp585'].some((s) =>
+      scenarios.includes(s)
+    )
+  ) {
     return false
   }
 
+  const [year, month, day] = t.split('-')
   if (!year || !month || !day) {
     return false
   }
@@ -62,26 +61,17 @@ const useRouting = () => {
       const { query } = router
 
       if (validateQuery(query, datasets)) {
-        const {
-          // displayTime values
-          year,
-          month,
-          day,
-          // experiment values
-          historical,
-          ssp245,
-          ssp370,
-          ssp585,
-        } = query
+        const { t, scenarios } = query
+        const [year, month, day] = t.split('-')
 
         const filters = {
-          variable: query.variable,
-          timescale: query.timescale,
+          variable: query.var,
+          timescale: query.scale,
           experiment: {
-            historical: historical === 'true',
-            ssp245: ssp245 === 'true',
-            ssp370: ssp370 === 'true',
-            ssp585: ssp585 === 'true',
+            historical: scenarios.includes('historical'),
+            ssp245: scenarios.includes('ssp245'),
+            ssp370: scenarios.includes('ssp370'),
+            ssp585: scenarios.includes('ssp585'),
           },
         }
 
@@ -97,10 +87,18 @@ const useRouting = () => {
     if (initialized) {
       const query = {
         ...(active ? { active } : {}),
-        ...(displayTime ? displayTime : {}),
-        ...(experiment ? experiment : {}),
-        ...(variable ? { variable } : {}),
-        ...(timescale ? { timescale } : {}),
+        ...(displayTime
+          ? { t: `${displayTime.year}-${displayTime.month}-${displayTime.day}` }
+          : {}),
+        ...(experiment
+          ? {
+              scenarios: Object.keys(experiment)
+                .filter((k) => experiment[k])
+                .join(','),
+            }
+          : {}),
+        ...(variable ? { var: variable } : {}),
+        ...(timescale ? { scale: timescale } : {}),
       }
 
       router.replace({ pathname: '', query }, null, {
