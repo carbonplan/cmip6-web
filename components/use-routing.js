@@ -2,11 +2,50 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDatasetsStore } from './datasets'
 
+const validateQuery = (query, datasets) => {
+  const {
+    active,
+    variable,
+    timescale,
+    // displayTime values
+    year,
+    month,
+    day,
+    // experiment values
+    historical,
+    ssp245,
+    ssp370,
+    ssp585,
+  } = query
+
+  if (!datasets[active]) {
+    return false
+  }
+
+  if (!['tasmax', 'tasmin', 'pr'].includes(variable)) {
+    return false
+  }
+
+  if (!['year', 'month', 'day'].includes(timescale)) {
+    return false
+  }
+
+  if (![historical, ssp245, ssp370, ssp585].some((d) => d === 'true')) {
+    return false
+  }
+
+  if (!year || !month || !day) {
+    return false
+  }
+
+  return true
+}
+
 // Listens for changes in datasets zustand store and updates the query
 // parameters of the url.
 const useRouting = () => {
   const router = useRouter()
-  const initialized = useDatasetsStore((state) => !!state.datasets)
+  const datasets = useDatasetsStore((state) => state.datasets)
   const active = useDatasetsStore((state) => state.active)
   const displayTime = useDatasetsStore((state) => state.displayTime)
   const variable = useDatasetsStore((state) => state.filters?.variable)
@@ -16,46 +55,38 @@ const useRouting = () => {
   const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
   const setFilters = useDatasetsStore((state) => state.setFilters)
 
+  const initialized = !!datasets
   // Sets values in the store based on the initial URL parameters
   useEffect(() => {
     if (router.isReady && initialized) {
       const { query } = router
-      const {
-        // displayTime values
-        year,
-        month,
-        day,
-        // experiment values
-        historical,
-        ssp245,
-        ssp370,
-        ssp585,
-      } = query
 
-      const filters = {
-        ...(query.variable ? { variable: query.variable } : {}),
-        ...(query.timescale ? { timescale: query.timescale } : {}),
-        ...(historical || ssp245 || ssp370 || ssp585
-          ? {
-              experiment: {
-                historical: historical === 'true',
-                ssp245: ssp245 === 'true',
-                ssp370: ssp370 === 'true',
-                ssp585: ssp585 === 'true',
-              },
-            }
-          : {}),
-      }
+      if (validateQuery(query, datasets)) {
+        const {
+          // displayTime values
+          year,
+          month,
+          day,
+          // experiment values
+          historical,
+          ssp245,
+          ssp370,
+          ssp585,
+        } = query
 
-      if (Object.keys(filters).length > 0) {
+        const filters = {
+          variable: query.variable,
+          timescale: query.timescale,
+          experiment: {
+            historical: historical === 'true',
+            ssp245: ssp245 === 'true',
+            ssp370: ssp370 === 'true',
+            ssp585: ssp585 === 'true',
+          },
+        }
+
         setFilters(filters)
-      }
-
-      if (query.active) {
         setActive(query.active)
-      }
-
-      if (year && month && day) {
         setDisplayTime({ year, month, day })
       }
     }
