@@ -8,6 +8,7 @@ import ExpandableFilter from './expandable-filter'
 import Dataset from './dataset'
 import { useRegionStore } from '../../region'
 import TooltipWrapper from './tooltip-wrapper'
+
 const formatNumber = (value) => String(value).padStart(2, '0')
 
 const LABEL_MAP = {

@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Box, Label } from 'theme-ui'
-import { Row, Column } from '@carbonplan/components'
+import { Box, Flex, Label } from 'theme-ui'
 import { Check, Search, X } from '@carbonplan/icons'
 import AnimateHeight from 'react-animate-height'
 import shallow from 'zustand/shallow'
@@ -53,82 +52,78 @@ const Dataset = ({ name, last }) => {
           : 'none',
       }}
     >
-      <Row columns={[6, 8, 4, 4]}>
-        <Column start={1} width={[4, 6, 2, 3]}>
-          <Label
-            sx={{
-              cursor: 'pointer',
-              color,
-              fontFamily: 'faux',
-              letterSpacing: 'faux',
-              fontSize: [1, 1, 1, 2],
-              transition: 'color 0.15s',
-              '@media (hover: hover) and (pointer: fine)': {
-                '&:hover': {
-                  color: activeColor,
-                },
+      <Flex sx={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+        <Label
+          sx={{
+            cursor: 'pointer',
+            color,
+            fontFamily: 'faux',
+            letterSpacing: 'faux',
+            fontSize: [1, 1, 1, 2],
+            transition: 'color 0.15s',
+            '@media (hover: hover) and (pointer: fine)': {
+              '&:hover': {
+                color: activeColor,
               },
-            }}
-            htmlFor={name}
-            onMouseOver={() => setHovered(name)}
-            onMouseLeave={() => setHovered(null)}
-          >
-            {getShortName(dataset, filters)}
-          </Label>
-        </Column>
-        <Column start={[5, 7, 3, 4]} width={[2, 2, 2, 1]}>
-          <Box sx={{ mt: '-8px', mr: '2px', float: 'right' }}>
-            <Box sx={{ position: 'relative', top: '4px' }}>
-              <Label
-                sx={{
-                  width: 'inherit',
-                  display: 'inline-block',
-                  position: 'relative',
-                  mr: 2,
+            },
+          }}
+          htmlFor={name}
+          onMouseOver={() => setHovered(name)}
+          onMouseLeave={() => setHovered(null)}
+        >
+          {getShortName(dataset, filters)}
+        </Label>
+        <Box sx={{ mt: '-8px', flexShrink: 0 }}>
+          <Box sx={{ position: 'relative', top: '4px' }}>
+            <Label
+              sx={{
+                width: 'inherit',
+                display: 'inline-block',
+                position: 'relative',
+                mr: 2,
+              }}
+            >
+              <CustomCheckbox
+                uncheckedIcon={Search}
+                checkedIcon={Check}
+                checkedHoverIcon={X}
+                checked={selected}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    selectDataset(name)
+                    if (!anyActive) setActive(name)
+                    openRegionPicker()
+                  } else {
+                    deselectDataset(name)
+                    setRegionData(name, null)
+                  }
                 }}
-              >
-                <CustomCheckbox
-                  uncheckedIcon={Search}
-                  checkedIcon={Check}
-                  checkedHoverIcon={X}
-                  checked={selected}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      selectDataset(name)
-                      if (!anyActive) setActive(name)
-                      openRegionPicker()
-                    } else {
-                      deselectDataset(name)
-                      setRegionData(name, null)
-                    }
-                  }}
-                />
-              </Label>
-              <Label
-                sx={{
-                  width: 'inherit',
-                  display: 'inline-block',
-                  position: 'relative',
-                  mr: 2,
+              />
+            </Label>
+            <Label
+              sx={{
+                width: 'inherit',
+                display: 'inline-block',
+                position: 'relative',
+                mr: 2,
+              }}
+            >
+              <CustomCheckbox
+                id={name}
+                uncheckedIcon={Eye}
+                checkedIcon={EyeFilled}
+                checked={active}
+                onChange={(e) => {
+                  if (e.target.checked && !active) {
+                    setActive(name)
+                  }
                 }}
-              >
-                <CustomCheckbox
-                  id={name}
-                  uncheckedIcon={Eye}
-                  checkedIcon={EyeFilled}
-                  checked={active}
-                  onChange={(e) => {
-                    if (e.target.checked && !active) {
-                      setActive(name)
-                    }
-                  }}
-                />
-              </Label>
-              <Tooltip expanded={expanded} setExpanded={setExpanded} />
-            </Box>
+              />
+            </Label>
+            <Tooltip expanded={expanded} setExpanded={setExpanded} />
           </Box>
-        </Column>
-      </Row>
+        </Box>
+      </Flex>
       <AnimateHeight
         duration={100}
         height={expanded ? 'auto' : 0}
