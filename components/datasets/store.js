@@ -76,7 +76,42 @@ export const useDatasetsStore = create((set, get) => ({
 
     const data = await result.json()
 
-    const datasets = getInitialDatasets(data)
+    const datasets = getInitialDatasets({
+      ...data,
+      datasets: [
+        ...data.datasets,
+        {
+          activity_id: 'CMIP',
+          aggregation: 'sum',
+          experiment_id: 'historical',
+          institution_id: 'CarbonPlan',
+          member_id: 'r1i1p1f1',
+          method: 'gard',
+          name: 'GARD annual',
+          original_dataset_uris: [],
+          source_id: 'BCC-CSM2-MR',
+          table_id: 'day',
+          timescale: 'year',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.1.7/pyramid/b5f2bd265e0c2fe1',
+          variable_id: 'tasmin',
+        },
+        {
+          activity_id: 'CMIP',
+          aggregation: 'sum',
+          experiment_id: 'historical',
+          institution_id: 'CarbonPlan',
+          member_id: 'r1i1p1f1',
+          method: 'gard',
+          name: 'GARD monthly',
+          original_dataset_uris: [],
+          source_id: 'BCC-CSM2-MR',
+          table_id: 'day',
+          timescale: 'month',
+          uri: 'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/0.1.7/pyramid/9d24712d2e99226a',
+          variable_id: 'tasmin',
+        },
+      ],
+    })
     const filters = getInitialFilters(datasets)
 
     set({ datasets, filters })
