@@ -48,6 +48,7 @@
     "zustand": "^3.6.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.5",
     "prettier": "2.3.2"
   }
 }
