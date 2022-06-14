@@ -1,8 +1,9 @@
-import { Box, Container, Divider, Flex } from 'theme-ui'
+import { Box, Container, Divider, Flex, Grid } from 'theme-ui'
 import { useBreakpointIndex } from '@theme-ui/match-media'
 import { Group } from '@carbonplan/components'
-import { Sidebar } from '@carbonplan/layouts'
+import { Sidebar, SidebarFooter } from '@carbonplan/layouts'
 import { useState } from 'react'
+import { alpha } from '@theme-ui/color'
 
 import Header from '../components/header'
 import MobileSettings from '../components/mobile-settings'
@@ -38,6 +39,22 @@ const sx = {
     textTransform: 'uppercase',
     mt: ['3px', '3px', '3px', '1px'],
   },
+  mobileOption: (selected, side) => ({
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '62px',
+    cursor: 'pointer',
+    fontSize: [3],
+    fontFamily: 'heading',
+    letterSpacing: 'allcaps',
+    textTransform: 'uppercase',
+    borderStyle: 'solid',
+    borderColor: 'muted',
+    borderWidth: '0px',
+    borderRightWidth: side === 'left' ? '1px' : 0,
+    [side === 'left' ? 'pl' : 'pr']: '16px',
+    bg: selected ? alpha('muted', 0.5) : 'background',
+  }),
 }
 
 const Tool = () => {
@@ -87,38 +104,63 @@ const Tool = () => {
             {index < 2 ? (
               <MobileSettings
                 expanded={expanded}
-                footer={<TimeSection sx={sx} />}
-              >
-                {inner}
-              </MobileSettings>
-            ) : (
-              <Sidebar
-                expanded={expanded}
-                setExpanded={setExpanded}
-                tooltip='Data browser'
-                side='left'
-                width={4}
-                onClose={closeRegionPicker}
                 footer={
                   <>
-                    <RegionSection sx={sx} />
+                    <SidebarFooter>
+                      <Grid
+                        columns={[2]}
+                        gap={[0]}
+                        sx={{ mx: '-32px', my: '-24px' }}
+                      >
+                        <Flex
+                          sx={sx.mobileOption(!expandedMethods, 'left')}
+                          onClick={() => setExpandedMethods(false)}
+                        >
+                          Data
+                        </Flex>
+                        <Flex
+                          sx={sx.mobileOption(expandedMethods, 'right')}
+                          onClick={() => setExpandedMethods(true)}
+                        >
+                          Methods
+                        </Flex>
+                      </Grid>
+                    </SidebarFooter>
                     <TimeSection sx={sx} />
                   </>
                 }
               >
-                {inner}
-              </Sidebar>
+                {expandedMethods ? <Methods /> : inner}
+              </MobileSettings>
+            ) : (
+              <>
+                <Sidebar
+                  expanded={expanded}
+                  setExpanded={setExpanded}
+                  tooltip='Data browser'
+                  side='left'
+                  width={4}
+                  onClose={closeRegionPicker}
+                  footer={
+                    <>
+                      <RegionSection sx={sx} />
+                      <TimeSection sx={sx} />
+                    </>
+                  }
+                >
+                  {inner}
+                </Sidebar>
+                <Sidebar
+                  expanded={expandedMethods}
+                  setExpanded={setExpandedMethods}
+                  tooltip='Methods'
+                  side='right'
+                  width={3}
+                >
+                  <Methods />
+                </Sidebar>
+              </>
             )}
-
-            <Sidebar
-              expanded={expandedMethods}
-              setExpanded={setExpandedMethods}
-              tooltip='Methods'
-              side='right'
-              width={3}
-            >
-              <Methods />
-            </Sidebar>
 
             <LoadingStates loading={loading} expanded={expanded} />
           </Container>
