@@ -17,6 +17,7 @@ import Map from '../components/map'
 import { useRegionStore } from '../components/region'
 import LoadingStates from '../components/loading-states'
 import useRouting from '../components/use-routing'
+import Methods from './methods.md'
 
 const sx = {
   heading: {
@@ -43,6 +44,7 @@ const Tool = () => {
   useRouting()
   const index = useBreakpointIndex({ defaultIndex: 2 })
   const [expanded, setExpanded] = useState(index >= 2)
+  const [expandedMethods, setExpandedMethods] = useState(false)
   const [loading, setLoading] = useState(false)
   const closeRegionPicker = useRegionStore((state) => state.closeRegionPicker)
 
@@ -107,6 +109,16 @@ const Tool = () => {
                 {inner}
               </Sidebar>
             )}
+
+            <Sidebar
+              expanded={expandedMethods}
+              setExpanded={setExpandedMethods}
+              tooltip='Methods'
+              side='right'
+              width={3}
+            >
+              <Methods />
+            </Sidebar>
 
             <LoadingStates loading={loading} expanded={expanded} />
           </Container>
