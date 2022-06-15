@@ -1,11 +1,57 @@
 import { useThemeUI } from 'theme-ui'
-import { Fill, Map, Line, RegionPicker } from '@carbonplan/maps'
+import { Fill, Map, Line, RegionPicker, useMapbox } from '@carbonplan/maps'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 import { useDatasetsStore } from './datasets'
 import { useRegionStore } from './region'
 import DatasetRaster from './dataset-raster'
 
 const bucket = 'https://storage.googleapis.com/carbonplan-maps/'
+
+const MapRouting = () => {
+  const [center, setCenter] = useState(null)
+  const [zoom, setZoom] = useState(null)
+  const { map } = useMapbox()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { center, zoom } = router.query
+      map.easeTo({
+        center: center.split(',').map(parseFloat),
+        zoom: parseFloat(zoom),
+        duration: 0,
+      })
+    }
+  }, [router.isReady])
+
+  useEffect(() => {
+    map.on('moveend', () => {
+      const { lng, lat } = map.getCenter()
+      setCenter(`${lng},${lat}`)
+      setZoom(map.getZoom())
+    })
+  }, [])
+
+  useEffect(() => {
+    if (center && zoom) {
+      const { center: prevCenter, zoom: prevZoom, ...rest } = router.query
+      router.replace(
+        {
+          pathname: '',
+          query: { ...rest, center, zoom },
+        },
+        null,
+        {
+          shallow: true,
+        }
+      )
+    }
+  }, [router.isReady, center, zoom])
+
+  return null
+}
 
 const MapWrapper = ({ children, setLoading }) => {
   const { theme } = useThemeUI()
@@ -18,6 +64,7 @@ const MapWrapper = ({ children, setLoading }) => {
 
   return (
     <Map zoom={0} center={[0, 0]} debug={false} setLoading={setLoading}>
+      <MapRouting />
       <Fill
         color={theme.rawColors.background}
         source={bucket + 'basemaps/ocean'}

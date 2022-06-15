@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDatasetsStore } from './datasets'
-import display from './sections/display'
 
 const validateQuery = (query, datasets) => {
   const {
@@ -85,7 +84,10 @@ const useRouting = () => {
   // Update the URL when the active dataset changes or the display time changes.
   useEffect(() => {
     if (initialized) {
+      const { center, zoom } = router.query
       const query = {
+        center,
+        zoom,
         ...(active ? { active } : {}),
         ...(displayTime
           ? { t: `${displayTime.year}-${displayTime.month}-${displayTime.day}` }
