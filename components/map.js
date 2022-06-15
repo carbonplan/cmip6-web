@@ -18,11 +18,13 @@ const MapRouting = () => {
   useEffect(() => {
     if (router.isReady) {
       const { center, zoom } = router.query
-      map.easeTo({
-        center: center.split(',').map(parseFloat),
-        zoom: parseFloat(zoom),
-        duration: 0,
-      })
+      if (center && zoom) {
+        map.easeTo({
+          center: center.split(',').map(parseFloat),
+          zoom: parseFloat(zoom),
+          duration: 0,
+        })
+      }
     }
   }, [router.isReady])
 
