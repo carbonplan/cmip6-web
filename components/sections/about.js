@@ -10,7 +10,7 @@ const AboutSection = ({ sx }) => {
           These data products and the website were developed jointly by the
           following contributors (in alphabetical order): Anderson Banihirwe,
           Oriana Chegwidden, Cindy Chiao, Jeremy Freeman, Raphael Hagen, Joe
-          Hamman, Kata Martin.
+          Hamman, Max Jones, Kata Martin.
         </Box>
 
         <Box>
