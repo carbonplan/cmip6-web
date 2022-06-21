@@ -86,8 +86,8 @@ const useRouting = () => {
     if (initialized) {
       const { center, zoom } = router.query
       const query = {
-        center,
-        zoom,
+        ...(center ? { center } : {}),
+        ...(zoom ? { zoom } : {}),
         ...(active ? { active } : {}),
         ...(displayTime
           ? { t: `${displayTime.year}-${displayTime.month}-${displayTime.day}` }
