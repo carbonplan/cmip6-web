@@ -42,7 +42,7 @@ const MapRouting = () => {
       router.replace(
         {
           pathname: '',
-          query: { ...rest, center, zoom },
+          query: { center, zoom, ...rest },
         },
         null,
         {
