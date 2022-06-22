@@ -8,9 +8,9 @@ const validateQuery = (query, datasets) => {
     active,
     t, // displayTime value
     filters: {
-      scale,
-      var: variable,
-      scenarios, // experiment value
+      t: scale,
+      v: variable,
+      s: scenarios, // experiment value
     },
   } = query
 
@@ -46,13 +46,13 @@ const getFilterHex = ({ variable, timescale, experiment }) => {
   const filters = {
     ...(experiment
       ? {
-          scenarios: Object.keys(experiment)
+          s: Object.keys(experiment)
             .filter((k) => experiment[k])
             .join(','),
         }
       : {}),
-    ...(variable ? { var: variable } : {}),
-    ...(timescale ? { scale: timescale } : {}),
+    ...(variable ? { v: variable } : {}),
+    ...(timescale ? { t: timescale } : {}),
   }
 
   return encodeJSON(filters)
@@ -87,13 +87,13 @@ const useRouting = () => {
         const [year, month, day] = t.split('-')
 
         const computedFilters = {
-          variable: filters.var,
-          timescale: filters.scale,
+          variable: filters.v,
+          timescale: filters.t,
           experiment: {
-            historical: filters.scenarios.includes('historical'),
-            ssp245: filters.scenarios.includes('ssp245'),
-            ssp370: filters.scenarios.includes('ssp370'),
-            ssp585: filters.scenarios.includes('ssp585'),
+            historical: filters.s.includes('historical'),
+            ssp245: filters.s.includes('ssp245'),
+            ssp370: filters.s.includes('ssp370'),
+            ssp585: filters.s.includes('ssp585'),
           },
         }
 
