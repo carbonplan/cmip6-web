@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDatasetsStore } from './datasets'
-import { generateKey, encryptMessage, decryptHex } from './utils'
+import { encodeJSON, decodeHex } from './utils'
 
 const validateQuery = (query, datasets) => {
   const {
@@ -14,7 +14,7 @@ const validateQuery = (query, datasets) => {
     },
   } = query
 
-  if (!datasets[active]) {
+  if (active && !datasets[active]) {
     return false
   }
 
@@ -42,8 +42,7 @@ const validateQuery = (query, datasets) => {
   return true
 }
 
-const getFilterHex = ({ variable, timescale, experiment }, publicKey) => {
-  console.log('generating hex')
+const getFilterHex = ({ variable, timescale, experiment }) => {
   const filters = {
     ...(experiment
       ? {
@@ -56,14 +55,12 @@ const getFilterHex = ({ variable, timescale, experiment }, publicKey) => {
     ...(timescale ? { scale: timescale } : {}),
   }
 
-  console.log(JSON.stringify(filters))
-  return encryptMessage(JSON.stringify(filters), publicKey)
+  return encodeJSON(filters)
 }
 
 // Listens for changes in datasets zustand store and updates the query
 // parameters of the url.
 const useRouting = () => {
-  const [{ privateKey, publicKey }, setKeys] = useState({})
   const router = useRouter()
   const datasets = useDatasetsStore((state) => state.datasets)
   const active = useDatasetsStore((state) => state.active)
@@ -75,21 +72,14 @@ const useRouting = () => {
   const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
   const setFilters = useDatasetsStore((state) => state.setFilters)
 
-  useEffect(() => {
-    generateKey().then((v) => setKeys(v))
-  }, [])
-
   const initialized = !!datasets
 
   // Sets values in the store based on the initial URL parameters
   useEffect(() => {
-    if (router.isReady && initialized && privateKey) {
+    if (router.isReady && initialized) {
       const { query } = router
 
-      // console.log('decrypted', decryptHex(privateKey, query.f))
-      const filters = query.f
-        ? JSON.parse(decryptHex(privateKey, query.f) ?? '{}')
-        : {}
+      const filters = query.f ? decodeHex(query.f) : {}
       const decryptedQuery = { ...query, filters }
 
       if (validateQuery(decryptedQuery, datasets)) {
@@ -107,48 +97,34 @@ const useRouting = () => {
           },
         }
 
+        datasets[decryptedQuery.active] && setActive(decryptedQuery.active)
         setFilters(computedFilters)
-        setActive(decryptedQuery.active)
         setDisplayTime({ year, month, day })
       }
     }
-  }, [initialized, router.isReady, privateKey])
+  }, [initialized, router.isReady])
 
   // Update the URL when the active dataset, display time, or filters change.
   useEffect(() => {
-    if (initialized && publicKey) {
-      console.log('up here')
-      getFilterHex({ variable, timescale, experiment }, publicKey).then(
-        (filterHex) => {
-          console.log('in here')
-          const { center, zoom } = router.query
-          const query = {
-            ...(center ? { center } : {}),
-            ...(zoom ? { zoom } : {}),
-            ...(active ? { active } : {}),
-            ...(displayTime
-              ? {
-                  t: `${displayTime.year}-${displayTime.month}-${displayTime.day}`,
-                }
-              : {}),
-            ...(variable && timescale && experiment ? { f: filterHex } : {}),
-          }
+    if (initialized) {
+      const { center, zoom } = router.query
+      const query = {
+        ...(center ? { center } : {}),
+        ...(zoom ? { zoom } : {}),
+        ...(active ? { active } : {}),
+        ...(displayTime
+          ? {
+              t: `${displayTime.year}-${displayTime.month}-${displayTime.day}`,
+            }
+          : {}),
+        f: getFilterHex({ variable, timescale, experiment }),
+      }
 
-          router.replace({ pathname: '', query }, null, {
-            shallow: true,
-          })
-        }
-      )
+      router.replace({ pathname: '', query }, null, {
+        shallow: true,
+      })
     }
-  }, [
-    initialized,
-    active,
-    displayTime,
-    variable,
-    timescale,
-    experiment,
-    publicKey,
-  ])
+  }, [initialized, active, displayTime, variable, timescale, experiment])
 }
 
 export default useRouting

@@ -32,34 +32,26 @@ export const generateKey = () => {
   )
 }
 
-export async function encryptMessage(message, publicKey) {
-  const msgUint8 = new TextEncoder().encode(message) // encode as (utf-8) Uint8Array
-  const hashBuffer = await window.crypto.subtle.encrypt(
-    // hash the message
-    { name: 'RSA-OAEP' },
-    publicKey,
-    msgUint8
-  )
-  const hashArray = Array.from(new Uint8Array(hashBuffer)) // convert buffer to byte array
-  // console.log('array', hashArray)
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('') // convert bytes to hex string
-  // console.log('hex', hashHex)
-  return hashHex
+export function encodeJSON(obj) {
+  const msgUint8 = new TextEncoder().encode(JSON.stringify(obj)) // encode as (utf-8) Uint8Array
+  return Array.from(msgUint8)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('') // convert bytes to hex string
 }
 
-export async function decryptHex(privateKey, hex) {
-  const arr = hex
+export function decodeHex(hex) {
+  const arr = hex // convert hex string to bytes
     .split('')
     .map((c, i) => (i % 2 === 0 ? `${c}${hex[i + 1]}` : null))
     .filter(Boolean)
     .map((d) => parseInt(d, 16))
-  const buffer = new Uint8Array(arr).buffer
-  const resultBuffer = await window.crypto.subtle.decrypt(
-    {
-      name: 'RSA-OAEP',
-    },
-    privateKey,
-    buffer
-  )
-  return new TextDecoder().decode(resultBuffer)
+  const stringified = new TextDecoder().decode(new Uint8Array(arr).buffer) // decode to utf-8 string
+  let result
+  try {
+    result = JSON.parse(stringified)
+  } catch {
+    result = {}
+  }
+
+  return result
 }
