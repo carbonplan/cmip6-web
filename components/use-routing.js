@@ -1,18 +1,20 @@
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useDatasetsStore } from './datasets'
-import display from './sections/display'
+import { encodeJSON, decodeHex } from './utils'
 
 const validateQuery = (query, datasets) => {
   const {
     active,
-    var: variable,
-    scale,
     t, // displayTime value
-    scenarios, // experiment value
+    filters: {
+      t: scale,
+      v: variable,
+      s: scenarios, // experiment value
+    },
   } = query
 
-  if (!datasets[active]) {
+  if (active && !datasets[active]) {
     return false
   }
 
@@ -40,6 +42,22 @@ const validateQuery = (query, datasets) => {
   return true
 }
 
+const getFilterHex = ({ variable, timescale, experiment }) => {
+  const filters = {
+    ...(experiment
+      ? {
+          s: Object.keys(experiment)
+            .filter((k) => experiment[k])
+            .join(','),
+        }
+      : {}),
+    ...(variable ? { v: variable } : {}),
+    ...(timescale ? { t: timescale } : {}),
+  }
+
+  return encodeJSON(filters)
+}
+
 // Listens for changes in datasets zustand store and updates the query
 // parameters of the url.
 const useRouting = () => {
@@ -55,50 +73,51 @@ const useRouting = () => {
   const setFilters = useDatasetsStore((state) => state.setFilters)
 
   const initialized = !!datasets
+
   // Sets values in the store based on the initial URL parameters
   useEffect(() => {
     if (router.isReady && initialized) {
       const { query } = router
 
-      if (validateQuery(query, datasets)) {
-        const { t, scenarios } = query
+      const filters = query.f ? decodeHex(query.f) : {}
+      const decryptedQuery = { ...query, filters }
+
+      if (validateQuery(decryptedQuery, datasets)) {
+        const { t } = decryptedQuery
         const [year, month, day] = t.split('-')
 
-        const filters = {
-          variable: query.var,
-          timescale: query.scale,
+        const computedFilters = {
+          variable: filters.v,
+          timescale: filters.t,
           experiment: {
-            historical: scenarios.includes('historical'),
-            ssp245: scenarios.includes('ssp245'),
-            ssp370: scenarios.includes('ssp370'),
-            ssp585: scenarios.includes('ssp585'),
+            historical: filters.s.includes('historical'),
+            ssp245: filters.s.includes('ssp245'),
+            ssp370: filters.s.includes('ssp370'),
+            ssp585: filters.s.includes('ssp585'),
           },
         }
 
-        setFilters(filters)
-        setActive(query.active)
+        datasets[decryptedQuery.active] && setActive(decryptedQuery.active)
+        setFilters(computedFilters)
         setDisplayTime({ year, month, day })
       }
     }
   }, [initialized, router.isReady])
 
-  // Update the URL when the active dataset changes or the display time changes.
+  // Update the URL when the active dataset, display time, or filters change.
   useEffect(() => {
     if (initialized) {
+      const { center, zoom } = router.query
       const query = {
+        ...(center ? { center } : {}),
+        ...(zoom ? { zoom } : {}),
         ...(active ? { active } : {}),
         ...(displayTime
-          ? { t: `${displayTime.year}-${displayTime.month}-${displayTime.day}` }
-          : {}),
-        ...(experiment
           ? {
-              scenarios: Object.keys(experiment)
-                .filter((k) => experiment[k])
-                .join(','),
+              t: `${displayTime.year}-${displayTime.month}-${displayTime.day}`,
             }
           : {}),
-        ...(variable ? { var: variable } : {}),
-        ...(timescale ? { scale: timescale } : {}),
+        f: getFilterHex({ variable, timescale, experiment }),
       }
 
       router.replace({ pathname: '', query }, null, {
