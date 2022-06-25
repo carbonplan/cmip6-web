@@ -77,10 +77,7 @@ class DateStrings {
   }
 
   formatTick(time) {
-    const initialTime = this._indexToDate(0)
-    const offset = time - this.time[0]
-
-    const date = timeDay.offset(initialTime, offset)
+    const date = this._indexToDate(this.time.indexOf(time))
     switch (this.timescale) {
       case 'day':
         return date.toLocaleString('default', {
@@ -124,7 +121,7 @@ class DateStrings {
         return Array(7)
           .fill(null)
           .map((_, i) => this.valuesToTime({ year, month: 1 + 2 * i, day: 1 }))
-          .filter((index) => typeof index === 'number')
+          .filter((time) => typeof time === 'number')
       case 'year':
         const { year: initialYear } = this._indexToValues(0)
         const count = 9
