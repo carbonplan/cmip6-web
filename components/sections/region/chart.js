@@ -86,8 +86,9 @@ const ChartWrapper = ({ data }) => {
   const zoom = region?.properties?.zoom || 0
 
   // By default, use active dataset as primary dataset (reference for dateStrings and timescale)
-  let primaryDataset = datasets[activeDataset]
-  if (!primaryDataset) {
+  let primaryDataset = datasets ? datasets[activeDataset] : null
+
+  if (datasets && !primaryDataset) {
     // But fallback to first selected dataset if none is active
     const selectedName = Object.keys(datasets).find(
       (key) => datasets[key].selected
@@ -95,7 +96,10 @@ const ChartWrapper = ({ data }) => {
     primaryDataset = datasets[selectedName]
   }
 
-  const { dateStrings, timescale } = primaryDataset
+  // allow null to fix a bug whereby loading a dataset while viewing
+  // annual and then switching to monthly and deselecting caused a crash
+  const { dateStrings, timescale } = primaryDataset || {}
+
   const { timeRange, ticks, bands } = useMemo(() => {
     if (!dateStrings) {
       return {}
