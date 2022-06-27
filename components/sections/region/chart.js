@@ -80,14 +80,15 @@ const ChartWrapper = ({ data }) => {
   const hoveredDataset = useDatasetsStore((state) => state.hovered)
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useDatasetsStore((state) => state.displayTime)
+  const sliding = useDatasetsStore((state) => state.slidingTime)
   const displayUnits = useDatasetsStore((state) => state.displayUnits)
   const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
   const { region } = useRegion()
   const zoom = region?.properties?.zoom || 0
 
   // By default, use active dataset as primary dataset (reference for dateStrings and timescale)
-  let primaryDataset = datasets[activeDataset]
-  if (!primaryDataset) {
+  let primaryDataset = datasets ? datasets[activeDataset] : null
+  if (datasets && !primaryDataset) {
     // But fallback to first selected dataset if none is active
     const selectedName = Object.keys(datasets).find(
       (key) => datasets[key].selected
@@ -242,7 +243,11 @@ const ChartWrapper = ({ data }) => {
                 [dateStrings.valuesToTime(display), range[1]],
               ]}
               color='secondary'
-              sx={{ strokeDasharray: 4 }}
+              sx={{
+                opacity: sliding[timescale] ? 1 : 0,
+                strokeDasharray: 4,
+                transition: 'opacity 0.15s',
+              }}
             />
           )}
           {!loading &&
