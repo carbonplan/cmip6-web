@@ -66,6 +66,7 @@ const LoadingSpinner = ({ opacity = 1 }) => {
         mx: 'auto',
         opacity: opacity,
         transition: 'opacity 0.05s',
+        pointerEvents: 'none',
       }}
     >
       <Spinner sx={{ color: 'secondary' }} duration={750} size={28} />
@@ -201,7 +202,7 @@ const ChartWrapper = ({ data }) => {
         <TickLabels
           bottom
           values={ticks}
-          format={(d) => dateStrings.formatTick(Math.round(d))}
+          format={(d) => dateStrings.formatTick(Math.round(d)).toUpperCase()}
         />
         {typeof hovered === 'number' && circle && (
           <Box
@@ -217,7 +218,7 @@ const ChartWrapper = ({ data }) => {
                 fontFamily: 'mono',
                 letterSpacing: 'mono',
                 textTransform: 'uppercase',
-                fontSize: [1, 1, 1, 2],
+                fontSize: [0, 0, 0, 1],
                 color: 'secondary',
               }}
             >
