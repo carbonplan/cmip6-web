@@ -13,6 +13,7 @@ const sx = {
   },
 }
 const TimeSlider = ({
+  scale,
   value,
   range,
   onChange,
@@ -22,11 +23,12 @@ const TimeSlider = ({
   debounce = false,
 }) => {
   const setUpdatingTime = useDatasetsStore((state) => state.setUpdatingTime)
+  const sliding = useDatasetsStore((state) => state.slidingTime)
+  const setSliding = useDatasetsStore((state) => state.setSlidingTime)
 
-  const [sliding, setSliding] = useState(false)
   const [sliderValue, setSliderValue] = useState(value)
   useEffect(() => {
-    if (!sliding && sliderValue !== value) {
+    if (!sliding[scale] && sliderValue !== value) {
       setSliderValue(value)
     }
   }, [sliding, sliderValue, value])
@@ -36,7 +38,7 @@ const TimeSlider = ({
       const updatedValue = parseFloat(e.target.value)
       setSliderValue(updatedValue)
 
-      if (!debounce || !sliding) {
+      if (!debounce || !sliding[scale]) {
         onChange(updatedValue)
       }
     },
@@ -44,13 +46,13 @@ const TimeSlider = ({
   )
 
   const handleMouseUp = useCallback(() => {
-    setSliding(false)
+    setSliding(scale, false)
     setUpdatingTime(false)
     if (debounce) onChange(sliderValue)
   }, [onChange, sliderValue, debounce])
 
   const handleMouseDown = useCallback(() => {
-    setSliding(true)
+    setSliding(scale, true)
     if (debounce) setUpdatingTime(true)
   }, [onChange, sliderValue, debounce])
 
@@ -76,8 +78,8 @@ const TimeSlider = ({
         <Box
           sx={{
             ...sx.label,
-            color: sliding ? 'primary' : 'secondary',
-            opacity: sliding || showValue ? 1 : 0,
+            color: sliding[scale] ? 'primary' : 'secondary',
+            opacity: sliding[scale] || showValue ? 1 : 0,
             transition: 'opacity 0.2s, color 0.2s',
           }}
         >
@@ -112,6 +114,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
     <Flex sx={{ gap: [2, 2, 2, 3] }}>
       {timescale === 'day' && (
         <TimeSlider
+          scale='day'
           value={day}
           range={ranges.day}
           onChange={(value) => onChange({ day: value })}
@@ -125,6 +128,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
       )}
       {['day', 'month'].includes(timescale) && (
         <TimeSlider
+          scale='month'
           value={month}
           range={ranges.month}
           onChange={(value) => onChange({ month: value })}
@@ -138,6 +142,7 @@ const Sliders = ({ dateStrings, historical = false }) => {
         />
       )}
       <TimeSlider
+        scale='year'
         value={year}
         range={ranges.year}
         onChange={(value) => onChange({ year: value })}
