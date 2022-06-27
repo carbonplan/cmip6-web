@@ -69,6 +69,7 @@ export const useDatasetsStore = create((set, get) => ({
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   displayUnits: DEFAULT_DISPLAY_UNITS.tasmax,
   updatingTime: false,
+  slidingTime: { day: false, month: false, year: false },
   fetchDatasets: async () => {
     const result = await fetch(
       'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/combined-cmip6-era5-pyramids-catalog-web.json'
@@ -84,6 +85,8 @@ export const useDatasetsStore = create((set, get) => ({
   setDisplayTime: (value) => set({ displayTime: value }),
   setDisplayUnits: (value) => set({ displayUnits: value }),
   setUpdatingTime: (value) => set({ updatingTime: value }),
+  setSlidingTime: (key, value) =>
+    set((prev) => ({ slidingTime: { ...prev.slidingTime, [key]: value } })),
   loadDateStrings: async (name) => {
     const [date_str, time] = await Promise.all([
       new Promise((resolve) =>

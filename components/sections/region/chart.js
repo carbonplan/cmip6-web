@@ -81,6 +81,7 @@ const ChartWrapper = ({ data }) => {
   const datasets = useDatasetsStore((state) => state.datasets)
   const display = useDatasetsStore((state) => state.displayTime)
   const displayUnits = useDatasetsStore((state) => state.displayUnits)
+  const sliding = useDatasetsStore((state) => state.slidingTime)
   const setDisplay = useDatasetsStore((state) => state.setDisplayTime)
   const { region } = useRegion()
   const zoom = region?.properties?.zoom || 0
@@ -236,6 +237,20 @@ const ChartWrapper = ({ data }) => {
         )}
 
         <Plot>
+          {!loading && (
+            <Line
+              data={[
+                [dateStrings.valuesToTime(display), range[0]],
+                [dateStrings.valuesToTime(display), range[1]],
+              ]}
+              color='secondary'
+              sx={{
+                opacity: sliding[timescale] ? 1 : 0,
+                strokeDasharray: 4,
+                transition: 'opacity 0.15s',
+              }}
+            />
+          )}
           {!loading &&
             lines
               .sort((a, b) => {
