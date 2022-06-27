@@ -66,6 +66,7 @@ const LoadingSpinner = ({ opacity = 1 }) => {
         mx: 'auto',
         opacity: opacity,
         transition: 'opacity 0.05s',
+        pointerEvents: 'none',
       }}
     >
       <Spinner sx={{ color: 'secondary' }} duration={750} size={28} />
@@ -94,7 +95,10 @@ const ChartWrapper = ({ data }) => {
     primaryDataset = datasets[selectedName]
   }
 
-  const { dateStrings, timescale } = primaryDataset
+  // allow null to fix a bug whereby loading a dataset while viewing
+  // annual and then switching to monthly and deselecting caused a crash
+  const { dateStrings, timescale } = primaryDataset || {}
+
   const { timeRange, ticks, bands } = useMemo(() => {
     if (!dateStrings) {
       return {}
@@ -201,7 +205,7 @@ const ChartWrapper = ({ data }) => {
         <TickLabels
           bottom
           values={ticks}
-          format={(d) => dateStrings.formatTick(Math.round(d))}
+          format={(d) => dateStrings.formatTick(Math.round(d)).toUpperCase()}
         />
         {typeof hovered === 'number' && circle && (
           <Box
@@ -217,7 +221,7 @@ const ChartWrapper = ({ data }) => {
                 fontFamily: 'mono',
                 letterSpacing: 'mono',
                 textTransform: 'uppercase',
-                fontSize: [1, 1, 1, 2],
+                fontSize: [0, 0, 0, 1],
                 color: 'secondary',
               }}
             >
@@ -231,6 +235,16 @@ const ChartWrapper = ({ data }) => {
         )}
 
         <Plot>
+          {!loading && (
+            <Line
+              data={[
+                [dateStrings.valuesToTime(display), range[0]],
+                [dateStrings.valuesToTime(display), range[1]],
+              ]}
+              color='secondary'
+              sx={{ strokeDasharray: 4 }}
+            />
+          )}
           {!loading &&
             lines
               .sort((a, b) => {
