@@ -6,7 +6,7 @@ import { encodeJSON, decodeHex } from './utils'
 const validateQuery = (query, datasets) => {
   const {
     active,
-    t, // displayTime value
+    // t, // displayTime value
     filters: {
       t: scale,
       v: variable,
@@ -34,10 +34,10 @@ const validateQuery = (query, datasets) => {
     return false
   }
 
-  const [year, month, day] = t.split('-')
-  if (!year || !month || !day) {
-    return false
-  }
+  // const [year, month, day] = t.split('-')
+  // if (!year || !month || !day) {
+  //   return false
+  // }
 
   return true
 }
@@ -64,12 +64,12 @@ const useRouting = () => {
   const router = useRouter()
   const datasets = useDatasetsStore((state) => state.datasets)
   const active = useDatasetsStore((state) => state.active)
-  const displayTime = useDatasetsStore((state) => state.displayTime)
+  //const displayTime = useDatasetsStore((state) => state.displayTime)
   const variable = useDatasetsStore((state) => state.filters?.variable)
   const timescale = useDatasetsStore((state) => state.filters?.timescale)
   const experiment = useDatasetsStore((state) => state.filters?.experiment)
   const setActive = useDatasetsStore((state) => state.setActive)
-  const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
+  //const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
   const setFilters = useDatasetsStore((state) => state.setFilters)
 
   const initialized = !!datasets
@@ -83,8 +83,8 @@ const useRouting = () => {
       const decryptedQuery = { ...query, filters }
 
       if (validateQuery(decryptedQuery, datasets)) {
-        const { t } = decryptedQuery
-        const [year, month, day] = t.split('-')
+        // const { t } = decryptedQuery
+        // const [year, month, day] = t.split('-')
 
         const computedFilters = {
           variable: filters.v,
@@ -99,7 +99,7 @@ const useRouting = () => {
 
         datasets[decryptedQuery.active] && setActive(decryptedQuery.active)
         setFilters(computedFilters)
-        setDisplayTime({ year, month, day })
+        // setDisplayTime({ year, month, day })
       }
     }
   }, [initialized, router.isReady])
@@ -112,11 +112,11 @@ const useRouting = () => {
         ...(center ? { center } : {}),
         ...(zoom ? { zoom } : {}),
         ...(active ? { active } : {}),
-        ...(displayTime
-          ? {
-              t: `${displayTime.year}-${displayTime.month}-${displayTime.day}`,
-            }
-          : {}),
+        // ...(displayTime
+        //   ? {
+        //       t: `${displayTime.year}-${displayTime.month}-${displayTime.day}`,
+        //     }
+        //   : {}),
         f: getFilterHex({ variable, timescale, experiment }),
       }
 
@@ -124,7 +124,7 @@ const useRouting = () => {
         shallow: true,
       })
     }
-  }, [initialized, active, displayTime, variable, timescale, experiment])
+  }, [initialized, active, variable, timescale, experiment])
 }
 
 export default useRouting
