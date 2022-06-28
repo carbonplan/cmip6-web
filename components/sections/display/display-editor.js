@@ -47,92 +47,99 @@ const DisplayEditor = ({ sx }) => {
     updateDatasetDisplay(name, { clim: setter(clim) })
   }
   return (
-    <Row columns={[6, 8, 4, 4]}>
-      <Column start={1} width={[6, 4, 2, 2]}>
-        <Box sx={{ ...sx.label, mb: 2 }}>
-          Colormap
-          <Select
-            value={colormapName}
-            onChange={(e) =>
-              updateDatasetDisplay(name, { colormapName: e.target.value })
-            }
-            size='xs'
-            sx={{
-              mt: [1],
-              display: 'block',
-            }}
-            sxSelect={{
-              textTransform: 'uppercase',
-              fontFamily: 'mono',
-              fontSize: [1, 1, 1, 2],
-              width: '100%',
-              pb: [1],
-            }}
-          >
-            {colormaps.map(({ name }) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </Select>
-        </Box>
-      </Column>
-      <Column start={[1, 1, 3, 3]} width={[6, 4, 2, 2]}>
-        <Box sx={{ ...sx.label, mb: 2 }}>
-          Units
-          <Select
-            value={displayUnits}
-            onChange={(e) => setDisplayUnits(e.target.value)}
-            size='xs'
-            sx={{
-              mt: [1],
-              display: 'block',
-            }}
-            sxSelect={{
-              fontFamily: 'mono',
-              fontSize: [1, 1, 1, 2],
-              width: '100%',
-              pb: [1],
-            }}
-          >
-            {UNITS_OPTIONS[variable].map(({ value, label }) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </Select>
-        </Box>
-      </Column>
-
-      <Column start={1} width={[6, 4, 4, 4]}>
-        <Box>
-          <Box sx={{ ...sx.label, mb: '5px' }}>
-            {variable} (
-            <Box as='span' sx={{ textTransform: 'none' }}>
-              {
-                UNITS_OPTIONS[variable].find(
-                  ({ value }) => value === displayUnits
-                )?.label
+    <>
+      <Box sx={{ ...sx.description, mb: [3, 3, 3, 4] }}>
+        Use the menus to choose a colormap or change the units. Click and drag
+        the colorbar limits to change them. Click the "sun" in the upper right
+        to switch between light mode and dark mode.
+      </Box>
+      <Row columns={[6, 8, 4, 4]}>
+        <Column start={1} width={[6, 4, 2, 2]}>
+          <Box sx={{ ...sx.label, mb: 2 }}>
+            Colormap
+            <Select
+              value={colormapName}
+              onChange={(e) =>
+                updateDatasetDisplay(name, { colormapName: e.target.value })
               }
-            </Box>
-            )
+              size='xs'
+              sx={{
+                mt: [1],
+                display: 'block',
+              }}
+              sxSelect={{
+                textTransform: 'uppercase',
+                fontFamily: 'mono',
+                fontSize: [1, 1, 1, 2],
+                width: '100%',
+                pb: [1],
+              }}
+            >
+              {colormaps.map(({ name }) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
+            </Select>
           </Box>
-          <Colorbar
-            colormap={colormap}
-            format={(d) =>
-              Math.round(
-                convertUnits(d, DEFAULT_DISPLAY_UNITS[variable], displayUnits)
+        </Column>
+        <Column start={[1, 1, 3, 3]} width={[6, 4, 2, 2]}>
+          <Box sx={{ ...sx.label, mb: 2 }}>
+            Units
+            <Select
+              value={displayUnits}
+              onChange={(e) => setDisplayUnits(e.target.value)}
+              size='xs'
+              sx={{
+                mt: [1],
+                display: 'block',
+              }}
+              sxSelect={{
+                fontFamily: 'mono',
+                fontSize: [1, 1, 1, 2],
+                width: '100%',
+                pb: [1],
+              }}
+            >
+              {UNITS_OPTIONS[variable].map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+          </Box>
+        </Column>
+
+        <Column start={1} width={[6, 4, 4, 4]}>
+          <Box>
+            <Box sx={{ ...sx.label, mb: '5px' }}>
+              {variable} (
+              <Box as='span' sx={{ textTransform: 'none' }}>
+                {
+                  UNITS_OPTIONS[variable].find(
+                    ({ value }) => value === displayUnits
+                  )?.label
+                }
+              </Box>
               )
-            }
-            clim={clim}
-            setClim={setClim}
-            horizontal
-            width={'100%'}
-            sxClim={{ fontSize: [1, 1, 1, 2], mt: ['-1px'], pb: ['2px'] }}
-          />
-        </Box>
-      </Column>
-    </Row>
+            </Box>
+            <Colorbar
+              colormap={colormap}
+              format={(d) =>
+                Math.round(
+                  convertUnits(d, DEFAULT_DISPLAY_UNITS[variable], displayUnits)
+                )
+              }
+              clim={clim}
+              setClim={setClim}
+              horizontal
+              width={'100%'}
+              sxClim={{ fontSize: [1, 1, 1, 2], mt: ['-1px'], pb: ['2px'] }}
+            />
+          </Box>
+        </Column>
+      </Row>
+    </>
   )
 }
 export default DisplayEditor
