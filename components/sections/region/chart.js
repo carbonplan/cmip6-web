@@ -145,8 +145,9 @@ const ChartWrapper = ({ data }) => {
       const lineData = Object.keys(value)
         .map((time) => {
           const { avg, min, max } = getArrayData(value[time], lats, zoom)
-          range[0] = Math.min(range[0], ds.getDisplayValue(min, displayUnits))
-          range[1] = Math.max(range[1], ds.getDisplayValue(max, displayUnits))
+
+          range[0] = Math.min(range[0], ds.getDisplayValue(avg, displayUnits))
+          range[1] = Math.max(range[1], ds.getDisplayValue(avg, displayUnits))
 
           const activeTime = dateStrings.valuesToTime(
             ds.dateStrings.timeToValues(Number(time))
@@ -170,7 +171,7 @@ const ChartWrapper = ({ data }) => {
         color = activeColor
         width = 2
       } else if (name === hoveredDataset) {
-        color = 'primary'
+        color = activeColor
         width = 2
       }
       return {
@@ -198,7 +199,10 @@ const ChartWrapper = ({ data }) => {
       <LoadingSpinner opacity={loading ? 1 : 0} />
       <Chart
         x={timeRange}
-        y={range}
+        y={[
+          range[0] - 0.05 * (range[1] - range[0]),
+          range[1] + 0.05 * (range[1] - range[0]),
+        ]}
         padding={{ left: 35, right: 0, top: 0, bottom: 25 }}
       >
         <Grid horizontal />
@@ -214,7 +218,7 @@ const ChartWrapper = ({ data }) => {
             sx={{
               position: 'absolute',
               right: 0,
-              top: 0,
+              top: '-31px',
               mt: 0,
             }}
           >
