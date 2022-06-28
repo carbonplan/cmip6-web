@@ -37,14 +37,14 @@ export const DEFAULT_DISPLAY_TIMES = {
 }
 
 export const DEFAULT_DISPLAY_UNITS = {
-  tasmax: 'K',
-  tasmin: 'K',
+  tasmax: '°C',
+  tasmin: '°C',
   pr: 'mm',
 }
 
 export const DEFAULT_CLIMS = {
-  tasmax: { day: [200, 320], month: [200, 320], year: [200, 320] },
-  tasmin: { day: [200, 300], month: [200, 300], year: [200, 300] },
+  tasmax: { day: [-73, 27], month: [-73, 27], year: [-73, 27] },
+  tasmin: { day: [-73, 27], month: [-73, 27], year: [-73, 27] },
   pr: { day: [0, 10], month: [0, 300], year: [0, 2000] },
 }
 

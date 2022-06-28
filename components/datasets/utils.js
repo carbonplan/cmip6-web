@@ -53,6 +53,10 @@ export const convertUnits = (value, from, to) => {
     return convertUnits(value, from, '°C') * (9 / 5) + 32
   } else if (from === '°F' && to === 'K') {
     return convertUnits((value - 32) * (5 / 9), '°C', to)
+  } else if (from === '°C' && to === '°F') {
+    return value * (9 / 5) + 32
+  } else if (from === '°F' && to === '°C') {
+    return (value - 32) * (5 / 9)
   }
 
   // precipitation units

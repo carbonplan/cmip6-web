@@ -120,7 +120,7 @@ const DisplayEditor = ({ sx }) => {
           <Colorbar
             colormap={colormap}
             format={(d) =>
-              formatValue(
+              Math.round(
                 convertUnits(d, DEFAULT_DISPLAY_UNITS[variable], displayUnits)
               )
             }
