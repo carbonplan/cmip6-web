@@ -13,7 +13,9 @@ const DisplaySection = ({ sx }) => {
       {active ? (
         <DisplayEditor sx={sx} />
       ) : (
-        <Box sx={sx.description}>Select a dataset to view properties.</Box>
+        <Box sx={sx.description}>
+          Select a dataset above to view properties.
+        </Box>
       )}
     </Box>
   )
