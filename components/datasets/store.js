@@ -10,10 +10,22 @@ import {
 } from './utils'
 import { DEFAULT_DISPLAY_TIMES, DEFAULT_DISPLAY_UNITS } from './constants'
 
+const METHOD_ORDER = [
+  'Raw',
+  'GARD-SV',
+  'GARD-MV',
+  'MACA',
+  'DeepSD',
+  'DeepSD-BC',
+]
+
 const sort = (a, b) => {
   if (a.source_id === b.source_id) {
     if (a.experiment_id === b.experiment_id) {
-      return a.method.localeCompare(b.method)
+      return (
+        METHOD_ORDER.findIndex((d) => d === a.method) -
+        METHOD_ORDER.findIndex((d) => d === b.method)
+      )
     }
     return a.experiment_id.localeCompare(b.experiment_id)
   }
@@ -84,7 +96,7 @@ export const useDatasetsStore = create((set, get) => ({
   slidingTime: { day: false, month: false, year: false },
   fetchDatasets: async () => {
     const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/flow-outputs/results/pyramids/combined-cmip6-era5-pyramids-catalog-web.json'
+      'https://cmip6downscaling.blob.core.windows.net/version1/catalogs/minified-pyramids-web-catalog.json'
     )
 
     const data = await result.json()

@@ -1,3 +1,5 @@
+import DataTable from './datasets/table'
+
 This is an interactive tool for exploring a collection of climate projections and downscaled datasets of daily temperature and precipitation derived from the Coupled Model Intercomparison Project Phase 6 (CMIP6). Read our [explainer article](https://carbonplan.org/research/cmip6-downscaling-explainer) for more about this work.
 
 You can use the panel on the left to filter the dataset collection based on your criteria of interest, and then select datasets for viewing in the map, as well as accessing links to the underlying data. All datasets are publicly available in `zarr` format on Microsoft Azure.
@@ -60,10 +62,27 @@ The GARD-MV (multi-variate) implementation follows the same process as the GARD-
 
 DeepSD uses a computer vision approach to learn spatial patterns at multiple resolutions [Vandal et al., 2017](https://dl.acm.org/doi/10.1145/3097983.3098004). Specifically, DeepSD is a stacked super-resolution convolutional neural network. We adapted the [open-source DeepSD implementation](https://github.com/tjvandal/deepsd) for downscaling global ensembles by updating the source code for Python 3 and TensorFlow2, removing the batch normalization layer, normalizing based on historical observations, training models for temperature and precipitation, and training on a global reanalysis product (ERA5). In addition, we trained the model for fewer iterations than in Vandal et al., 2017 and clipped aphysical precipitation values at 0. Our dataset includes an additional bias-corrected product (DeepSD-BC). Given its origin in deep learning, this method is the most different from those included here, and is an experimental contribution to our dataset.
 
-# Access
+## Access
 
-## sample code snippet
+There are two ways to access the data using Python.
 
-## link to sample notebook
+First, the entire collection of datasets at daily timescales is available through an `intake` catalog using the following code snippet.
 
-## list of datasets
+```
+import intake
+cat = intake.open_esm_datastore('https://cmip6downscaling.blob.core.windows.net/version1/catalogs/global-downscaled-cmip6.json'
+)
+```
+
+You can check out this example [Jupyter notebook](https://github.com/carbonplan/cmip6-downscaling/blob/6097a9c4425887419b32bda6abbf089a003400f8/notebooks/accessing_data_example.ipynb) to see how to access the data, perform some simple analysis, and download subsets.
+
+You can also access the data by using the URL of an individual dataset. See below for a table of all available datasets in this collection with storage locations and other metadata. A code snippet showing how to use the URL is shown below:
+
+```
+import xarray as xr
+xr.open_zarr(‘<insert url>’)
+```
+
+These are all daily datasets. For any given dataset, you can access the monthly or yearly aggregation by changing the `day` in the URL to either `month` or `year`. These monthly and yearly aggregated versions are the one we show in the map tool.
+
+<DataTable />
