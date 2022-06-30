@@ -120,7 +120,11 @@ const Dataset = ({ name, last }) => {
                 }}
               />
             </Label>
-            <Tooltip expanded={expanded} setExpanded={setExpanded} />
+            <Tooltip
+              expanded={expanded}
+              setExpanded={setExpanded}
+              sx={{ pt: '2px' }}
+            />
           </Box>
         </Box>
       </Flex>

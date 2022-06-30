@@ -1,6 +1,6 @@
 import { Box, Container, Divider, Flex, Grid } from 'theme-ui'
 import { useBreakpointIndex } from '@theme-ui/match-media'
-import { Group } from '@carbonplan/components'
+import { Group, Link } from '@carbonplan/components'
 import { Sidebar, SidebarFooter } from '@carbonplan/layouts'
 import { useState } from 'react'
 import { alpha } from '@theme-ui/color'
@@ -68,8 +68,10 @@ const Tool = () => {
   const inner = (
     <Group spacing={4}>
       <Box sx={sx.description}>
-        This explorer lets you browse a catalog of climate data. Use the panels
-        below to select datasets, variables, and times.
+        This explorer lets you browse a catalog of raw and downscaled climate
+        data. Use the panels below to select datasets, variables, and times.
+        Read <Link href='/research/cmip6-downscaling'>our explainer</Link> for
+        more details.
       </Box>
 
       <Divider sx={{ my: 4 }} />

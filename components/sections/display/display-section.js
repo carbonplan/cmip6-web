@@ -12,7 +12,6 @@ const DisplaySection = ({ sx }) => {
       {active ? (
         <>
           <TooltipWrapper
-            mb='0px'
             tooltip='Use the menus to choose a colormap or change the units. Click and drag
         the colorbar limits to change them. Click the "sun" in the upper right
         to switch between light mode and dark mode.'

@@ -18,7 +18,7 @@ const Tooltip = ({ expanded, setExpanded, sx }) => {
           },
         },
         p: [0],
-        transform: 'translate(0px, -4px)',
+        transform: 'translate(0px, -3.75px)',
         ...sx,
       }}
     >

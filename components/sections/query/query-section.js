@@ -101,7 +101,10 @@ const Filters = ({ sx }) => {
           Variable
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <TooltipWrapper tooltip='Select climate variable that will be shown.'>
+          <TooltipWrapper
+            tooltip='Select climate variable to show in the map.  TASMAX and TASMIN are maximum and minimum near-surface temperature, and PR is at-surface precipitation.
+'
+          >
             <Filter
               values={variableFilter}
               setValues={(obj) => {
@@ -122,7 +125,7 @@ const Filters = ({ sx }) => {
           Timescale
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <TooltipWrapper tooltip='Select whether to view full daily data or summarized to monthly or annual timesteps.'>
+          <TooltipWrapper tooltip='Select whether to view data at a yearly or monthly timestep.'>
             <Filter
               values={timescaleFilter}
               setValues={(obj) => {
@@ -140,7 +143,7 @@ const Filters = ({ sx }) => {
           Scenarios
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <TooltipWrapper tooltip='Select whether to view historical data or future  data from Shared Socioeconomic Pathways (SSPs) representing different levels of warming.'>
+          <TooltipWrapper tooltip='Select whether to view historical data or future data from Shared Socioeconomic Pathways (SSPs) representing different levels of warming.'>
             <Flex sx={{ flexDirection: 'column' }}>
               <Filter
                 values={historicalFilter}
@@ -197,7 +200,7 @@ const Filters = ({ sx }) => {
           GCMs
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <TooltipWrapper tooltip='Select global climate models (GCMs) used produce either downscaled or raw datasets.'>
+          <TooltipWrapper tooltip='Select the global climate model (GCM) used in the creation of the dataset.'>
             <ExpandableFilter
               values={filters.gcm}
               setValues={(obj) => {
@@ -213,7 +216,7 @@ const Filters = ({ sx }) => {
           Methods
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <TooltipWrapper tooltip='Select downscaling method used to derive datasets.'>
+          <TooltipWrapper tooltip='Select the downscaling method used to derive the dataset.'>
             <Filter
               values={filters.method}
               setValues={(obj) => {
