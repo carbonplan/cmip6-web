@@ -1036,10 +1036,10 @@ const DataTable = () => {
               </Column>
             </Row>
             <Row columns={3}>
-              <Column start={1} width={1}>
+              <Column start={1} width={1} sx={{ textTransform: 'uppercase' }}>
                 {d[1]}
               </Column>
-              <Column start={2} width={2}>
+              <Column start={2} width={2} sx={{ textTransform: 'uppercase' }}>
                 {d[3]}
               </Column>
             </Row>
