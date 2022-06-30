@@ -1,3 +1,3 @@
-import Index from '../tool/index.js'
+import Main from '../components/main.js'
 
-export default Index
+export default Main

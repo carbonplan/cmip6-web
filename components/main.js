@@ -5,19 +5,19 @@ import { Sidebar, SidebarFooter } from '@carbonplan/layouts'
 import { useState } from 'react'
 import { alpha } from '@theme-ui/color'
 
-import Header from '../components/header'
-import MobileSettings from '../components/mobile-settings'
+import Header from './header'
+import MobileSettings from './mobile-settings'
 import {
   AboutSection,
   DisplaySection,
   QuerySection,
   RegionSection,
   TimeSection,
-} from '../components/sections'
-import Map from '../components/map'
-import { useRegionStore } from '../components/region'
-import LoadingStates from '../components/loading-states'
-import useRouting from '../components/use-routing'
+} from './sections'
+import Map from './map'
+import { useRegionStore } from './region'
+import LoadingStates from './loading-states'
+import useRouting from './use-routing'
 import Methods from './methods.md'
 
 const sx = {
@@ -153,9 +153,9 @@ const Tool = () => {
                 <Sidebar
                   expanded={expandedMethods}
                   setExpanded={setExpandedMethods}
-                  tooltip='Methods'
+                  tooltip='Usage info'
                   side='right'
-                  width={3}
+                  width={4}
                 >
                   <Methods />
                 </Sidebar>

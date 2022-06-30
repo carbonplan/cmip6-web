@@ -11,9 +11,11 @@ const Header = ({ expanded, setExpanded }) => {
   return (
     <>
       <Meta
-        card={'https://images.carbonplan.org/social/maps-demo.png'}
-        description={'TK'}
-        title={'CMIP6 downscaling / research / carbonplan'}
+        card={'https://images.carbonplan.org/social/cmip6-downscaling.png'}
+        description={
+          'Interactive mapping tool for exploring downscaled CMIP6 data of global climate projections.'
+        }
+        title={'CMIP6 Downscaling – CarbonPlan'}
       />
 
       <Container>
