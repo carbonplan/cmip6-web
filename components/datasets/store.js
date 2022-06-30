@@ -96,7 +96,7 @@ export const useDatasetsStore = create((set, get) => ({
   slidingTime: { day: false, month: false, year: false },
   fetchDatasets: async () => {
     const result = await fetch(
-      'https://cmip6downscaling.blob.core.windows.net/version1/catalogs/minified-pyramids-web-catalog.json'
+      'https://cmip6downscaling.azureedge.net/version1/catalogs/minified-pyramids-web-catalog.json'
     )
 
     const data = await result.json()
