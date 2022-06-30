@@ -102,7 +102,7 @@ const Filters = ({ sx }) => {
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
           <TooltipWrapper
-            tooltip='Select climate variable to show in the map.  TASMAX and TASMIN are maximum and minimum near-surface temperature, and PR is at-surface precipitation.
+            tooltip='Select climate variable to show in the map.  TASMAX and TASMIN are maximum and minimum near-surface temperature and PR is precipitation.
 '
           >
             <Filter
