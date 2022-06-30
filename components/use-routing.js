@@ -3,7 +3,8 @@ import { useEffect } from 'react'
 import { useDatasetsStore } from './datasets'
 import { encodeJSON, decodeHex } from './utils'
 
-//const DEFAULT_ACTIVE = 'ScenarioMIP.BCC.BCC-CSM2-MR.ssp245.day.gn.r1i1p1f1.tasmax.YS'
+const DEFAULT_ACTIVE =
+  'ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.year.DeepSD-BC.tasmax'
 
 const validateQuery = (query, datasets) => {
   const {
@@ -103,7 +104,7 @@ const useRouting = () => {
         setFilters(computedFilters)
         // setDisplayTime({ year, month, day })
       } else {
-        //setActive(DEFAULT_ACTIVE)
+        setActive(DEFAULT_ACTIVE)
       }
     }
   }, [initialized, router.isReady])

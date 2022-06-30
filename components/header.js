@@ -13,7 +13,7 @@ const Header = ({ expanded, setExpanded }) => {
       <Meta
         card={'https://images.carbonplan.org/social/cmip6-downscaling.png'}
         description={
-          'Interactive mapping tool for exploring global downscaled climate projections from CMIP6'
+          'Interactive mapping tool for exploring global downscaled climate projections from CMIP6.'
         }
         title={'CMIP6 Downscaling – CarbonPlan'}
       />

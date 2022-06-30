@@ -81,6 +81,8 @@ export const useDatasetsStore = create((set, get) => ({
     const datasets = getInitialDatasets(data)
     const filters = getInitialFilters(datasets)
 
+    filters.method['Raw'] = false
+
     set({ datasets, filters })
   },
   setDisplayTime: (value) => set({ displayTime: value }),
