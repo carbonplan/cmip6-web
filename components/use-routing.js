@@ -4,7 +4,7 @@ import { useDatasetsStore } from './datasets'
 import { encodeJSON, decodeHex } from './utils'
 
 const DEFAULT_ACTIVE =
-  'ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD-BC.tasmax.year'
+  'ScenarioMIP.BCC.BCC-CSM2-MR.ssp245.r1i1p1f1.day.GARD-SV.tasmax.year'
 
 const validateQuery = (query, datasets) => {
   const {

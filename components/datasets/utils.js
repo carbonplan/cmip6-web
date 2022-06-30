@@ -89,10 +89,11 @@ export const getShortName = (dataset, filters) => {
     return 'Observational*'
   }
 
-  const attributes = [gcm, method]
+  const attributes = [gcm]
   if (!filters.experiment.historical) {
     attributes.push(EXPERIMENTS[experiment])
   }
+  attributes.push(method)
 
   return attributes.join(' ')
 }

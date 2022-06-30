@@ -10,9 +10,20 @@ import {
 } from './utils'
 import { DEFAULT_DISPLAY_TIMES, DEFAULT_DISPLAY_UNITS } from './constants'
 
+const sort = (a, b) => {
+  if (a.source_id === b.source_id) {
+    if (a.experiment_id === b.experiment_id) {
+      return a.method.localeCompare(b.method)
+    }
+    return a.experiment_id.localeCompare(b.experiment_id)
+  }
+  return a.source_id.localeCompare(b.source_id)
+}
+
 const getInitialDatasets = (data, attrs) => {
   return data.datasets
     .sort((a, b) => (a.experiment_id === 'reanalysis' ? -1 : 1))
+    .sort(sort)
     .reduce((accum, dataset) => {
       accum[dataset.name] = {
         name: dataset.name,
@@ -81,7 +92,14 @@ export const useDatasetsStore = create((set, get) => ({
     const datasets = getInitialDatasets(data)
     const filters = getInitialFilters(datasets)
 
-    filters.method['Raw'] = false
+    filters.method = {
+      Raw: false,
+      'GARD-SV': true,
+      'GARD-MV': true,
+      MACA: true,
+      DeepSD: true,
+      'DeepSD-BC': true,
+    }
 
     set({ datasets, filters })
   },
