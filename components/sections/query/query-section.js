@@ -13,14 +13,14 @@ const formatNumber = (value) => String(value).padStart(2, '0')
 
 const LABEL_MAP = {
   // variable
-  tasmax: 'tmax',
-  tasmin: 'tmin',
-  pr: 'prec',
+  tasmax: 'tasmax',
+  tasmin: 'tasmin',
+  pr: 'pr',
 
   // timescale
   year: 'yearly',
   month: 'monthly',
-  day: 'daily',
+  // day: 'daily',
 
   // experiment
   historical: 'historical',
@@ -77,7 +77,7 @@ const Filters = ({ sx }) => {
     return {
       [LABEL_MAP.year]: filters.timescale === 'year',
       [LABEL_MAP.month]: filters.timescale === 'month',
-      [LABEL_MAP.day]: filters.timescale === 'day',
+      // [LABEL_MAP.day]: filters.timescale === 'day',
     }
   }, [filters.timescale])
 
@@ -101,7 +101,7 @@ const Filters = ({ sx }) => {
           Variable
         </Column>
         <Column start={[3, 3, 2, 2]} width={[4, 6, 3, 3]}>
-          <TooltipWrapper tooltip='Select climate variable mapped in dataset.'>
+          <TooltipWrapper tooltip='Select climate variable that will be shown.'>
             <Filter
               values={variableFilter}
               setValues={(obj) => {

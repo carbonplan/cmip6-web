@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Column, Row, Button } from '@carbonplan/components'
+import { Column, Link, Row, Button } from '@carbonplan/components'
 import { Down } from '@carbonplan/icons'
 import { Box, Flex } from 'theme-ui'
 
@@ -57,7 +57,7 @@ const DatasetInfo = ({ dataset, color }) => {
 
   return (
     <Row columns={[6, 8, 4, 4]}>
-      <Column start={1} width={[6, 8, 4, 4]} sx={{ py: 3 }}>
+      <Column start={1} width={[6, 8, 4, 4]} sx={{ pt: 3, pb: 2 }}>
         <Flex sx={{ gap: [4, 5, 5, 6], mb: 3 }}>
           {dataset.era5 && (
             <Box>
@@ -79,6 +79,24 @@ const DatasetInfo = ({ dataset, color }) => {
           <Box>
             <Box sx={sx.index}>Aggregation</Box>
             <Box sx={sx.entry}>{dataset.aggregation}</Box>
+          </Box>
+          <Box>
+            <Box sx={sx.index}>License</Box>
+            <Box>
+              <Link
+                sx={{
+                  ...sx.entry,
+                  '@media (hover: hover) and (pointer: fine)': {
+                    '&:hover': {
+                      color: 'text',
+                    },
+                  },
+                }}
+                href={dataset.license.url}
+              >
+                {dataset.license.name}
+              </Link>
+            </Box>
           </Box>
         </Flex>
         <Button

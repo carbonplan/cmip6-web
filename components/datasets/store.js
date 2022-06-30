@@ -26,6 +26,7 @@ const getInitialDatasets = (data, attrs) => {
         institution: dataset.institution_id,
         aggregation: dataset.aggregation,
         member: dataset.member_id,
+        license: dataset.license,
 
         dateStrings: null,
         selected: false,

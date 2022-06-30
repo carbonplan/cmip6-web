@@ -44,8 +44,8 @@ const Dataset = ({ name, last }) => {
   return (
     <Box
       sx={{
-        pt: '4px',
-        mb: '1px',
+        pt: '5px',
+        mb: '2px',
         borderTop: ({ colors }) => `solid 1px ${colors.hinted}`,
         borderBottom: last
           ? ({ colors }) => `solid 1px ${colors.hinted}`

@@ -24,7 +24,6 @@ const UNITS_OPTIONS = {
   pr: [
     { value: 'mm', label: 'mm' },
     { value: 'in', label: 'in' },
-    { value: 'kg m-2 s-1', label: 'kg/m²/s' },
   ],
 }
 const DisplayEditor = ({ sx }) => {
@@ -48,11 +47,6 @@ const DisplayEditor = ({ sx }) => {
   }
   return (
     <>
-      <Box sx={{ ...sx.description, mb: [3, 3, 3, 4] }}>
-        Use the menus to choose a colormap or change the units. Click and drag
-        the colorbar limits to change them. Click the "sun" in the upper right
-        to switch between light mode and dark mode.
-      </Box>
       <Row columns={[6, 8, 4, 4]}>
         <Column start={1} width={[6, 4, 2, 2]}>
           <Box sx={{ ...sx.label, mb: 2 }}>
