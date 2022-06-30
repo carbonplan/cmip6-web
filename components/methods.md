@@ -12,6 +12,8 @@ Below we describe how to interact with the map, the methods we used to produce t
 
 For any given setting of the filters in the `Datasets` section at top left, the available matching datasets will populate in the section below. Clicking on the eye icon will display that dataset in the map. The info icon will expand the entry to reveal additional metadata, including the institution that ran the original GCM, the ensemble member, the temporal aggregation scheme, the license, and a link to the data stored on Microsoft Azure.
 
+Note that not all combinations of options are always available: for example, for a given model, scenario, and method, only certain variables may be available; and different models may have different sets of scenarios. Some of these cases are due to gaps in the underlying source data, whereas others are due to runs we have not yet completed.
+
 ## Variables
 
 We use the same variable definitions used commonly in CMIP6: `tasmax` and `tasmin` denote, respectively, maximum and minimum near-surface temperature (at 2 m) and `pr` denotes precipitation (at-surface daily flux).
@@ -62,7 +64,7 @@ The GARD-MV (multi-variate) implementation follows the same process as the GARD-
 
 DeepSD uses a computer vision approach to learn spatial patterns at multiple resolutions [Vandal et al., 2017](https://dl.acm.org/doi/10.1145/3097983.3098004). Specifically, DeepSD is a stacked super-resolution convolutional neural network. We adapted the [open-source DeepSD implementation](https://github.com/tjvandal/deepsd) for downscaling global ensembles by updating the source code for Python 3 and TensorFlow2, removing the batch normalization layer, normalizing based on historical observations, training models for temperature and precipitation, and training on a global reanalysis product (ERA5). In addition, we trained the model for fewer iterations than in Vandal et al., 2017 and clipped aphysical precipitation values at 0. Our dataset includes an additional bias-corrected product (DeepSD-BC). Given its origin in deep learning, this method is the most different from those included here, and is an experimental contribution to our dataset.
 
-## Access
+# Access
 
 There are two ways to access the data using Python.
 
@@ -74,13 +76,13 @@ cat = intake.open_esm_datastore('https://cmip6downscaling.blob.core.windows.net/
 )
 ```
 
-You can check out this example [Jupyter notebook](https://github.com/carbonplan/cmip6-downscaling/blob/6097a9c4425887419b32bda6abbf089a003400f8/notebooks/accessing_data_example.ipynb) to see how to access the data, perform some simple analysis, and download subsets.
+You can check out this example [Jupyter notebook](https://github.com/carbonplan/cmip6-downscaling/blob/main/notebooks/accessing_data_example.ipynb) to see how to access the data, perform some simple analysis, and download subsets.
 
 You can also access the data by using the URL of an individual dataset. See below for a table of all available datasets in this collection with storage locations and other metadata. A code snippet showing how to use the URL is shown below:
 
 ```
 import xarray as xr
-xr.open_zarr(‘<insert url>’)
+xr.open_zarr(‘https://cmip6downscaling.blob.core.windows.net/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD.pr.zarr’)
 ```
 
 These are all daily datasets. For any given dataset, you can access the monthly or yearly aggregation by changing the `day` in the URL to either `month` or `year`. These monthly and yearly aggregated versions are the one we show in the map tool.
