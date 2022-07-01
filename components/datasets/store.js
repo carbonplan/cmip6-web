@@ -46,6 +46,7 @@ const getInitialDatasets = (data, attrs) => {
         experiment: dataset.experiment_id,
         timescale: dataset.timescale,
         original_dataset_uris: dataset.original_dataset_uris,
+        daily_downscaled_data_uri: dataset.daily_downscaled_data_uri,
         institution: dataset.institution_id,
         aggregation: dataset.aggregation,
         member: dataset.member_id,

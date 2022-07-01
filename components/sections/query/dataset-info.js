@@ -28,14 +28,8 @@ const DatasetInfo = ({ dataset, color }) => {
   const handleClick = () => {
     const blank = document.createElement('textarea')
     document.body.appendChild(blank)
-
-    if (dataset.original_dataset_uris.length === 1) {
-      blank.value = dataset.original_dataset_uris[0]
-    } else {
-      blank.value = `[${dataset.original_dataset_uris
-        .map((uri) => `"${uri}"`)
-        .join(', ')}]`
-    }
+    blank.value =
+      dataset.daily_downscaled_data_uri || dataset.original_dataset_uris[0]
     blank.select()
     document.execCommand('copy')
     document.body.removeChild(blank)
