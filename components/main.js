@@ -70,8 +70,9 @@ const Tool = () => {
       <Box sx={sx.description}>
         This explorer lets you browse a catalog of raw and downscaled climate
         data. Use the panels below to select datasets, variables, and times.
-        Read <Link href='/research/cmip6-downscaling'>our explainer</Link> for
-        more details.
+        Read{' '}
+        <Link href='/research/cmip6-downscaling-explainer'>our explainer</Link>{' '}
+        for more details.
       </Box>
 
       <Divider sx={{ my: 4 }} />
