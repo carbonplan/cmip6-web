@@ -82,7 +82,7 @@ You can also access the data by using the URL of an individual dataset. See belo
 
 ```
 import xarray as xr
-xr.open_zarr(‘https://cmip6downscaling.blob.core.windows.net/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD.pr.zarr’)
+xr.open_zarr('https://cmip6downscaling.blob.core.windows.net/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD.pr.zarr')
 ```
 
 These are all daily datasets. For any given dataset, you can access the monthly or yearly aggregation by changing the `day` in the URL to either `month` or `year`. These monthly and yearly aggregated versions are the one we show in the map tool.
