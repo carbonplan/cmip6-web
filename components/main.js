@@ -42,7 +42,7 @@ const sx = {
   mobileOption: (selected, side) => ({
     justifyContent: 'center',
     alignItems: 'center',
-    height: '62px',
+    height: '48px',
     cursor: 'pointer',
     fontSize: [3],
     fontFamily: 'heading',
@@ -125,7 +125,7 @@ const Tool = () => {
                           sx={sx.mobileOption(expandedMethods, 'right')}
                           onClick={() => setExpandedMethods(true)}
                         >
-                          Methods
+                          Usage
                         </Flex>
                       </Grid>
                     </SidebarFooter>

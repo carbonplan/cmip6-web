@@ -78,9 +78,9 @@ const Dataset = ({ name, last }) => {
             <Label
               sx={{
                 width: 'inherit',
-                display: 'inline-block',
                 position: 'relative',
                 mr: 2,
+                display: ['none', 'none', 'inline-block', 'inline-block'],
               }}
             >
               <CustomCheckbox

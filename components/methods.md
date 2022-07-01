@@ -10,13 +10,13 @@ Below we describe how to interact with the map, the methods we used to produce t
 
 ## Filtering
 
-For any given setting of the filters in the `Datasets` section at top left, the available matching datasets will populate in the section below. Clicking on the eye icon will display that dataset in the map. The info icon will expand the entry to reveal additional metadata, including the institution that ran the original GCM, the ensemble member, the temporal aggregation scheme, the license, and a link to the data stored on Microsoft Azure.
+For any given setting of the filters in the `DATASETS` section, the available matching datasets will populate in the section below. Clicking on the eye icon will display that dataset in the map. The info icon will expand the entry to reveal additional metadata, including the institution that ran the original GCM, the ensemble member, the temporal aggregation scheme, the license, and a link to the data stored on Microsoft Azure.
 
 Note that not all combinations of options are always available: for example, for a given model, scenario, and method, only certain variables may be available; and different models may have different sets of scenarios. Some of these cases are due to gaps in the underlying source data, whereas others are due to runs we have not yet completed.
 
 ## Variables
 
-We use the same variable definitions used commonly in CMIP6: `tasmax` and `tasmin` denote, respectively, maximum and minimum near-surface temperature (at 2 m) and `pr` denotes precipitation (at-surface daily flux).
+We use the same variable definitions used commonly in CMIP6: `TASMAX` and `TASMIN` denote, respectively, maximum and minimum near-surface temperature (at 2 m) and `PR` denotes precipitation (at-surface daily flux).
 
 ## Timescale
 
@@ -32,7 +32,7 @@ This work includes the implementation of four downscaling methods, described in 
 
 ## Timeseries
 
-Clicking the magnifying glass on a dataset will expand a timeseries plot at lower left showing the average of the circular region shown on the map. You can view and compare several timeseries by clicking the magnifying glass on additional datasets.
+Clicking the magnifying glass on a dataset will expand a timeseries plot at lower left showing the average of the circular region shown on the map (Desktop version only). You can view and compare several timeseries by clicking the magnifying glass on additional datasets.
 
 # Methods
 
