@@ -119,6 +119,63 @@ const ChartWrapper = ({ data }) => {
     }
   }, [dateStrings, display])
 
+  const { lines, range, circle } = useMemo(() => {
+    let circle
+    let lines = []
+    const range = [Infinity, -Infinity]
+
+    if (!datasets || !dateStrings) {
+      return { circle, lines, range }
+    }
+
+    lines = data
+      .filter(([name, value, lats]) => value && lats && datasets[name].selected)
+      .map(([name, value, lats]) => {
+        const ds = datasets[name]
+
+        const lineData = Object.keys(value)
+          .map((time) => {
+            const { avg, min, max } = getArrayData(value[time], lats, zoom)
+            range[0] = Math.min(range[0], ds.getDisplayValue(min, displayUnits))
+            range[1] = Math.max(range[1], ds.getDisplayValue(max, displayUnits))
+
+            const activeTime = dateStrings.valuesToTime(
+              ds.dateStrings.timeToValues(Number(time))
+            )
+
+            const convertedAvg = ds.getDisplayValue(avg, displayUnits)
+
+            if (name === activeDataset && hovered === activeTime) {
+              circle = [activeTime, convertedAvg]
+            }
+
+            return [activeTime, convertedAvg]
+          })
+          .filter((p) => typeof p[0] === 'number')
+
+        let color = 'secondary'
+        let width = 1.5
+        const activeColor = COLORMAP_COLORS[ds.colormapName]
+
+        if (name === activeDataset) {
+          color = activeColor
+          width = 2
+        } else if (name === hoveredDataset) {
+          color = 'primary'
+          width = 2
+        }
+        return {
+          key: name,
+          circle,
+          color,
+          width,
+          lineData,
+        }
+      }, [])
+
+    return { lines, range, circle }
+  }, [datasets, dateStrings, data])
+
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
   if (!datasets || !dateStrings) {
     return (
@@ -133,55 +190,6 @@ const ChartWrapper = ({ data }) => {
       </Box>
     )
   }
-
-  let circle
-  const range = [Infinity, -Infinity]
-
-  const lines = data
-    .filter(([name, value, lats]) => value && lats && datasets[name].selected)
-    .map(([name, value, lats]) => {
-      const ds = datasets[name]
-
-      const lineData = Object.keys(value)
-        .map((time) => {
-          const { avg, min, max } = getArrayData(value[time], lats, zoom)
-
-          range[0] = Math.min(range[0], ds.getDisplayValue(avg, displayUnits))
-          range[1] = Math.max(range[1], ds.getDisplayValue(avg, displayUnits))
-
-          const activeTime = dateStrings.valuesToTime(
-            ds.dateStrings.timeToValues(Number(time))
-          )
-
-          const convertedAvg = ds.getDisplayValue(avg, displayUnits)
-
-          if (name === activeDataset && hovered === activeTime) {
-            circle = [activeTime, convertedAvg]
-          }
-
-          return [activeTime, convertedAvg]
-        })
-        .filter((p) => typeof p[0] === 'number')
-
-      let color = 'secondary'
-      let width = 1.5
-      const activeColor = COLORMAP_COLORS[ds.colormapName]
-
-      if (name === activeDataset) {
-        color = activeColor
-        width = 2
-      } else if (name === hoveredDataset) {
-        color = activeColor
-        width = 2
-      }
-      return {
-        key: name,
-        circle,
-        color,
-        width,
-        lineData,
-      }
-    }, [])
 
   const loading = data.some(([name, value]) => !value)
 
