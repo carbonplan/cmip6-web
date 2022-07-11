@@ -62,6 +62,7 @@ const DatasetRaster = ({ name, index }) => {
     }
     return dateStrings.getDisplayRange(display)
   }, [dateStrings, display])
+  const setData = useCallback((v) => setRegionData(name, v), [name])
 
   if (timeRange.length === 0) {
     return null
@@ -90,7 +91,7 @@ const DatasetRaster = ({ name, index }) => {
         setDatasetUnits(name, m.metadata[`0/${filters.variable}/.zattrs`].units)
       }
       regionOptions={{
-        setData: showRegionPicker ? (v) => setRegionData(name, v) : null,
+        setData,
         selector: { time: timeRange },
       }}
     />
