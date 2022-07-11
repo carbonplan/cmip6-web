@@ -8,7 +8,11 @@ import {
   getFiltersCallback,
   convertUnits,
 } from './utils'
-import { DEFAULT_DISPLAY_TIMES, DEFAULT_DISPLAY_UNITS } from './constants'
+import {
+  DEFAULT_CLIMS,
+  DEFAULT_DISPLAY_TIMES,
+  DEFAULT_DISPLAY_UNITS,
+} from './constants'
 
 const METHOD_ORDER = [
   'Raw',
@@ -56,7 +60,6 @@ const getInitialDatasets = (data, attrs) => {
         selected: false,
         loaded: false,
         colormapName: null,
-        clim: null,
 
         units: null,
         getDisplayValue: () => null,
@@ -91,6 +94,7 @@ export const useDatasetsStore = create((set, get) => ({
   active: null,
   hovered: null,
   filters: null,
+  clims: DEFAULT_CLIMS,
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   displayUnits: DEFAULT_DISPLAY_UNITS.tasmax,
   updatingTime: false,
@@ -121,6 +125,16 @@ export const useDatasetsStore = create((set, get) => ({
   setUpdatingTime: (value) => set({ updatingTime: value }),
   setSlidingTime: (key, value) =>
     set((prev) => ({ slidingTime: { ...prev.slidingTime, [key]: value } })),
+  setClim: (value) =>
+    set((prev) => ({
+      clims: {
+        ...prev.clims,
+        [prev.filters.variable]: {
+          ...prev.clims[prev.filters.variable],
+          [prev.filters.timescale]: value,
+        },
+      },
+    })),
   loadDateStrings: async (name) => {
     const [date_str, time] = await Promise.all([
       new Promise((resolve) =>
@@ -297,11 +311,11 @@ export const useDatasetsStore = create((set, get) => ({
   updateDatasetDisplay: (name, values) =>
     set(({ datasets, filters }) => {
       const invalidKey = Object.keys(values).find(
-        (k) => !['colormapName', 'clim'].includes(k)
+        (k) => !['colormapName'].includes(k)
       )
       if (invalidKey) {
         throw new Error(
-          `Unexpected display update. Invalid key: ${invalidKey}, must be one of 'colormapName', 'clim'`
+          `Unexpected display update. Invalid key: ${invalidKey}, must be equal to 'colormapName'`
         )
       }
 

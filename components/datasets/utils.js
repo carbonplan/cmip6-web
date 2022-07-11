@@ -1,4 +1,4 @@
-import { DEFAULT_CLIMS, DEFAULT_COLORMAPS } from './constants'
+import { DEFAULT_COLORMAPS } from './constants'
 
 export const getFiltersCallback = (filters) => {
   return (d) => {
@@ -27,17 +27,13 @@ export const areSiblings = (d1, d2) => {
 }
 
 export const getDatasetDisplay = (dataset, filters, forceUpdate = false) => {
-  let { colormapName, clim } = dataset
+  let { colormapName } = dataset
 
   if (!colormapName || forceUpdate) {
     colormapName = DEFAULT_COLORMAPS[filters.variable]
   }
 
-  if (!clim || forceUpdate) {
-    clim = DEFAULT_CLIMS[filters.variable][filters.timescale]
-  }
-
-  return { colormapName, clim }
+  return { colormapName }
 }
 
 export const convertUnits = (value, from, to) => {
