@@ -3,7 +3,6 @@ import { Colorbar, Column, Row, Select } from '@carbonplan/components'
 import { colormaps, useThemedColormap } from '@carbonplan/colormaps'
 import shallow from 'zustand/shallow'
 
-import { formatValue } from '../../utils'
 import {
   convertUnits,
   useDatasetsStore,
@@ -31,20 +30,21 @@ const DisplayEditor = ({ sx }) => {
   const variable = useDatasetsStore((state) => state.filters.variable)
   const displayUnits = useDatasetsStore((state) => state.displayUnits)
   const setDisplayUnits = useDatasetsStore((state) => state.setDisplayUnits)
+  const clim = useDatasetsStore(
+    (state) => state.clims[state.filters.variable][state.filters.timescale]
+  )
+  const setClim = useDatasetsStore((state) => state.setClim)
 
   const updateDatasetDisplay = useDatasetsStore(
     (state) => state.updateDatasetDisplay
   )
-  const { colormapName, clim } = useDatasetsStore(
+  const { colormapName } = useDatasetsStore(
     (state) => state.datasets[name],
     shallow
   )
 
   const colormap = useThemedColormap(colormapName)
 
-  const setClim = (setter) => {
-    updateDatasetDisplay(name, { clim: setter(clim) })
-  }
   return (
     <>
       <Row columns={[6, 8, 4, 4]}>
@@ -125,7 +125,7 @@ const DisplayEditor = ({ sx }) => {
                 )
               }
               clim={clim}
-              setClim={setClim}
+              setClim={(setter) => setClim(setter(clim))}
               horizontal
               width={'100%'}
               sxClim={{ fontSize: [1, 1, 1, 2], mt: ['-1px'], pb: ['2px'] }}

@@ -13,8 +13,13 @@ import { useRegionStore } from './region'
 
 const DatasetRaster = ({ name, index }) => {
   const active = useDatasetsStore((state) => state.active === name)
-  const { dateStrings, source, colormapName, clim, loaded, units } =
-    useDatasetsStore((state) => state.datasets[name], shallow)
+  const { dateStrings, source, colormapName, loaded, units } = useDatasetsStore(
+    (state) => state.datasets[name],
+    shallow
+  )
+  const clim = useDatasetsStore(
+    (state) => state.clims[state.filters.variable][state.filters.timescale]
+  )
   const setLoaded = useDatasetsStore((state) => state.setLoaded)
   const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)

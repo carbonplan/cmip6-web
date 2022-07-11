@@ -91,6 +91,11 @@ export const useDatasetsStore = create((set, get) => ({
   active: null,
   hovered: null,
   filters: null,
+  clims: {
+    tasmax: { day: [-73, 27], month: [-73, 27], year: [-73, 27] },
+    tasmin: { day: [-73, 27], month: [-73, 27], year: [-73, 27] },
+    pr: { day: [0, 10], month: [0, 300], year: [0, 2000] },
+  },
   displayTime: DEFAULT_DISPLAY_TIMES.HISTORICAL,
   displayUnits: DEFAULT_DISPLAY_UNITS.tasmax,
   updatingTime: false,
@@ -121,6 +126,16 @@ export const useDatasetsStore = create((set, get) => ({
   setUpdatingTime: (value) => set({ updatingTime: value }),
   setSlidingTime: (key, value) =>
     set((prev) => ({ slidingTime: { ...prev.slidingTime, [key]: value } })),
+  setClim: (value) =>
+    set((prev) => ({
+      clims: {
+        ...prev.clims,
+        [prev.filters.variable]: {
+          ...prev.clims[prev.filters.variable],
+          [prev.filters.timescale]: value,
+        },
+      },
+    })),
   loadDateStrings: async (name) => {
     const [date_str, time] = await Promise.all([
       new Promise((resolve) =>
