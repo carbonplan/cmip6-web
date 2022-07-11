@@ -157,11 +157,8 @@ const ChartWrapper = ({ data }) => {
         let width = 1.5
         const activeColor = COLORMAP_COLORS[ds.colormapName]
 
-        if (name === activeDataset) {
+        if (name === activeDataset || name === hoveredDataset) {
           color = activeColor
-          width = 2
-        } else if (name === hoveredDataset) {
-          color = 'primary'
           width = 2
         }
         return {
@@ -174,7 +171,7 @@ const ChartWrapper = ({ data }) => {
       }, [])
 
     return { lines, range, circle }
-  }, [datasets, dateStrings, data])
+  }, [datasets, dateStrings, data, hovered, activeDataset, hoveredDataset])
 
   // We cannot render domain before dateStrings have been loaded, so return generic loading text
   if (!datasets || !dateStrings) {
