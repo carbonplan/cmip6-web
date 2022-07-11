@@ -21,7 +21,6 @@ const DatasetRaster = ({ name, index }) => {
     (state) => state.clims[state.filters.variable][state.filters.timescale]
   )
   const setLoaded = useDatasetsStore((state) => state.setLoaded)
-  const showRegionPicker = useRegionStore((state) => state.showRegionPicker)
   const setRegionData = useRegionStore((state) => state.setRegionData)
   const display = useDatasetsStore((state) => state.displayTime, shallow)
   const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
