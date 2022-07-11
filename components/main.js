@@ -17,7 +17,6 @@ import {
 import Map from './map'
 import { useRegionStore } from './region'
 import LoadingStates from './loading-states'
-import useRouting from './use-routing'
 import Methods from './methods.md'
 
 const sx = {
@@ -58,7 +57,6 @@ const sx = {
 }
 
 const Tool = () => {
-  useRouting()
   const index = useBreakpointIndex({ defaultIndex: 2 })
   const [expanded, setExpanded] = useState(index >= 2)
   const [expandedMethods, setExpandedMethods] = useState(false)
