@@ -37,9 +37,11 @@ const validateQuery = (query, datasets) => {
     return false
   }
 
-  const [year, month, day] = t.split('-')
-  if (!year || !month || !day) {
-    return false
+  if (t) {
+    const [year, month, day] = t.split('-')
+    if (!year || !month || !day) {
+      return false
+    }
   }
 
   return true
@@ -86,9 +88,6 @@ const useRouting = () => {
       const decryptedQuery = { ...query, filters }
 
       if (validateQuery(decryptedQuery, datasets)) {
-        const { t } = decryptedQuery
-        const [year, month, day] = t.split('-')
-
         const computedFilters = {
           variable: filters.v,
           timescale: filters.t,
@@ -102,7 +101,11 @@ const useRouting = () => {
 
         datasets[decryptedQuery.active] && setActive(decryptedQuery.active)
         setFilters(computedFilters)
-        setDisplayTime({ year, month, day })
+        const { t } = decryptedQuery
+        if (t) {
+          const [year, month, day] = t.split('-')
+          setDisplayTime({ year, month, day })
+        }
       } else {
         setActive(DEFAULT_ACTIVE)
       }
