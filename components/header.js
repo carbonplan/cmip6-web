@@ -6,8 +6,10 @@ import {
   Header as HeaderComponent,
   Settings,
 } from '@carbonplan/components'
+import useRouting from './use-routing'
 
 const Header = ({ expanded, setExpanded }) => {
+  useRouting()
   return (
     <>
       <Meta
