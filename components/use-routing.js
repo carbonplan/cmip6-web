@@ -112,26 +112,7 @@ const useRouting = () => {
   // Update the URL when the active dataset, display time, or filters change.
   useEffect(() => {
     if (initialized) {
-      const { center, zoom } = router.query
-      const query = {
-        ...(center ? { center } : {}),
-        ...(zoom ? { zoom } : {}),
-        ...(active ? { active } : {}),
-        ...(displayTime
-          ? {
-              t: `${displayTime.year}-${displayTime.month}-${displayTime.day}`,
-            }
-          : {}),
-        f: getFilterHex({ variable, timescale, experiment }),
-      }
-
       const newUrl = new URL(window.location)
-      if (center) {
-        newUrl.searchParams.set('center', center)
-      }
-      if (zoom) {
-        newUrl.searchParams.set('zoom', zoom)
-      }
       if (active) {
         newUrl.searchParams.set('active', active)
       }

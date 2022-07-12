@@ -38,19 +38,13 @@ const MapRouting = () => {
 
   useEffect(() => {
     if (center && zoom) {
-      const { center: prevCenter, zoom: prevZoom, ...rest } = router.query
-      router.replace(
-        {
-          pathname: '',
-          query: { center, zoom, ...rest },
-        },
-        null,
-        {
-          shallow: true,
-        }
-      )
+      const newUrl = new URL(window.location)
+      newUrl.searchParams.set('center', center)
+      newUrl.searchParams.set('zoom', zoom)
+
+      window.history.replaceState({}, '', newUrl)
     }
-  }, [router.isReady, center, zoom])
+  }, [center, zoom])
 
   return null
 }
