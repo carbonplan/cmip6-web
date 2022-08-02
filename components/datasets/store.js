@@ -106,13 +106,39 @@ export const useDatasetsStore = create((set, get) => ({
 
     const data = await result.json()
 
-    const datasets = getInitialDatasets(data)
+    const datasets = {
+      ...getInitialDatasets(data),
+      test: {
+        aggregation: "mean",
+        colormapName: null,
+        daily_downscaled_data_uri: "https://cmip6downscaling.blob.core.windows.net/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.GARD-SV.tasmax.zarr",
+        dateStrings: null,
+        era5: false,
+        experiment: "historical",
+        gcm: "TEST",
+        getDisplayValue: () => { },
+        institution: "TEST",
+        license: { name: 'CC-BY-SA-4.0', url: 'https://creativecommons.org/licenses/by-sa/4.0/' },
+        loaded: false,
+        member: "r1i1p1f1",
+        method: "TEST",
+        name: "TEST",
+        original_dataset_uris: [],
+        selected: false,
+        source: "https://carbonplan-cmip6.s3.us-west-2.amazonaws.com/flow-outputs/results/0.1.9.post29%2Bdirty/pyramid/225609b32a8f02a6_historical",
+        timescale: "month",
+        units: null,
+        variable: "tasmax",
+
+      }
+    }
     const filters = getInitialFilters(datasets)
 
     filters.method = {
       Raw: false,
       'GARD-SV': true,
       'GARD-MV': true,
+      TEST: true,
       MACA: true,
       DeepSD: true,
       'DeepSD-BC': true,
