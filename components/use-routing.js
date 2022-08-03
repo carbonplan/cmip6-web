@@ -130,7 +130,11 @@ const useRouting = () => {
         getFilterHex({ variable, timescale, experiment })
       )
 
-      window.history.replaceState({}, '', newUrl)
+      window.history.replaceState(
+        { ...window.history.state, as: newUrl.href, url: newUrl.href },
+        '',
+        newUrl
+      )
     }
   }, [initialized, active, displayTime, variable, timescale, experiment])
 }

@@ -42,7 +42,11 @@ const MapRouting = () => {
       newUrl.searchParams.set('center', center)
       newUrl.searchParams.set('zoom', zoom)
 
-      window.history.replaceState({}, '', newUrl)
+      window.history.replaceState(
+        { ...window.history.state, as: newUrl.href, url: newUrl.href },
+        '',
+        newUrl
+      )
     }
   }, [center, zoom])
 
