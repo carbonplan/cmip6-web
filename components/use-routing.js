@@ -9,7 +9,7 @@ const DEFAULT_ACTIVE =
 const validateQuery = (query, datasets) => {
   const {
     active,
-    // t, // displayTime value
+    t, // displayTime value
     filters: {
       t: scale,
       v: variable,
@@ -37,10 +37,12 @@ const validateQuery = (query, datasets) => {
     return false
   }
 
-  // const [year, month, day] = t.split('-')
-  // if (!year || !month || !day) {
-  //   return false
-  // }
+  if (t) {
+    const [year, month, day] = t.split('-')
+    if (!year || !month || !day) {
+      return false
+    }
+  }
 
   return true
 }
@@ -67,12 +69,12 @@ const useRouting = () => {
   const router = useRouter()
   const datasets = useDatasetsStore((state) => state.datasets)
   const active = useDatasetsStore((state) => state.active)
-  //const displayTime = useDatasetsStore((state) => state.displayTime)
+  const displayTime = useDatasetsStore((state) => state.displayTime)
   const variable = useDatasetsStore((state) => state.filters?.variable)
   const timescale = useDatasetsStore((state) => state.filters?.timescale)
   const experiment = useDatasetsStore((state) => state.filters?.experiment)
   const setActive = useDatasetsStore((state) => state.setActive)
-  //const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
+  const setDisplayTime = useDatasetsStore((state) => state.setDisplayTime)
   const setFilters = useDatasetsStore((state) => state.setFilters)
 
   const initialized = !!datasets
@@ -86,9 +88,6 @@ const useRouting = () => {
       const decryptedQuery = { ...query, filters }
 
       if (validateQuery(decryptedQuery, datasets)) {
-        // const { t } = decryptedQuery
-        // const [year, month, day] = t.split('-')
-
         const computedFilters = {
           variable: filters.v,
           timescale: filters.t,
@@ -102,7 +101,11 @@ const useRouting = () => {
 
         datasets[decryptedQuery.active] && setActive(decryptedQuery.active)
         setFilters(computedFilters)
-        // setDisplayTime({ year, month, day })
+        const { t } = decryptedQuery
+        if (t) {
+          const [year, month, day] = t.split('-')
+          setDisplayTime({ year, month, day })
+        }
       } else {
         setActive(DEFAULT_ACTIVE)
       }
@@ -112,24 +115,28 @@ const useRouting = () => {
   // Update the URL when the active dataset, display time, or filters change.
   useEffect(() => {
     if (initialized) {
-      const { center, zoom } = router.query
-      const query = {
-        ...(center ? { center } : {}),
-        ...(zoom ? { zoom } : {}),
-        ...(active ? { active } : {}),
-        // ...(displayTime
-        //   ? {
-        //       t: `${displayTime.year}-${displayTime.month}-${displayTime.day}`,
-        //     }
-        //   : {}),
-        f: getFilterHex({ variable, timescale, experiment }),
+      const newUrl = new URL(window.location)
+      if (active) {
+        newUrl.searchParams.set('active', active)
       }
+      if (displayTime) {
+        newUrl.searchParams.set(
+          't',
+          `${displayTime.year}-${displayTime.month}-${displayTime.day}`
+        )
+      }
+      newUrl.searchParams.set(
+        'f',
+        getFilterHex({ variable, timescale, experiment })
+      )
 
-      router.replace({ pathname: '', query }, null, {
-        shallow: true,
-      })
+      window.history.replaceState(
+        { ...window.history.state, as: newUrl.href, url: newUrl.href },
+        '',
+        newUrl
+      )
     }
-  }, [initialized, active, variable, timescale, experiment])
+  }, [initialized, active, displayTime, variable, timescale, experiment])
 }
 
 export default useRouting
