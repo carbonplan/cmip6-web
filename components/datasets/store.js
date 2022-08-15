@@ -103,7 +103,7 @@ export const useDatasetsStore = create((set, get) => ({
     const result = await fetch(
       'https://carbonplan-cmip6.s3.us-west-2.amazonaws.com/minified-pyramids-web-catalog-MSFT.json'
     )
-    
+
     const data = await result.json()
 
     const datasets = getInitialDatasets(data)
