@@ -439,7 +439,7 @@ const data = [
     'historical',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.MPI-M.MPI-ESM1-2-HR.historical.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -447,7 +447,7 @@ const data = [
     'historical',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.MPI-M.MPI-ESM1-2-HR.historical.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -455,7 +455,7 @@ const data = [
     'historical',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.MPI-M.MPI-ESM1-2-HR.historical.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -463,7 +463,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp245.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -471,7 +471,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp245.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -479,7 +479,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp245.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -487,7 +487,7 @@ const data = [
     'ssp370',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp370.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -495,7 +495,7 @@ const data = [
     'ssp370',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp370.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -503,7 +503,7 @@ const data = [
     'ssp370',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp370.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -511,7 +511,7 @@ const data = [
     'ssp585',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp585.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -519,7 +519,7 @@ const data = [
     'ssp585',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp585.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -527,7 +527,7 @@ const data = [
     'ssp585',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.DKRZ.MPI-ESM1-2-HR.ssp585.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -535,7 +535,7 @@ const data = [
     'historical',
     'DeepSD',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.DeepSD.pr.zarr',
   ],
   [
@@ -543,7 +543,7 @@ const data = [
     'historical',
     'DeepSD',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.DeepSD.tasmax.zarr',
   ],
   [
@@ -551,7 +551,7 @@ const data = [
     'historical',
     'DeepSD',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.DeepSD.tasmin.zarr',
   ],
   [
@@ -559,7 +559,7 @@ const data = [
     'historical',
     'DeepSD-BC',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.DeepSD-BC.pr.zarr',
   ],
   [
@@ -567,7 +567,7 @@ const data = [
     'historical',
     'DeepSD-BC',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.DeepSD-BC.tasmax.zarr',
   ],
   [
@@ -575,7 +575,7 @@ const data = [
     'historical',
     'DeepSD-BC',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.DeepSD-BC.tasmin.zarr',
   ],
   [
@@ -583,7 +583,7 @@ const data = [
     'historical',
     'GARD-MV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-MV/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.GARD-MV.pr.zarr',
   ],
   [
@@ -591,7 +591,7 @@ const data = [
     'historical',
     'GARD-MV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-MV/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.GARD-MV.tasmax.zarr',
   ],
   [
@@ -599,7 +599,7 @@ const data = [
     'historical',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -607,7 +607,7 @@ const data = [
     'historical',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -615,7 +615,7 @@ const data = [
     'historical',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -623,7 +623,7 @@ const data = [
     'historical',
     'MACA',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/MACA/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.MACA.pr.zarr',
   ],
   [
@@ -631,7 +631,7 @@ const data = [
     'historical',
     'MACA',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/MACA/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.MACA.tasmax.zarr',
   ],
   [
@@ -639,7 +639,7 @@ const data = [
     'historical',
     'MACA',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/MACA/CMIP.MRI.MRI-ESM2-0.historical.r1i1p1f1.day.MACA.tasmin.zarr',
   ],
   [
@@ -647,7 +647,7 @@ const data = [
     'ssp245',
     'DeepSD',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.DeepSD.pr.zarr',
   ],
   [
@@ -655,7 +655,7 @@ const data = [
     'ssp245',
     'DeepSD',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.DeepSD.tasmax.zarr',
   ],
   [
@@ -663,7 +663,7 @@ const data = [
     'ssp245',
     'DeepSD',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.DeepSD.tasmin.zarr',
   ],
   [
@@ -671,7 +671,7 @@ const data = [
     'ssp245',
     'DeepSD-BC',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.DeepSD-BC.pr.zarr',
   ],
   [
@@ -679,7 +679,7 @@ const data = [
     'ssp245',
     'DeepSD-BC',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.DeepSD-BC.tasmax.zarr',
   ],
   [
@@ -687,7 +687,7 @@ const data = [
     'ssp245',
     'DeepSD-BC',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.DeepSD-BC.tasmin.zarr',
   ],
   [
@@ -695,7 +695,7 @@ const data = [
     'ssp245',
     'GARD-MV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-MV/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.GARD-MV.pr.zarr',
   ],
   [
@@ -703,7 +703,7 @@ const data = [
     'ssp245',
     'GARD-MV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-MV/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.GARD-MV.tasmax.zarr',
   ],
   [
@@ -711,7 +711,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -719,7 +719,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -727,7 +727,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -735,7 +735,7 @@ const data = [
     'ssp245',
     'MACA',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/MACA/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.MACA.tasmax.zarr',
   ],
   [
@@ -743,7 +743,7 @@ const data = [
     'ssp245',
     'MACA',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/MACA/ScenarioMIP.MRI.MRI-ESM2-0.ssp245.r1i1p1f1.day.MACA.tasmin.zarr',
   ],
   [
@@ -751,7 +751,7 @@ const data = [
     'ssp370',
     'DeepSD',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.MRI.MRI-ESM2-0.ssp370.r1i1p1f1.day.DeepSD.pr.zarr',
   ],
   [
@@ -759,7 +759,7 @@ const data = [
     'ssp370',
     'DeepSD',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.MRI.MRI-ESM2-0.ssp370.r1i1p1f1.day.DeepSD.tasmax.zarr',
   ],
   [
@@ -767,7 +767,7 @@ const data = [
     'ssp370',
     'DeepSD',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.MRI.MRI-ESM2-0.ssp370.r1i1p1f1.day.DeepSD.tasmin.zarr',
   ],
   [
@@ -775,7 +775,7 @@ const data = [
     'ssp370',
     'DeepSD-BC',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.MRI.MRI-ESM2-0.ssp370.r1i1p1f1.day.DeepSD-BC.pr.zarr',
   ],
   [
@@ -783,7 +783,7 @@ const data = [
     'ssp370',
     'DeepSD-BC',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.MRI.MRI-ESM2-0.ssp370.r1i1p1f1.day.DeepSD-BC.tasmax.zarr',
   ],
   [
@@ -791,7 +791,7 @@ const data = [
     'ssp370',
     'DeepSD-BC',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.MRI.MRI-ESM2-0.ssp370.r1i1p1f1.day.DeepSD-BC.tasmin.zarr',
   ],
   [
@@ -799,7 +799,7 @@ const data = [
     'ssp370',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.MRI.MRI-ESM2-0.ssp370.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -807,7 +807,7 @@ const data = [
     'ssp585',
     'DeepSD',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r1i1p1f1.day.DeepSD.tasmax.zarr',
   ],
   [
@@ -815,7 +815,7 @@ const data = [
     'ssp585',
     'DeepSD',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r1i1p1f1.day.DeepSD.tasmin.zarr',
   ],
   [
@@ -823,7 +823,7 @@ const data = [
     'ssp585',
     'DeepSD-BC',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r1i1p1f1.day.DeepSD-BC.tasmax.zarr',
   ],
   [
@@ -831,7 +831,7 @@ const data = [
     'ssp585',
     'DeepSD-BC',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r1i1p1f1.day.DeepSD-BC.tasmin.zarr',
   ],
   [
@@ -839,7 +839,7 @@ const data = [
     'ssp585',
     'MACA',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/MACA/ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r1i1p1f1.day.MACA.pr.zarr',
   ],
   [
@@ -847,7 +847,7 @@ const data = [
     'ssp585',
     'MACA',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/MACA/ScenarioMIP.MRI.MRI-ESM2-0.ssp585.r1i1p1f1.day.MACA.tasmax.zarr',
   ],
   [
