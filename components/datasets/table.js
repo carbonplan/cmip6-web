@@ -71,7 +71,7 @@ const data = [
     'historical',
     'DeepSD',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/CMIP.CCCma.CanESM5.historical.r1i1p1f1.day.DeepSD.pr.zarr',
   ],
   [
@@ -87,7 +87,7 @@ const data = [
     'historical',
     'DeepSD',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/CMIP.CCCma.CanESM5.historical.r1i1p1f1.day.DeepSD.tasmin.zarr',
   ],
   [
@@ -95,7 +95,7 @@ const data = [
     'historical',
     'DeepSD-BC',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/CMIP.CCCma.CanESM5.historical.r1i1p1f1.day.DeepSD-BC.pr.zarr',
   ],
   [
@@ -103,7 +103,7 @@ const data = [
     'historical',
     'DeepSD-BC',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/CMIP.CCCma.CanESM5.historical.r1i1p1f1.day.DeepSD-BC.tasmax.zarr',
   ],
   [
@@ -111,7 +111,7 @@ const data = [
     'historical',
     'DeepSD-BC',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/CMIP.CCCma.CanESM5.historical.r1i1p1f1.day.DeepSD-BC.tasmin.zarr',
   ],
   [
@@ -119,7 +119,7 @@ const data = [
     'historical',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.CCCma.CanESM5.historical.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -127,7 +127,7 @@ const data = [
     'historical',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.CCCma.CanESM5.historical.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -135,7 +135,7 @@ const data = [
     'historical',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.CCCma.CanESM5.historical.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -143,7 +143,7 @@ const data = [
     'ssp245',
     'DeepSD',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD.pr.zarr',
   ],
   [
@@ -151,7 +151,7 @@ const data = [
     'ssp245',
     'DeepSD',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD.tasmin.zarr',
   ],
   [
@@ -159,7 +159,7 @@ const data = [
     'ssp245',
     'DeepSD',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD.tasmax.zarr',
   ],
   [
@@ -167,7 +167,7 @@ const data = [
     'ssp245',
     'DeepSD-BC',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD-BC.pr.zarr',
   ],
   [
@@ -175,7 +175,7 @@ const data = [
     'ssp245',
     'DeepSD-BC',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD-BC.tasmin.zarr',
   ],
   [
@@ -183,7 +183,7 @@ const data = [
     'ssp245',
     'DeepSD-BC',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD-BC.tasmax.zarr',
   ],
   [
@@ -191,7 +191,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -199,7 +199,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -207,7 +207,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -215,7 +215,7 @@ const data = [
     'ssp370',
     'DeepSD',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp370.r1i1p1f1.day.DeepSD.pr.zarr',
   ],
   [
@@ -223,7 +223,7 @@ const data = [
     'ssp370',
     'DeepSD',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp370.r1i1p1f1.day.DeepSD.tasmax.zarr',
   ],
   [
@@ -231,7 +231,7 @@ const data = [
     'ssp370',
     'DeepSD',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp370.r1i1p1f1.day.DeepSD.tasmin.zarr',
   ],
   [
@@ -239,7 +239,7 @@ const data = [
     'ssp370',
     'DeepSD-BC',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.CCCma.CanESM5.ssp370.r1i1p1f1.day.DeepSD-BC.pr.zarr',
   ],
   [
@@ -247,7 +247,7 @@ const data = [
     'ssp370',
     'DeepSD-BC',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.CCCma.CanESM5.ssp370.r1i1p1f1.day.DeepSD-BC.tasmax.zarr',
   ],
   [
@@ -255,7 +255,7 @@ const data = [
     'ssp370',
     'DeepSD-BC',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.CCCma.CanESM5.ssp370.r1i1p1f1.day.DeepSD-BC.tasmin.zarr',
   ],
   [
@@ -263,7 +263,7 @@ const data = [
     'ssp370',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp370.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -271,7 +271,7 @@ const data = [
     'ssp370',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp370.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -279,7 +279,7 @@ const data = [
     'ssp370',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp370.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -287,7 +287,7 @@ const data = [
     'ssp585',
     'DeepSD',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp585.r1i1p1f1.day.DeepSD.pr.zarr',
   ],
   [
@@ -295,7 +295,7 @@ const data = [
     'ssp585',
     'DeepSD',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp585.r1i1p1f1.day.DeepSD.tasmax.zarr',
   ],
   [
@@ -303,7 +303,7 @@ const data = [
     'ssp585',
     'DeepSD',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp585.r1i1p1f1.day.DeepSD.tasmin.zarr',
   ],
   [
@@ -311,7 +311,7 @@ const data = [
     'ssp585',
     'DeepSD-BC',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.CCCma.CanESM5.ssp585.r1i1p1f1.day.DeepSD-BC.pr.zarr',
   ],
   [
@@ -319,7 +319,7 @@ const data = [
     'ssp585',
     'DeepSD-BC',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.CCCma.CanESM5.ssp585.r1i1p1f1.day.DeepSD-BC.tasmax.zarr',
   ],
   [
@@ -327,7 +327,7 @@ const data = [
     'ssp585',
     'DeepSD-BC',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD-BC/ScenarioMIP.CCCma.CanESM5.ssp585.r1i1p1f1.day.DeepSD-BC.tasmin.zarr',
   ],
   [
@@ -335,7 +335,7 @@ const data = [
     'ssp585',
     'GARD-SV',
     'pr',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp585.r1i1p1f1.day.GARD-SV.pr.zarr',
   ],
   [
@@ -343,7 +343,7 @@ const data = [
     'ssp585',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp585.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -351,7 +351,7 @@ const data = [
     'ssp585',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.CCCma.CanESM5.ssp585.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
