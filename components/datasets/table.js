@@ -7,7 +7,7 @@ const data = [
     'historical',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.BCC.BCC-CSM2-MR.historical.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -15,7 +15,7 @@ const data = [
     'historical',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/CMIP.BCC.BCC-CSM2-MR.historical.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -23,7 +23,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.BCC.BCC-CSM2-MR.ssp245.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -31,7 +31,7 @@ const data = [
     'ssp245',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.BCC.BCC-CSM2-MR.ssp245.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -39,7 +39,7 @@ const data = [
     'ssp370',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.BCC.BCC-CSM2-MR.ssp370.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -47,7 +47,7 @@ const data = [
     'ssp370',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.BCC.BCC-CSM2-MR.ssp370.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -55,7 +55,7 @@ const data = [
     'ssp585',
     'GARD-SV',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.BCC.BCC-CSM2-MR.ssp585.r1i1p1f1.day.GARD-SV.tasmax.zarr',
   ],
   [
@@ -63,7 +63,7 @@ const data = [
     'ssp585',
     'GARD-SV',
     'tasmin',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/GARD-SV/ScenarioMIP.BCC.BCC-CSM2-MR.ssp585.r1i1p1f1.day.GARD-SV.tasmin.zarr',
   ],
   [
@@ -79,7 +79,7 @@ const data = [
     'historical',
     'DeepSD',
     'tasmax',
-    'CC-BY-SA-4.0',
+    'CC-BY-4.0',
     'https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/CMIP.CCCma.CanESM5.historical.r1i1p1f1.day.DeepSD.tasmax.zarr',
   ],
   [
