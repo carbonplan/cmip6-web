@@ -43,7 +43,7 @@
     "react": "^18.2.0",
     "react-animate-height": "^2.0.23",
     "react-dom": "^18.2.0",
-    "rehype-slug": "^4.0.1",
+    "rehype-slug": "^5.1.0",
     "theme-ui": "^0.15.3",
     "zarr-js": "^2.2.1",
     "zustand": "^3.6.5"
