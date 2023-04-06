@@ -72,8 +72,7 @@ First, the entire collection of datasets at daily timescales is available throug
 
 ```
 import intake
-cat = intake.open_esm_datastore('https://cmip6downscaling.blob.core.windows.net/version1/catalogs/global-downscaled-cmip6.json'
-)
+cat = intake.open_esm_datastore('https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/catalogs/global-downscaled-cmip6.json')
 ```
 
 You can check out this example [Jupyter notebook](https://github.com/carbonplan/cmip6-downscaling/blob/main/notebooks/accessing_data_example.ipynb) to see how to access the data, perform some simple analysis, and download subsets.
@@ -82,7 +81,7 @@ You can also access the data by using the URL of an individual dataset. See belo
 
 ```
 import xarray as xr
-xr.open_zarr('https://cmip6downscaling.blob.core.windows.net/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD.pr.zarr')
+xr.open_zarr('https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/data/DeepSD/ScenarioMIP.CCCma.CanESM5.ssp245.r1i1p1f1.day.DeepSD.pr.zarr')
 ```
 
 These are all daily datasets. For any given dataset, you can access the monthly or yearly aggregation by changing the `day` in the URL to either `month` or `year`. These monthly and yearly aggregated versions are the one we show in the map tool.
