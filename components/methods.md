@@ -72,8 +72,7 @@ First, the entire collection of datasets at daily timescales is available throug
 
 ```
 import intake
-cat = intake.open_esm_datastore('https://cmip6downscaling.blob.core.windows.net/version1/catalogs/global-downscaled-cmip6.json'
-)
+cat = intake.open_esm_datastore('https://cpdataeuwest.blob.core.windows.net/cp-cmip/version1/catalogs/global-downscaled-cmip6.json')
 ```
 
 You can check out this example [Jupyter notebook](https://github.com/carbonplan/cmip6-downscaling/blob/main/notebooks/accessing_data_example.ipynb) to see how to access the data, perform some simple analysis, and download subsets.
