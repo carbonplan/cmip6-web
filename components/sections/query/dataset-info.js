@@ -41,12 +41,12 @@ const DatasetInfo = ({ dataset, color }) => {
     setTick(timeout)
   }
 
-  let copyText = 'Copy Zarr store link'
+  let copyText = 'Copy Zarr store link (daily)'
 
   if (copied) {
     copyText = 'Copied!'
   } else if (dataset.original_dataset_uris.length > 1) {
-    copyText = 'Copy Zarr store links'
+    copyText = 'Copy Zarr store links (daily)'
   }
 
   return (
